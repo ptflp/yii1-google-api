@@ -6,7 +6,7 @@
  * The followings are the available columns in table 'tbl_user':
  * @property integer $id
  * @property string $email
- * @property integer $city
+ * @property integer $city_id
  * @property integer $role
  * @property integer $ban
  * @property string $updated_at
@@ -31,12 +31,12 @@ class User extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('email, role, ban', 'required'),
-			array('city, role, ban', 'numerical', 'integerOnly'=>true),
+			array('city_id, role, ban', 'numerical', 'integerOnly'=>true),
 			array('email', 'length', 'max'=>255),
 			array('updated_at, created_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, email, city, role, ban, updated_at, created_at', 'safe', 'on'=>'search'),
+			array('id, email, city_id, role, ban, updated_at, created_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -48,6 +48,7 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'city' => array(self::BELONGS_TO, 'City', 'city_id'),
 		);
 	}
 
@@ -59,7 +60,7 @@ class User extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'email' => 'Email',
-			'city' => 'City',
+			'city_id' => 'City',
 			'role' => 'Role',
 			'ban' => 'Ban',
 			'updated_at' => 'Updated At',
@@ -87,7 +88,7 @@ class User extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('email',$this->email,true);
-		$criteria->compare('city',$this->city);
+		$criteria->compare('city_id',$this->city_id);
 		$criteria->compare('role',$this->role);
 		$criteria->compare('ban',$this->ban);
 		$criteria->compare('updated_at',$this->updated_at,true);
