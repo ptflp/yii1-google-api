@@ -26,9 +26,9 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'city'); ?>
-		<?php echo $form->textField($model,'city'); ?>
-		<?php echo $form->error($model,'city'); ?>
+		<?php echo $form->labelEx($model,'city_id'); ?>
+		<?php echo $form->textField($model,'city_id'); ?>
+		<?php echo $form->error($model,'city_id'); ?>
 	</div>
 
 	<div class="row">
@@ -41,18 +41,6 @@
 		<?php echo $form->labelEx($model,'ban'); ?>
 		<?php echo $form->textField($model,'ban'); ?>
 		<?php echo $form->error($model,'ban'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'updated_at'); ?>
-		<?php echo $form->textField($model,'updated_at'); ?>
-		<?php echo $form->error($model,'updated_at'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'created_at'); ?>
-		<?php echo $form->textField($model,'created_at'); ?>
-		<?php echo $form->error($model,'created_at'); ?>
 	</div>
 
 	<div class="row buttons">

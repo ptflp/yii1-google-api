@@ -22,8 +22,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'city'); ?>
-		<?php echo $form->textField($model,'city'); ?>
+		<?php echo $form->label($model,'city_id'); ?>
+		<?php echo $form->textField($model,'city_id'); ?>
 	</div>
 
 	<div class="row">

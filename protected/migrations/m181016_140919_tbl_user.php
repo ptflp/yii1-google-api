@@ -7,7 +7,7 @@ class m181016_140919_tbl_user extends CDbMigration
         $this->createTable('tbl_user', array(
 				'id' => 'pk',
 				'email' => 'string NOT NULL',
-				'city' =>  'integer DEFAULT NULL',
+				'city_id' =>  'integer DEFAULT NULL',
 				'role' => 'integer NOT NULL',
 				'ban' => 'boolean NOT NULL',
 				'updated_at' => 'timestamp DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP',

@@ -23,7 +23,7 @@ $this->menu=array(
 	'attributes'=>array(
 		'id',
 		'email',
-		'city',
+		'city_id',
 		'role',
 		'ban',
 		'updated_at',
