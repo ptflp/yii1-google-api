@@ -3,3 +3,4 @@
 *.log
 /vendor
 /web/assets
+client_secrets.json
