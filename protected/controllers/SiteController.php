@@ -29,8 +29,7 @@ class SiteController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$container = new DI\Container();
-		$oauth = $container->get('GoogleOauth');
+		$oauth = $this->container->get('GoogleOauth');
 		$configPath =Yii::app()->params['client_secrets'];
 		$oauth->loadFileConfig($configPath);
 		$oauth->setRedirectUri('http://localhost:8000/site/test')
