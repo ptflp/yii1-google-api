@@ -5,8 +5,13 @@ class m181016_140919_tbl_user extends CDbMigration
 	public function up()
 	{
         $this->createTable('tbl_user', array(
-            'id' => 'pk',
-            'email' => 'string NOT NULL'
+				'id' => 'pk',
+				'email' => 'string NOT NULL',
+				'city' =>  'integer DEFAULT NULL',
+				'role' => 'integer NOT NULL',
+				'ban' => 'boolean NOT NULL',
+				'updated_at' => 'timestamp DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP',
+				'created_at' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
         ));
 	}
 
