@@ -13,7 +13,7 @@ class UserIdentity extends CUserIdentity {
 	public function authenticate(){
 		 // Производим стандартную аутентификацию, описанную в руководстве.
 		 $user = User::model()->find('LOWER(email)=?', array(strtolower($this->username)));
-		 if(($user===null) || (md5($this->password)!==$user->password)) {
+		 if(($user===null) || ($this->username!==$user->email)) {
 			  $this->errorCode = self::ERROR_USERNAME_INVALID;
 		 } else {
 			  // В качестве идентификатора будем использовать id, а не username,
@@ -25,7 +25,7 @@ class UserIdentity extends CUserIdentity {
 			  // в самом приложении. Используется как Yii::app()->user->name.
 			  // realName есть в нашей модели. У вас это может быть name, firstName
 			  // или что-либо ещё.
-			  $this->username = $user->realName;
+			  $this->username = $user->email;
 
 			  $this->errorCode = self::ERROR_NONE;
 		 }
