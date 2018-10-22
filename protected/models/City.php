@@ -26,6 +26,7 @@ class City extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('city', 'required'),
+			array('city', 'unique'),
 			array('city', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
