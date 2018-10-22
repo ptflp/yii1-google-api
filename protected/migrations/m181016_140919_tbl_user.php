@@ -6,9 +6,7 @@ class m181016_140919_tbl_user extends CDbMigration
 	{
         $this->createTable('tbl_user', array(
             'id' => 'pk',
-            'email' => 'string NOT NULL',
-            'gToken' => 'string NOT NULL',
-            'gUserId' => 'string NOT NULL',
+            'email' => 'string NOT NULL'
         ));
 	}
 
