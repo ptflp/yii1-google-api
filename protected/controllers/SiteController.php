@@ -33,7 +33,7 @@ class SiteController extends Controller
 		$oauth = $container->get('GoogleOauth');
 		$configPath =Yii::app()->params['client_secrets'];
 		$oauth->loadFileConfig($configPath);
-		$oauth->setRedirectUri('http://localhost:8080/site/test')
+		$oauth->setRedirectUri('http://localhost:8000/site/test')
 			  ->addScope(GoogleOauth::USERINFO_EMAIL)
 			  ->addScope(GoogleOauth::USERINFO_PROFILE)
 			  ->createOauthLink();
@@ -84,7 +84,7 @@ class SiteController extends Controller
 			$oauth = $container->get('GoogleOauth');
 			$configPath =Yii::app()->params['client_secrets'];
 			$oauth->loadFileConfig($configPath);
-			$oauth->setRedirectUri('http://localhost:8080/site/test')
+			$oauth->setRedirectUri('http://localhost:8000/site/test')
 				  ->addScope(GoogleOauth::USERINFO_EMAIL)
 				  ->addScope(GoogleOauth::USERINFO_PROFILE)
 				  ->createOauthLink();
