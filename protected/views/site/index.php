@@ -19,7 +19,9 @@ if (isset($addressDetails)&&isset($placesDetails)&&isset($cityObj)) {
 	print_r($cityObj);
 	echo '</pre>';
 }
-
+if(Yii::app()->user->checkAccess('999')){
+	echo "hello, I'm administrator";
+}
 if(isset($userInfo)){
 	echo 'Email: '.$userInfo->email;
 	echo '<br>';
