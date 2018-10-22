@@ -1,0 +1,10 @@
+{
+   "name": "Google API",
+   "description": "Google API application",
+   "require":{
+      "yiisoft/yii": "1.1.16",
+      "leeoniya/dump-r": "^2.1",
+      "guzzlehttp/guzzle": "^6.3",
+      "php-di/php-di": "^6.0"
+   }
+}
