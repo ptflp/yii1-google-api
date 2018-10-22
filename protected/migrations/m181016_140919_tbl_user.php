@@ -14,8 +14,7 @@ class m181016_140919_tbl_user extends CDbMigration
 
 	public function down()
 	{
-		echo "m181016_140919_tbl_user does not support migration down.\n";
-		return false;
+		$this->dropTable('tbl_user');
 	}
 
 	/*
