@@ -36,6 +36,7 @@ class User extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('email, role, ban', 'required'),
+			array('email', 'unique'),
 			array('city_id, role, ban', 'numerical', 'integerOnly'=>true),
 			array('email', 'length', 'max'=>255),
 			array('updated_at, created_at', 'safe'),
