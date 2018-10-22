@@ -26,6 +26,8 @@ class GoogleOauth implements GoogleOauthInterface
 
     protected $redirectUri;
 
+    protected $configPath;
+
     protected $oauthLink;
 
     protected $oauthToken;
@@ -56,6 +58,26 @@ class GoogleOauth implements GoogleOauthInterface
     public function setRedirectUri(string $redirectUri)
     {
         $this->redirectUri = $redirectUri;
+
+        return $this;
+    }
+
+    public function setConfigFile(string $configPath)
+    {
+        $this->configPath = $configPath;
+    }
+
+
+    public function loadFileConfig(string $configPath = NULL)
+    {
+        if (!$configPath == NULL) {
+            $this->setConfigFile($configPath);
+        }
+        $json = file_get_contents($this->configPath);
+
+        $dataSecrets = json_decode($json);
+        $this->setClientId($dataSecrets->web->client_id)
+             ->setClientSecret($dataSecrets->web->client_secret);
 
         return $this;
     }
