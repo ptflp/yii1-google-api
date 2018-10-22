@@ -14,7 +14,13 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('city_id')); ?>:</b>
-	<?php echo CHtml::encode($data->city->city); ?>
+	<?php
+	if (isset($data->city->city)) {
+		$cityName = $data->city->city;
+	} else {
+		$cityName = 'Не определен';
+	}
+	echo CHtml::encode($cityName); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('role')); ?>:</b>
@@ -26,7 +32,13 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('updated_at')); ?>:</b>
-	<?php echo CHtml::encode($data->updated_at); ?>
+	<?php
+	if ($data->updated_at==NULL) {
+		$updatedAt = 'Профиль не менялся';
+	} else {
+		$updatedAt = $data->updated_at;
+	}
+	echo CHtml::encode($updatedAt); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('created_at')); ?>:</b>

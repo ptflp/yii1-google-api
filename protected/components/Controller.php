@@ -20,4 +20,12 @@ class Controller extends CController
 	 * for more details on how to specify this property.
 	 */
 	public $breadcrumbs=array();
+
+	public $container;
+
+	protected function beforeAction($action)
+	{
+		$this->container = new DI\Container();
+		return parent::beforeAction($action);
+	}
 }
