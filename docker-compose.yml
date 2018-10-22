@@ -8,14 +8,14 @@ services:
       - ./:/app:delegated
     ports:
       - '8000:80'
-    networks: 
+    networks:
       - skynet
   db:
     image: mysql
     container_name: g-api-db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    networks: 
+    networks:
       - skynet
     environment:
       MYSQL_ROOT_PASSWORD: root
