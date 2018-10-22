@@ -13,8 +13,8 @@
 	<?php echo CHtml::encode($data->email); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('city')); ?>:</b>
-	<?php echo CHtml::encode($data->city); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('city_id')); ?>:</b>
+	<?php echo CHtml::encode($data->city->city); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('role')); ?>:</b>
