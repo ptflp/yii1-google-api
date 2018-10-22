@@ -5,17 +5,19 @@ class m181016_140919_tbl_user extends CDbMigration
 	public function up()
 	{
         $this->createTable('tbl_user', array(
-            'id' => 'pk',
-            'email' => 'string NOT NULL',
-            'gToken' => 'string NOT NULL',
-            'gUserId' => 'string NOT NULL',
+				'id' => 'pk',
+				'email' => 'string NOT NULL',
+				'city_id' =>  'integer DEFAULT NULL',
+				'role' => 'integer NOT NULL',
+				'ban' => 'boolean NOT NULL',
+				'updated_at' => 'timestamp DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP',
+				'created_at' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
         ));
 	}
 
 	public function down()
 	{
-		echo "m181016_140919_tbl_user does not support migration down.\n";
-		return false;
+		$this->dropTable('tbl_user');
 	}
 
 	/*

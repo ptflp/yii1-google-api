@@ -4,3 +4,5 @@
 /vendor
 /web/assets
 client_secrets.json
+g_api_key.json
+protected/runtime/gii-1.1.16/

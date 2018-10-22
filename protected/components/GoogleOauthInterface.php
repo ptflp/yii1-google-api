@@ -8,6 +8,10 @@ interface GoogleOauthInterface
 
     public function setRedirectUri(string $redirectUri);
 
+    public function setConfigFile(string $configPath);
+
+    public function loadFileConfig(string $configPath);
+
     public function addScope(string $scope);
 
     public function createOauthLink();

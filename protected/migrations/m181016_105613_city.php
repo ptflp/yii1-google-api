@@ -7,14 +7,15 @@ class m181016_105613_city extends CDbMigration
         $this->createTable('tbl_city', array(
             'id' => 'pk',
             'city' => 'string NOT NULL',
-        ));
+		  ));
+		  $this->createIndex('idxcity','tbl_city','city',true);
 	}
 
 	public function down()
 	{
 		$this->dropTable('tbl_city');
 	}
-	
+
 	/*
 	// Use safeUp/safeDown to do migration with transaction
 	public function safeUp()
