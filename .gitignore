@@ -4,3 +4,4 @@
 /vendor
 /web/assets
 client_secrets.json
+g_api_key.json

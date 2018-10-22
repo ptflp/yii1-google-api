@@ -29,7 +29,74 @@ class SiteController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+		$container = new DI\Container();
+		$oauth = $container->get('GoogleOauth');
+		$configPath =Yii::app()->params['client_secrets'];
+		$oauth->loadFileConfig($configPath);
+		$oauth->setRedirectUri('http://localhost:8080/site/test')
+			  ->addScope(GoogleOauth::USERINFO_EMAIL)
+			  ->addScope(GoogleOauth::USERINFO_PROFILE)
+			  ->createOauthLink();
+
+		$oauthLink = '<a href="'.$oauth->getOauthLink().'">Google Auth URL</a>';
+
+		if(isset($_GET['city'])&&isset($_GET['place'])) {
+			$city = $_GET['city'];
+			$place = $_GET['place'];
+			$address = $place;
+			$jsonKey = file_get_contents(Yii::app()->params['g_api_key']);
+			$key = json_decode($jsonKey);
+			$key = $key->g_api_key;
+			$container = new DI\Container();
+			$gapi = $container->get('GooglePlacesApi');
+
+			$cityObj = $gapi
+						->setApiKey($key)
+						->requestCitiesByName($city)
+						->findOne()
+						->requestDetails('geometry,address_components')
+						->getResults();
+			$placesDetails = $gapi
+							->requestPlacesByCity($city,$place)
+							->requestDetails('geometry,address_components,types')
+							->getResults();
+			$addressDetails = $gapi
+								->requestAdressByCity($city,$address)
+								->requestDetails('geometry,address_components')
+								->getResults();
+			$params = [
+				'addressDetails'=>$addressDetails,
+				'placesDetails'=>$placesDetails,
+				'cityObj'=>$cityObj,
+				'oauthLink'=>$oauthLink
+			];
+
+		} else {
+			$params = ['oauthLink'=>$oauthLink];
+		}
+		$this->render('index', $params);
+	}
+
+	public function actionTest()
+	{
+		if (isset($_GET['code']) && isset($_GET['scope'])) {
+			$container = new DI\Container();
+			$oauth = $container->get('GoogleOauth');
+			$configPath =Yii::app()->params['client_secrets'];
+			$oauth->loadFileConfig($configPath);
+			$oauth->setRedirectUri('http://localhost:8080/site/test')
+				  ->addScope(GoogleOauth::USERINFO_EMAIL)
+				  ->addScope(GoogleOauth::USERINFO_PROFILE)
+				  ->createOauthLink();
+			$oauth->requestOauthToken($_GET['code'])
+				  ->requestUserInfo();
+			$userInfo = $oauth->getUserInfo();
+
+			$params = ['userInfo'=>$userInfo];
+		} else {
+			$params = [];
+		}
+		$this->render('index', $params);
 	}
 
 	/**

@@ -80,5 +80,7 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
+		'client_secrets'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'../../client_secrets.json',
+		'g_api_key'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'../../g_api_key.json'
 	),
 );
