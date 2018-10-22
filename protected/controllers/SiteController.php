@@ -36,7 +36,8 @@ class SiteController extends Controller
 		$oauth->setRedirectUri('http://localhost:8000/site/test')
 			  ->addScope(GoogleOauth::USERINFO_EMAIL)
 			  ->addScope(GoogleOauth::USERINFO_PROFILE)
-			  ->createOauthLink();
+			  ->createOauthLink()
+			  ->getOauthLink();
 
 		$oauthLink = '<a href="'.$oauth->getOauthLink().'">Google Auth URL</a>';
 

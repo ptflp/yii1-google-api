@@ -14,8 +14,9 @@
  */
 class User extends CActiveRecord
 {
-	const ROLE_ADMIN = 'admin';
-	const ROLE_USER = 'user';
+	const ROLE_ADMIN = '999';
+	const ROLE_USER = '1';
+	const ROLE_GUEST = '0';
 	const ROLE_BANNED = 'banned';
 
 	/**
