@@ -56,8 +56,7 @@ class SiteController extends Controller
 			$params = [
 				'addressDetails'=>$addressDetails,
 				'placesDetails'=>$placesDetails,
-				'cityObj'=>$cityObj,
-				'oauthLink'=>$oauthLink
+				'cityObj'=>$cityObj
 			];
 
 		} else {
