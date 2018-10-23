@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- when using the mode "code", it's important to specify charset utf-8 -->
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+    <link href="jsoneditor/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <script src="jsoneditor/dist/jsoneditor.min.js"></script>  
+    <style>
+         div#jsoneditorTree, div#jsoneditorCode {
+            width: 50%;
+            height: 377px;
+            float: left;
+         }
+    </style>
+</head>
+<body>
+   
+      <div id="jsoneditorCode"></div>
+      <div id="jsoneditorTree"></div>
+   
+   <script>
+     var job = {
+       "title": "Job description",
+       "type": "object",
+       "required": ["address"],
+       "properties": {
+         "company": {
+           "type": "string"
+         },
+         "role": {
+           "type": "string"
+         },
+         "address": {
+           "type": "string"
+         },
+         "salary": {
+           "type": "number",
+           "minimum": 120
+         }
+       }
+     };
+     var json = {
+       firstName: 'John',
+       lastName: 'Doe',
+       gender: null,
+       age: "28",
+       availableToHire: 1,
+       job: {
+         company: 'freelance',
+         role: 'developer',
+         salary: 100
+       }
+     };
+     var optionsCode = {
+       mode: 'code',
+     };
+     var optionsTree = {
+       mode: 'tree',
+     };
+     // create the editor
+     var container = document.getElementById('jsoneditorCode');
+     var editor = new JSONEditor(container, optionsCode, json);
+     var container = document.getElementById('jsoneditorTree');
+     var editor = new JSONEditor(container, optionsTree, json);
+   </script>
+</body>
+</html>
