@@ -32,7 +32,8 @@ class Controller extends CController
 	protected function renderJSON($data)
 	{
 		header('Content-type: application/json');
-		echo CJSON::encode($data);
+		// echo CJSON::encode($data);
+		echo json_encode($data,JSON_UNESCAPED_UNICODE);
 
 		foreach (Yii::app()->log->routes as $route) {
 			if($route instanceof CWebLogRoute) {
