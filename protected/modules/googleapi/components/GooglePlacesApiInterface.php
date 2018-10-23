@@ -14,6 +14,8 @@ interface GooglePlacesApiInterface
 
     public function getPlaceDetailsById(string $placeId, string $fields);
 
+    public function nearbySearch(string $keyword, string $type, int $radius=NULL, array $location=NULL);
+
     public function findOne();
 
     public function getResults();

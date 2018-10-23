@@ -2,11 +2,11 @@
 
 class PlaceController extends Controller
 {
-	public function actionIndex()
+	public function actionSearch()
 	{
-		if(isset($_GET['city'])&&isset($_GET['place'])) {
+		if(isset($_GET['city'])&&isset($_GET['keyword'])) {
 			$city = $_GET['city'];
-			$place = $_GET['place'];
+			$place = $_GET['keyword'];
 			$address = $place;
 			$jsonKey = file_get_contents(Yii::app()->params['g_api_key']);
 			$key = json_decode($jsonKey);
@@ -21,15 +21,14 @@ class PlaceController extends Controller
 						->requestDetails('geometry,address_components')
 						->getResults();
 			$placesDetails = $gapi
-							->requestPlacesByCity($city,$place)
-							->requestDetails('geometry,address_components,types')
+							->nearbySearch($place,'store')
 							->getResults();
-			$addressDetails = $gapi
-								->requestAdressByCity($city,$address)
-								->requestDetails('geometry,address_components')
-								->getResults();
+			// $addressDetails = $gapi
+			// 					->requestAdressByCity($city,$address)
+			// 					->requestDetails('geometry,address_components')
+			// 					->getResults();
 			$params = [
-				'addressDetails'=>$addressDetails,
+				// 'addressDetails'=>$addressDetails,
 				'placesDetails'=>$placesDetails,
 				'cityObj'=>$cityObj
 			];

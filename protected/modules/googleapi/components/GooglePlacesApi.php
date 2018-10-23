@@ -14,6 +14,8 @@ class GooglePlacesApi implements GooglePlacesApiInterface
 
     protected $detailsUrl = 'https://maps.googleapis.com/maps/api/place/details/json';
 
+    protected $nearbyUrl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
+
     protected $paramsUrl = [];
 
     protected $results;
@@ -127,6 +129,11 @@ class GooglePlacesApi implements GooglePlacesApiInterface
                 $this->location[] = $this->results->geometry->location->lat;
                 $this->location[] = $this->results->geometry->location->lng;
             }
+            if(isset($this->results->details->geometry)) {
+                $this->location[] = $this->results->details->geometry->location->lat;
+                $this->location[] = $this->results->details->geometry->location->lng;
+
+            }
         } else {
             foreach ($this->results as $key => $value) {
                 $this->results[$key]->details=$this->getPlaceDetailsById($value->place_id,$fields);
@@ -152,6 +159,38 @@ class GooglePlacesApi implements GooglePlacesApiInterface
         $data = $this->fetch($this->detailsUrl);
 
         return $data->result;
+    }
+
+    public function nearbySearch(string $keyword, string $type, int $radius=NULL, array $location=NULL)
+    {
+        if(!$location==NULL) {
+            $this->location = $location;
+        }
+
+        if(!empty($this->location)) {
+            $lat = $this->location[0];
+            $lng = $this->location[1];
+        } else {
+            //Exception
+            die('Location not set');
+        }
+
+        $paramsUrl = [
+            'location'=>"$lat,$lng",
+            'radius'=>$this->radius,
+            'type'=>$type,
+            'language'=>$this->lang,
+            'keyword'=>$keyword,
+            'key'=> $this->key,
+        ];
+
+        $this->client->setParamsUrl($paramsUrl);
+
+        $data = $this->fetch($this->nearbyUrl);
+
+        $this->results = $data->results;
+
+        return $this;
     }
 
     public function findOne()
