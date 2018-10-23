@@ -48,8 +48,25 @@ class PlaceController extends Controller
 				]
 			];
 
-
 			$places = [];
+
+			$addressDetails = $gapi
+								->requestAdressByCity($city,$address)
+								->requestDetails('geometry')
+								->getResults();
+			array_slice($addressDetails,0,2);
+			foreach ($addressDetails as $addressObj) {
+				$name = $addressObj->structured_formatting->main_text;
+				$lng = $addressObj->details->geometry->location->lng;
+				$lat = $addressObj->details->geometry->location->lat;
+				$places[] = [
+					"name" => $name,
+					"longitude" => $lng,
+					"latitude" => $lat,
+					"address" => $name
+				];
+			}
+
 			foreach ($placeTypes as $type) {
 				$temp = $gapi
 				->nearbySearch($type['ru'].' '.$place,$type['en'])
@@ -67,31 +84,12 @@ class PlaceController extends Controller
 							"latitude" => $lat,
 							"address" => $address
 						];
-						// "name": "Лена, кинотеатр",
-						// "longitude": 129.721214,
-						// "latitude": 62.020283,
-						// "address": "Ленина проспект, 45",
 					}
 				}
 			}
-			echo '<pre>';
-			print_r($places);
-			echo '</pre>';
 
-			$addressDetails = $gapi
-								->requestAdressByCity($city,$address)
-								->getResults();
-			$params = [
-				'addressDetails'=>$addressDetails,
-				'places'=>$places,
-				'cityObj'=>$cityObj
-			];
+			$this->renderJSON($places);
 
-		} else {
-			$params = [];
 		}
-		echo '<pre>';
-		print_r($params);
-		echo '</pre>';
 	}
 }
