@@ -13,7 +13,7 @@ class UserIdentity extends CUserIdentity {
 	public function authenticate(){
 		 // Производим стандартную аутентификацию, описанную в руководстве.
 		 $user = User::model()->find('LOWER(email)=?', array(strtolower($this->username)));
-		 if(($user===null) || ($this->username!==$user->email)) {
+		 if($user===null) {
 			 $user = new User;
 			 $user->email = $this->username;
 			 $user->role = 999;

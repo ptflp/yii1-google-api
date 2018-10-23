@@ -1,6 +1,6 @@
 <?php
 
-class ApiController extends Controller
+class PlaceController extends Controller
 {
 	public function actionIndex()
 	{
