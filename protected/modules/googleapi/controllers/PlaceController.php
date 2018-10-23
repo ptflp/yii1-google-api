@@ -20,7 +20,7 @@ class PlaceController extends Controller
 						->findOne()
 						->requestDetails('geometry,address_components')
 						->getResults();
-
+			dump_r($city);
 			$placeTypes = [
 				[
 					'en' => 'movie_theater',
@@ -54,6 +54,7 @@ class PlaceController extends Controller
 								->requestAdressByCity($city,$address)
 								->requestDetails('geometry')
 								->getResults();
+								// dump_r($addressDetails);
 			array_slice($addressDetails,0,2);
 			foreach ($addressDetails as $addressObj) {
 				$name = $addressObj->structured_formatting->main_text;
@@ -72,6 +73,9 @@ class PlaceController extends Controller
 				->nearbySearch($type['ru'].' '.$place,$type['en'])
 				->getResults();
 				foreach ($temp as $item) {
+					echo '<pre>';
+					print_r($item);
+					echo '</pre>';
 					$itemName = mb_strtolower($item->name);
 					if(strpos($itemName,$place) !== false){
 						$name = $item->name . ', ' . $type['ru'];
