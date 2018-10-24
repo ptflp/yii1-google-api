@@ -4,19 +4,24 @@ class PlaceController extends Controller
 {
 	public function actionSearch()
 	{
-		if(isset($_GET['city'])&&isset($_GET['keyword'])) {
+		if(isset($_GET['city_id']) && isset($_GET['keyword'])) {
+			if(is_numeric($_GET['city_id'])) {
+				$cityId = $_GET['city_id'];
+				$place = mb_strtolower($_GET['keyword']);
 
-			$city = mb_strtolower($_GET['city']);
-			$place = mb_strtolower($_GET['keyword']);
+				$place = trim($place);
 
-			$place = trim($place);
+				$places = $this->container
+									->get('PlaceSearch')
+									->requestData($cityId,$place)
+									->getResults();
 
-			$places = $this->container
-								->get('PlaceSearch')
-								->requestData($city,$place)
-								->getResults();
-
-			$this->renderJSON($places);
+				$this->renderJSON($places);
+			} else {
+				$this->renderJSON([]);
+			}
+		} else {
+			$this->renderJSON([]);
 		}
 	}
 }

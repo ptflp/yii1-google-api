@@ -16,12 +16,6 @@ class PlaceSearch
 
    protected $cityName;
 
-   /*
-   // надо бы найти и сопоставить google types
-   // то есть найти руссифицированные типы
-   // нашел в гугл мапс русские аналоги типов.
-   // Multiple types queries depricated прийдется по каждому типу выводить по очередно.
-   */
    protected $placeTypes;
 
    public function __construct(GooglePlacesApi $placesApiObj, City $cityModel)
@@ -29,7 +23,13 @@ class PlaceSearch
       $this->placesApi = $placesApiObj;
       $this->apiKeyPath = Yii::app()->params['g_api_key'];
       $this->setApiKey();
-      $this->city = $cityModel;
+      $this->cityModel = $cityModel;
+      /*
+      // надо бы найти и сопоставить google types
+      // то есть найти руссифицированные типы
+      // нашел в гугл мапс русские аналоги типов.
+      // Multiple types queries depricated прийдется по каждому типу выводить по очередно.
+      */
       $this->placeTypes = [
          [
             'en' => 'movie_theater',
@@ -66,24 +66,41 @@ class PlaceSearch
       $this->placesApi->setApiKey($key);
    }
 
-   public function requestData($cityId,string $input)
+   public function requestData(int $cityId,string $input)
    {
       $input = trim($input);
-      $this->placesApi
-         ->requestCitiesByName($cityId)
-         ->findOne()
-         ->requestDetails('geometry,address_components')
-         ->getResults();
 
-      $this->cityName = $cityId;
-      $this->requestAddresses($input);
+      $this->requestCityById($cityId);
 
-      $this->requestPlaces($input);
+      if(is_string($this->cityName)) {
+         $this->setPlacesApiCity();
 
+         $this->requestAddresses($input);
+
+         $this->requestPlaces($input);
+      }
 
       $this->results = array_merge($this->addressData,$this->placesData);
 
       return $this;
+   }
+
+   protected function requestCityById(int $cityId)
+   {
+      $cityModel = $this->cityModel::model()->findByPk($cityId);
+      if($cityModel !== NULL) {
+         $this->cityName = $cityModel->city;
+      }
+
+   }
+
+   public function setPlacesApiCity()
+   {
+      $this->placesApi
+         ->requestCitiesByName($this->cityName)
+         ->findOne()
+         ->requestDetails('geometry')
+         ->getResults();
    }
 
    protected function requestAddresses(string $address)
