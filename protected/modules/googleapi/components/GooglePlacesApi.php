@@ -24,6 +24,8 @@ class GooglePlacesApi implements GooglePlacesApiInterface
 
     protected $lang = 'ru';
 
+    protected $error;
+
     public function __construct(ClientAdaptor $client, string $key=NULL)
     {
         if(!$key==NULL) {
@@ -60,7 +62,7 @@ class GooglePlacesApi implements GooglePlacesApiInterface
             $lng = $this->location[1];
         } else {
             //Exception
-            die('Location not set');
+            throw new \Exception('Location not set');
         }
 
         if(!$radius==NULL) {
@@ -172,7 +174,7 @@ class GooglePlacesApi implements GooglePlacesApiInterface
             $lng = $this->location[1];
         } else {
             //Exception
-            die('Location not set');
+            throw new \Exception('Location not set');
         }
 
         $paramsUrl = [
@@ -226,11 +228,17 @@ class GooglePlacesApi implements GooglePlacesApiInterface
 
     protected function fetch(string $url)
     {
-        $this->client->setUrl($url);
-        $this->client->fetch();
+        try {
+            $this->client->setUrl($url);
+            $this->client->fetch();
 
-		$json = $this->client->getResponse();
-        $data = json_decode($json);
+            $json = $this->client->getResponse();
+            $data = json_decode($json);
+        } catch(\Exception $e) {
+            $this->error = $e;
+            $data = [];
+        }
+
         return $data;
     }
 }
