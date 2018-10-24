@@ -14,11 +14,13 @@ class PlaceSearch
 
    protected $addressData = [];
 
+   protected $cityName;
+
    /*
    // надо бы найти и сопоставить google types
-   // и найти руссифицированные типы
+   // то есть найти руссифицированные типы
    // нашел в гугл мапс русские аналоги типов.
-   // Multiple types queries depricated прийдется по каждому типу выводить поочередно.
+   // Multiple types queries depricated прийдется по каждому типу выводить по очередно.
    */
    protected $placeTypes;
 
@@ -64,21 +66,35 @@ class PlaceSearch
       $this->placesApi->setApiKey($key);
    }
 
-   public function getData($cityId,string $place)
+   public function requestData($cityId,string $input)
    {
-      $place = trim($place);
+      $input = trim($input);
       $this->placesApi
          ->requestCitiesByName($cityId)
          ->findOne()
          ->requestDetails('geometry,address_components')
          ->getResults();
 
+      $this->cityName = $cityId;
+      $this->requestAddresses($input);
+
+      $this->requestPlaces($input);
+
+
+      $this->results = array_merge($this->addressData,$this->placesData);
+
+      return $this;
+   }
+
+   protected function requestAddresses(string $address)
+   {
+      $city = $this->cityName;
       $addressDetails = $this->placesApi
-								->requestAdressByCity($cityId,$place)
+								->requestAdressByCity($city,$address)
 								->requestDetails('geometry')
                         ->getResults();
 
-      array_slice($addressDetails,0,2);
+      array_slice($addressDetails,0,3);
       foreach ($addressDetails as $addressObj) {
          $name = $addressObj->structured_formatting->main_text;
          $lng = $addressObj->details->geometry->location->lng;
@@ -90,15 +106,18 @@ class PlaceSearch
             "address" => $name
          ];
       }
+   }
 
+   public function requestPlaces(string $place)
+   {
       foreach ($this->placeTypes as $type) {
          $addType = '';
          if(strpos($place,$type['ru']) == false) {
             $addType = $type['ru'];
          }
          $temp = $this->placesApi
-         ->nearbySearch($addType.' '.$place,$type['en'])
-         ->getResults();
+                     ->nearbySearch($addType.' '.$place,$type['en'])
+                     ->getResults();
          foreach ($temp as $item) {
             $itemName = mb_strtolower($item->name);
             if(strpos($itemName,$place) !== false){
@@ -116,10 +135,6 @@ class PlaceSearch
             }
          }
       }
-
-      $this->results = array_merge($this->addressData,$this->placesData);
-
-      return $this;
    }
 
    public function getResults()

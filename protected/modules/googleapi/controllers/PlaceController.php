@@ -13,7 +13,7 @@ class PlaceController extends Controller
 
 			$places = $this->container
 								->get('PlaceSearch')
-								->getData($city,$place)
+								->requestData($city,$place)
 								->getResults();
 
 			$this->renderJSON($places);
