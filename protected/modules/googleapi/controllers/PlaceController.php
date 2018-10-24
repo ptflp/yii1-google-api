@@ -7,12 +7,11 @@ class PlaceController extends Controller
 		if(isset($_GET['city'])&&isset($_GET['keyword'])) {
 			$city = mb_strtolower($_GET['city']);
 			$place = mb_strtolower($_GET['keyword']);
-			$address = $place;
+
 			$jsonKey = file_get_contents(Yii::app()->params['g_api_key']);
 			$key = json_decode($jsonKey);
 			$key = $key->key;
-			$container = new DI\Container();
-			$gapi = $container->get('GooglePlacesApi')
+			$gapi = $this->container->get('GooglePlacesApi')
 									->setApiKey($key);
 
 			$cityObj = $gapi
@@ -23,13 +22,19 @@ class PlaceController extends Controller
 			// echo '<pre>';
 			// print_r($cityObj);
 			// echo '</pre>';
+			/*
+				надо бы найти и сопоставить google types
+				и найти руссифицированные типы
+				нашел в гугл мапс русские аналоги типов.
+				Multiple types queries depricated прийдется по каждому типу выводить поочередно.
+			*/
 			$placeTypes = [
 				[
 					'en' => 'movie_theater',
 					'ru' => 'кинотеатр'
 				],
 				[
-					'en' => 'lodging',
+					'en' => 'lodging', // сюда входят мини гостиницы и прочие
 					'ru' => 'гостиница'
 				],
 				[
@@ -53,7 +58,7 @@ class PlaceController extends Controller
 			$places = [];
 
 			$addressDetails = $gapi
-								->requestAdressByCity($city,$address)
+								->requestAdressByCity($city,$place)
 								->requestDetails('geometry')
 								->getResults();
 								// dump_r($addressDetails);
@@ -71,13 +76,17 @@ class PlaceController extends Controller
 			}
 
 			foreach ($placeTypes as $type) {
+				$addType = '';
+				if(strpos($place,$type['ru']) == false) {
+					$addType = $type['ru'];
+				}
 				$temp = $gapi
-				->nearbySearch($type['ru'].' '.$place,$type['en'])
+				->nearbySearch($addType.' '.$place,$type['en'])
 				->getResults();
 				foreach ($temp as $item) {
 					$itemName = mb_strtolower($item->name);
 					if(strpos($itemName,$place) !== false){
-						$name = $item->name . ', ' . $type['ru'];
+						$name = $item->name . ', ' . $addType;
 						$lat = $item->geometry->location->lat;
 						$lng = $item->geometry->location->lng;
 						$address = substr($item->vicinity, 0, strrpos($item->vicinity, ","));
