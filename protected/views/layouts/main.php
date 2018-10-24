@@ -12,16 +12,16 @@
     <link rel="icon" type="image/png" href="/main/img/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="/main/img/favicon-32x32.png" sizes="32x32">
 
-    <title>Google API Yii 1.16</title>
+    <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
 
     <!-- uikit -->
-    <link rel="stylesheet" href="bower_components/uikit/css/uikit.almost-flat.min.css" media="all">
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/bower_components/uikit/css/uikit.almost-flat.min.css" media="all">
 
     <!-- altair admin -->
-    <link rel="stylesheet" href="/main/css/main.min.css" media="all">
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/main/css/main.min.css" media="all">
 
-    <link href="jsoneditor/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
     <style>
          div#jsoneditorTree, div#jsoneditorCode {
             height: 377px;
@@ -30,9 +30,9 @@
 
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
-        <script type="text/javascript" src="bower_components/matchMedia/matchMedia.js"></script>
-        <script type="text/javascript" src="bower_components/matchMedia/matchMedia.addListener.js"></script>
-        <link rel="stylesheet" href="/main/css/ie.css" media="all">
+        <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/bower_components/matchMedia/matchMedia.js"></script>
+        <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/bower_components/matchMedia/matchMedia.addListener.js"></script>
+        <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/main/css/ie.css" media="all">
     <![endif]-->
 
 </head>
@@ -40,70 +40,29 @@
     <!-- main header -->
     <header id="header_main">
         <div class="header_main_content">
-            <nav class="uk-navbar">
-
-                <div class="uk-navbar-flip">
-                    <ul class="uk-navbar-nav user_actions">
-                        <li><a href="#" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i>asfasfas</a></li>
-                        <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="/main/img/avatars/avatar_11_tn.png" alt=""/></a>
-                            <div class="uk-dropdown uk-dropdown-small">
-                                <ul class="uk-nav js-uk-prevent">
-                                    <li><a href="page_user_profile.html">My profile</a></li>
-                                    <li><a href="page_settings.html">Settings</a></li>
-                                    <li><a href="login.html">Login Page</a></li>
-                                    <li><a href="login_v2.html">Login Page v2</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+				<?php $this->widget('ext.materialwidgets.NavMenu',array(
+					'items'=>array(
+						array('label'=>'Главная', 'url'=>array('/', 'city'=>'якутск', 'place'=>'лена')),
+						array('label'=>'Админка', 'url'=>array('/admin/user'), 'visible'=>Yii::app()->user->checkAccess(User::ROLE_ADMIN)),
+						array('label'=>'Настройки', 'url'=>array('/user/settings'), 'visible'=>!Yii::app()->user->isGuest),
+						array('label'=>'Войти через Google', 'url'=>array('/googleapi/oauth/authenticate'), 'visible'=>Yii::app()->user->isGuest),
+						array('label'=>'('.Yii::app()->user->name.')', 'type'=>'profile', 'visible'=>!Yii::app()->user->isGuest,
+							'submenu' => [
+								[
+									'url'=>array('/site/logout'),
+									'label'=>'logout'
+								]
+							]
+						)
+					),
+				)); ?>
         </div>
     </header><!-- main header end -->
     <!-- main sidebar -->
     <div id="page_content">
         <div id="page_content_inner">
 
-            <div class="md-card">
-                <div class="md-card-content">
-                    <h3 class="heading_a">Input fields</h3>
-                    <div class="uk-grid" data-uk-grid-margin>
-                        <div class="uk-width-medium-1-1">
-                            <div class="uk-form-row">
-                                <div class="uk-grid" data-uk-grid-margin>
-                                    <div class="uk-width-medium-1-3">
-                                        <select id="select_demo_5" data-md-selectize data-md-selectize-bottom data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
-                                            <option value="">Выберите город</option>
-                                            <option value="a">Item A</option>
-                                            <option value="b">Item B</option>
-                                            <option value="c">Item C</option>
-                                        </select>
-                                        <span class="uk-form-help-block">Список городов</span>
-                                    </div>
-                                    <div class="uk-width-medium-2-3">
-                                        <label>Введите адрес или место</label>
-                                        <input type="text" class="md-input" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="md-card">
-                <div class="md-card-content">
-                    <h3 class="heading_a">Input fields</h3>
-                    <div class="uk-grid" data-uk-grid-margin>
-                        <div class="uk-width-medium-1-2">
-                            <div id="jsoneditorCode"></div>
-                        </div>
-                        <div class="uk-width-medium-1-2">
-                            <div id="jsoneditorTree"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+				<?php echo $content; ?>
 
         </div>
     </div>
@@ -130,12 +89,12 @@
     </script>
 
     <!-- common functions -->
-    <script src="/main/js/common.js"></script>
+    <script src="<?php echo Yii::app()->request->baseUrl; ?>/main/js/common.js"></script>
     <!-- uikit functions -->
-    <script src="/main/js/uikit_custom.js"></script>
+    <script src="<?php echo Yii::app()->request->baseUrl; ?>/main/js/uikit_custom.js"></script>
     <!-- altair common functions/helpers -->
-    <script src="/main/js/altair_admin_common.js"></script>
-    <script src="jsoneditor/dist/jsoneditor.min.js"></script>
+    <script src="<?php echo Yii::app()->request->baseUrl; ?>/main/js/altair_admin_common.js"></script>
+    <script src="<?php echo Yii::app()->request->baseUrl; ?>/jsoneditor/dist/jsoneditor.min.js"></script>
 
 
     <script>
