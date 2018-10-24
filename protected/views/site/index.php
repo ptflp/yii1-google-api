@@ -25,10 +25,11 @@ $this->pageTitle=Yii::app()->name;
 										<span class="uk-form-help-block">Список городов</span>
 								</div>
 								<div class="uk-width-medium-2-3">
-										<label>Введите адрес или место</label>
-										<input type="text" class="md-input" />
+									<div class="uk-input-group">
+                                <div class="md-input-wrapper"><label>Введите адрес или место</label><input type="text" class="md-input"><span class="md-input-bar "></span></div>
+
+                            </div>
 								</div>
-								<img class="uk-margin-top" src="/main/img/spinners/spinner.gif" alt="">
 							</div>
 						</div>
 				</div>

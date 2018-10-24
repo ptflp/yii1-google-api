@@ -45,7 +45,7 @@
 						array('label'=>'Главная', 'url'=>array('/', 'city'=>'якутск', 'place'=>'лена')),
 						array('label'=>'Админка', 'url'=>array('/admin/user'), 'visible'=>Yii::app()->user->checkAccess(User::ROLE_ADMIN)),
 						array('label'=>'Настройки', 'url'=>array('/user/settings'), 'visible'=>!Yii::app()->user->isGuest),
-						array('label'=>'Войти через Google', 'url'=>array('/googleapi/oauth/authenticate'), 'visible'=>Yii::app()->user->isGuest),
+						array('label'=>'Войти', 'type'=>'modal', 'url'=>array('/googleapi/oauth/authenticate'), 'visible'=>Yii::app()->user->isGuest),
 						array('label'=>'('.Yii::app()->user->name.')', 'type'=>'profile', 'visible'=>!Yii::app()->user->isGuest,
 							'submenu' => [
 								[
@@ -66,7 +66,6 @@
 
         </div>
     </div>
-
     <!-- google web fonts -->
     <script>
         WebFontConfig = {
