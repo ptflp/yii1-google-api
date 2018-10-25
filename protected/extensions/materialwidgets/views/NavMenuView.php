@@ -49,7 +49,7 @@ $icons = [
                               <?php break;
                               case 'profile':
                                     $img = '/main/img/avatar_11_tn.png';
-                                    if(isset($item['img'])){
+                                    if(isset($item['img'])&&!empty($item['img'])){
                                           $img = $item['img'];
                                     }
                                     ?>
