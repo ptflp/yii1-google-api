@@ -36,6 +36,10 @@ class PlaceSearch
             'ru' => 'кинотеатр'
          ],
          [
+               'en' => 'electronics_store',
+               'ru' => 'Магазин электроники'
+         ],
+         [
             'en' => 'lodging', // сюда входят мини гостиницы и прочие
             'ru' => 'гостиница'
          ],
@@ -137,7 +141,9 @@ class PlaceSearch
                      ->getResults();
          foreach ($temp as $item) {
             $itemName = mb_strtolower($item->name);
-            if(strpos($itemName,$place) !== false){
+            $percent = null;
+            $returnValue = similar_text($itemName, $place, $percent);
+            if($percent > 60){
                $name = $item->name . ', ' . $addType;
                $lat = $item->geometry->location->lat;
                $lng = $item->geometry->location->lng;
