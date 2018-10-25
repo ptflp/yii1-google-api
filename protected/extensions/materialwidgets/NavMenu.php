@@ -9,7 +9,7 @@ class NavMenu extends CWidget
    }
 
    public function run() {
-      $this->render('NavMenu', [
+      $this->render('NavMenuView', [
          'items' => $this->items
       ]);
    }

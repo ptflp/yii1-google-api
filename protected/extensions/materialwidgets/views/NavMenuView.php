@@ -1,4 +1,7 @@
 <?php
+/**
+ * Виджет кривой, чисто для примера
+ */
 $icons = [
       'default' => '',
       'fullscreen' => '<i class="material-icons md-24 md-light">fullscreen</i>'
