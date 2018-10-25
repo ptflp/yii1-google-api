@@ -18,9 +18,19 @@ class UserController extends Controller
 
 		if(isset($_POST['User']))
 		{
-			if($model->validate(array('city_id'=>$_POST['User']['city_id']))) {
-				$model->city_id = $_POST['User']['city_id'];
-				$model->save();
+			$cityId = $_POST['User']['city_id'];
+			if($model->validate(array('city_id'=>$cityId))) {
+				// Вариант 1
+				$db = Yii::app()->db2;
+				$sql = 'UPDATE tbl_user SET `city_id`=:city_id WHERE `id` = :userId';
+				$command = $db->createCommand($sql);
+				$command->bindParam(":city_id", $cityId, PDO::PARAM_INT);
+				$command->bindParam(":userId", $id, PDO::PARAM_INT);
+				$response = $command->execute(); //INSERT UPDATE DELETE
+				// Вариант 2
+				// $model->city_id = $cityId;
+				// $model->save();
+				$this->redirect('/user/settings');
 			}
 		}
 
