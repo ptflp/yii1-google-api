@@ -10,7 +10,7 @@ if(Yii::app()->user->isGuest):
 	?>
 <div class="md-card">
 		<div class="md-card-content">
-			<h3 class="heading_a">Input fields</h3>
+			<h3 class="heading_a">Test Google places API</h3>
 			<?php
 				if(Yii::app()->user->checkAccess('999')){
 					echo "hello, I'm administrator";

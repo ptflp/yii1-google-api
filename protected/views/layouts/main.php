@@ -43,15 +43,19 @@
 				<?php $this->widget('ext.materialwidgets.NavMenu',array(
 					'items'=>array(
 						array('label'=>'Главная', 'url'=>array('/', 'city'=>'якутск', 'place'=>'лена')),
-						array('label'=>'Админка', 'url'=>array('/admin/user'), 'visible'=>Yii::app()->user->checkAccess(User::ROLE_ADMIN)),
 						array('label'=>'Настройки', 'url'=>array('/user/settings'), 'visible'=>!Yii::app()->user->isGuest),
 						array('label'=>'Войти', 'type'=>'modal', 'url'=>array('/googleapi/oauth/authenticate'), 'visible'=>Yii::app()->user->isGuest),
 						array('label'=>'('.Yii::app()->user->name.')', 'type'=>'profile', 'img'=>Yii::app()->user->getAvatar(), 'visible'=>!Yii::app()->user->isGuest,
 							'submenu' => [
+                                [
+                                    'label'=>'Админка',
+                                    'url'=>array('/admin/user'),
+                                    'visible'=>Yii::app()->user->checkAccess(User::ROLE_ADMIN)
+                                ],
 								[
 									'url'=>array('/site/logout'),
 									'label'=>'logout'
-								]
+                                ]
 							]
 						)
 					),
@@ -113,6 +117,14 @@
             // ie fixes
             altair_helpers.ie_fix();
         });
+        $( "#settingsCity" ).change(function() {
+            var cityId = $(this).val();
+            cityId = parseInt(cityId);
+            $.post( "/user/settings/", { city_id: cityId })
+            .done(function( data ) {
+                UIkit.notify("Операция успешна", {status:'success'})
+            });
+        });
     </script>
 
 
@@ -157,9 +169,13 @@
      };
      // create the editor
      var container = document.getElementById('jsoneditorCode');
-     var editor = new JSONEditor(container, optionsCode, json);
+     if (container !== null) {
+        var editor = new JSONEditor(container, optionsCode, json);
+     }
      var container = document.getElementById('jsoneditorTree');
-     var editor = new JSONEditor(container, optionsTree, json);
+     if (container !== null) {
+        var editor = new JSONEditor(container, optionsCode, json);
+     }
    </script>
 </body>
 </html>

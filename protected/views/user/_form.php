@@ -4,31 +4,29 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'user-form',
-	// Please note: When you enable ajax validation, make sure the corresponding
-	// controller action is handling ajax validation correctly.
-	// There is a call to performAjaxValidation() commented in generated controller code.
-	// See class documentation of CActiveForm for details on this.
-	'enableAjaxValidation'=>false,
-)); ?>
+			<h3 class="heading_a">Выберите ваш город:</h3>
+			<div class="uk-grid" data-uk-grid-margin>
+				<div class="uk-width-medium-1-1">
+						<div class="uk-form-row">
+							<div class="uk-grid" data-uk-grid-margin>
+								<div class="uk-width-medium-1-3">
+										<select id="settingsCity" data-md-selectize data-md-selectize-bottom data-uk-tooltip="{pos:'top'}" title="Выберите город">
+											<?php if(!empty(Yii::app()->user->getCity()['name'])): ?>
+												<option value="<?=Yii::app()->user->getCity()['id']?>"><?=Yii::app()->user->getCity()['name']?></option>
+											<?php else: ?>
+                                 	<option value="">Установите город по умолчанию в настройках</option>
+											<?php endif;?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
-	<?php echo $form->errorSummary($model); ?>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'city_id'); ?>
-		<?php echo $form->dropDownList($model,'city_id',$cityList); ?>
-		<?php echo $form->error($model,'city_id'); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-	</div>
-
-<?php $this->endWidget(); ?>
-
-</div><!-- form -->
+											<?php foreach ($cityList as $key => $city):?>
+												<?php if ($key !== Yii::app()->user->getCity()['id']): ?>
+													<option value="<?=$key?>"><?=$city?></option>
+												<?php endif; ?>
+											<?php endforeach;?>
+										</select>
+										<span class="uk-form-help-block">Выберите город</span>
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
