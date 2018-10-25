@@ -5,7 +5,7 @@ class PlaceController extends Controller
 	public function actionSearch()
 	{
 		if(isset($_GET['city_id']) && isset($_GET['keyword'])) {
-			if(is_numeric($_GET['city_id'])) {
+			if(is_numeric($_GET['city_id']) && strlen($_GET['keyword'])>1) {
 				$cityId = $_GET['city_id'];
 				$place = mb_strtolower($_GET['keyword']);
 
