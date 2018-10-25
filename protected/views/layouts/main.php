@@ -199,6 +199,7 @@
         $( "#cityId" ).change(function() {
             var cityId = $(this).val();
             app.cityId = cityId;
+            app.lookupPlacesInput();
         });
     }
     </script>
