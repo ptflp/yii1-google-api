@@ -28,4 +28,18 @@ class Controller extends CController
 		$this->container = new DI\Container();
 		return parent::beforeAction($action);
 	}
+
+	protected function renderJSON($data)
+	{
+		header('Content-type: application/json');
+		// echo CJSON::encode($data);
+		echo json_encode($data,JSON_UNESCAPED_UNICODE);
+
+		foreach (Yii::app()->log->routes as $route) {
+			if($route instanceof CWebLogRoute) {
+					$route->enabled = false; // disable any weblogroutes
+			}
+		}
+		Yii::app()->end();
+	}
 }

@@ -59,6 +59,8 @@ return array(
 
 		// database settings are configured in database.php
 		'db'=>require(dirname(__FILE__).'/database.php'),
+		// database settings are configured in database.php
+		'db2'=>require(dirname(__FILE__).'/database2.php'),
 
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors

@@ -4,7 +4,7 @@
 
 $this->breadcrumbs=array(
 	'Cities'=>array('index'),
-	$model->id,
+	$model->name,
 );
 
 $this->menu=array(
@@ -22,6 +22,6 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
-		'city',
+		'name',
 	),
 )); ?>

@@ -9,13 +9,22 @@ class UserIdentity extends CUserIdentity {
 	// Будем хранить id.
 	protected $_id;
 
+	protected $user;
+
+	protected $googleInfo;
+
 	// Данный метод вызывается один раз при аутентификации пользователя.
-	public function authenticate(){
-		 // Производим стандартную аутентификацию, описанную в руководстве.
+	public function authenticate() {
+		if ($this->googleInfo->picture) {
+			$picture = $this->googleInfo->picture;
+		} else {
+			$picture = NULL;
+		}
 		 $user = User::model()->find('LOWER(email)=?', array(strtolower($this->username)));
-		 if(($user===null) || ($this->username!==$user->email)) {
+		 if($user===null) {
 			 $user = new User;
 			 $user->email = $this->username;
+			 $user->avatar = $picture;
 			 $user->role = 999;
 			 $user->ban = 0;
 			 $user->save(false);
@@ -25,17 +34,28 @@ class UserIdentity extends CUserIdentity {
 		// метод getId(см. ниже).
 		$this->_id = $user->id;
 
-		// Далее логин нам не понадобится, зато имя может пригодится
-		// в самом приложении. Используется как Yii::app()->user->name.
-		// realName есть в нашей модели. У вас это может быть name, firstName
-		// или что-либо ещё.
 		$this->username = $user->email;
 
 		$this->errorCode = self::ERROR_NONE;
 		return true;
 	}
 
-	public function getId(){
+	public function getId() {
 		 return $this->_id;
+	}
+
+	protected function setUser(CActiveRecord $user) {
+		$attributes = $user->attributes;
+		$attributes['city'] = $user->city->attributes;
+		$this->user = $attributes;
+	}
+
+	public function getUser() {
+		return $this->user;
+	}
+
+
+	public function setGoogleInfo($googleInfo) {
+		$this->googleInfo = $googleInfo;
 	}
 }

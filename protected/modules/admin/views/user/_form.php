@@ -27,7 +27,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'city_id'); ?>
-		<?php echo $form->textField($model,'city_id'); ?>
+		<?php echo $form->dropDownList($model,'city_id',$cityList); ?>
 		<?php echo $form->error($model,'city_id'); ?>
 	</div>
 
@@ -39,7 +39,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'ban'); ?>
-		<?php echo $form->textField($model,'ban'); ?>
+		<?php echo $form->dropDownList($model,'ban',[0=>'Бан снят', 1=>'Забанен']); ?>
 		<?php echo $form->error($model,'ban'); ?>
 	</div>
 

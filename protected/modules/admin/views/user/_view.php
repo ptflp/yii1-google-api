@@ -15,8 +15,8 @@
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('city_id')); ?>:</b>
 	<?php
-	if (isset($data->city->city)) {
-		$cityName = $data->city->city;
+	if (isset($data->city->name)) {
+		$cityName = $data->city->name;
 	} else {
 		$cityName = 'Не определен';
 	}

@@ -1,6 +1,7 @@
 <?php
 
 include('../vendor/autoload.php');
+include('../protected/functions.php');
 
 // change the following paths if necessary
 $yii=dirname(__FILE__).'/../vendor/yiisoft/yii/framework/yii.php';
