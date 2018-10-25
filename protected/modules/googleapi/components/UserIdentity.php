@@ -9,6 +9,8 @@ class UserIdentity extends CUserIdentity {
 	// Будем хранить id.
 	protected $_id;
 
+	protected $user;
+
 	// Данный метод вызывается один раз при аутентификации пользователя.
 	public function authenticate(){
 		 // Производим стандартную аутентификацию, описанную в руководстве.
@@ -25,6 +27,8 @@ class UserIdentity extends CUserIdentity {
 		// метод getId(см. ниже).
 		$this->_id = $user->id;
 
+		$this->setUser($user);
+
 		// Далее логин нам не понадобится, зато имя может пригодится
 		// в самом приложении. Используется как Yii::app()->user->name.
 		// realName есть в нашей модели. У вас это может быть name, firstName
@@ -37,5 +41,14 @@ class UserIdentity extends CUserIdentity {
 
 	public function getId(){
 		 return $this->_id;
+	}
+
+	protected function setUser(CActiveRecord $user) {
+		$this->user = $user->attributes;
+	}
+
+	public function getUser()
+	{
+		return $this->user;
 	}
 }

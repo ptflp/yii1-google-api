@@ -38,7 +38,8 @@ class OauthController extends Controller
 											->requestUserInfo()
 											->getUserInfo();
 
-		$authorize = $this->container->get('UserAuthorize');
+		$authorize = $this->container
+								->get('UserAuthorize');
 		$authorize->setEmail($userInfo->email)->login();
 		$this->redirect(Yii::app()->homeUrl);
 	}
