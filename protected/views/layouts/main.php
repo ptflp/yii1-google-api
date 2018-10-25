@@ -129,38 +129,7 @@
 
 
    <script>
-     var job = {
-       "title": "Job description",
-       "type": "object",
-       "required": ["address"],
-       "properties": {
-         "company": {
-           "type": "string"
-         },
-         "role": {
-           "type": "string"
-         },
-         "address": {
-           "type": "string"
-         },
-         "salary": {
-           "type": "number",
-           "minimum": 120
-         }
-       }
-     };
-     var json = {
-       firstName: 'John',
-       lastName: 'Doe',
-       gender: null,
-       age: "28",
-       availableToHire: 1,
-       job: {
-         company: 'freelance',
-         role: 'developer',
-         salary: 100
-       }
-     };
+     var json = [];
      var optionsCode = {
        mode: 'code',
      };
@@ -170,12 +139,68 @@
      // create the editor
      var container = document.getElementById('jsoneditorCode');
      if (container !== null) {
-        var editor = new JSONEditor(container, optionsCode, json);
+        var editorJSON = new JSONEditor(container, optionsCode, json);
      }
      var container = document.getElementById('jsoneditorTree');
      if (container !== null) {
-        var editor = new JSONEditor(container, optionsCode, json);
+        var editorObj = new JSONEditor(container, optionsTree, json);
      }
    </script>
+
+
+  <script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+
+    <script>
+
+    var checkApp = document.getElementById('app');
+    if (checkApp !== null) {
+        var app = new Vue({
+            el: '#app',
+            data: {
+                placesInput: '',
+                places: '',
+                cityId: ''
+            },
+            created: function () {
+                var f = document.getElementById('firstSelect') ;
+                this.cityId = f.value;
+            },
+            watch: {
+                placesInput: function() {
+                    this.places = ''
+                    if (this.placesInput.length > 2) {
+                        this.lookupPlacesInput()
+                    }
+                }
+            },
+            methods: {
+                lookupPlacesInput: _.debounce(function() {
+                    altair_helpers.content_preloader_show();
+                    var app = this
+                    axios.get('/googleapi/place/search?city_id=' + app.cityId +'&keyword=' +app.placesInput)
+                        .then(function (response) {
+                            altair_helpers.content_preloader_hide();
+                            editorJSON.set(response.data);
+                            editorObj.set(response.data);
+                            console.log(response.data);
+                            console.log(app.cityId);
+                        })
+                        .catch(function (error) {
+                        })
+                }, 500),
+                test: function() {
+                    console.log('test');
+                }
+            }
+        });
+
+        $( "#cityId" ).change(function() {
+            var cityId = $(this).val();
+            app.cityId = cityId;
+        });
+    }
+    </script>
 </body>
 </html>

@@ -8,7 +8,7 @@ if(Yii::app()->user->isGuest):
 <?php if(!Yii::app()->user->isGuest):
 /* AUTHORIZED USER CONTENT */
 	?>
-<div class="md-card">
+<div class="md-card" id="app">
 		<div class="md-card-content">
 			<h3 class="heading_a">Test Google places API</h3>
 			<?php
@@ -19,11 +19,14 @@ if(Yii::app()->user->isGuest):
 			<div class="uk-grid" data-uk-grid-margin>
 				<div class="uk-width-medium-1-1">
 						<div class="uk-form-row">
-							<div class="uk-grid" data-uk-grid-margin>
+							<div class="uk-grid" data-uk-grid-margin v-on:load="test()">
 								<div class="uk-width-medium-1-3">
-										<select id="cityId" data-md-selectize data-md-selectize-bottom data-uk-tooltip="{pos:'top'}" title="Выберите город">
+										<?php if(!empty(Yii::app()->user->getCity()['name'])): ?>
+										<input id="firstSelect" type="hidden" value="<?=Yii::app()->user->getCity()['id']?>" />
+										<?php endif;?>
+										<select id="cityId"  data-md-selectize data-md-selectize-bottom data-uk-tooltip="{pos:'top'}" title="Выберите город" >
 											<?php if(!empty(Yii::app()->user->getCity()['name'])): ?>
-												<option value="<?=Yii::app()->user->getCity()['id']?>"><?=Yii::app()->user->getCity()['name']?></option>
+												<option selected value="<?=Yii::app()->user->getCity()['id']?>"><?=Yii::app()->user->getCity()['name']?></option>
 											<?php else: ?>
                                  	<option value="">Установите город по умолчанию в настройках</option>
 											<?php endif;?>
@@ -37,7 +40,10 @@ if(Yii::app()->user->isGuest):
 										<span class="uk-form-help-block">Выберите город</span>
 								</div>
 								<div class="uk-width-medium-2-3">
-                                <div class="md-input-wrapper"><label>Введите адрес или место</label><input type="text" class="md-input"><span class="md-input-bar "></span></div>
+									<div class="md-input-wrapper">
+										<label>Введите адрес или место</label>
+										<input type="text" class="md-input" v-model="placesInput">
+									</div>
 								</div>
 							</div>
 						</div>
