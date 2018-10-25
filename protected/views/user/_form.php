@@ -15,7 +15,7 @@
 											<?php if(!empty(Yii::app()->user->getCity()['name'])): ?>
 												<option value="<?=Yii::app()->user->getCity()['id']?>"><?=Yii::app()->user->getCity()['name']?></option>
 											<?php else: ?>
-                                 	<option value="">Установите город по умолчанию в настройках</option>
+                                 	<option value=""></option>
 											<?php endif;?>
 
 											<?php foreach ($cityList as $key => $city):?>
