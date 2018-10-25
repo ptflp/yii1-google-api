@@ -12,7 +12,7 @@ class WebUser extends CWebUser {
 			}
 		}
 
-		return parent::__get($name);
+		return;
 	}
 
 	public function login($identity, $duration = 0) {

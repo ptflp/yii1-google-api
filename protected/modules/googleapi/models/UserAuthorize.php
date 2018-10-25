@@ -2,7 +2,9 @@
 
 class UserAuthorize
 {
-   public $email;
+   protected $email;
+
+	protected $googleInfo;
 
    private $_identity;
 
@@ -26,6 +28,7 @@ class UserAuthorize
 		if($this->_identity===null)
 		{
 			$this->_identity=new UserIdentity($this->email,NULL);
+			$this->_identity->setGoogleInfo($this->googleInfo);
 			$this->_identity->authenticate();
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
@@ -35,5 +38,12 @@ class UserAuthorize
 		}
 		else
 			return false;
+	}
+
+	public function setGoogleInfo($googleInfo)
+	{
+		$this->googleInfo = $googleInfo;
+
+		return $this;
 	}
 }

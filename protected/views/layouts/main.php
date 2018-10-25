@@ -46,7 +46,7 @@
 						array('label'=>'Админка', 'url'=>array('/admin/user'), 'visible'=>Yii::app()->user->checkAccess(User::ROLE_ADMIN)),
 						array('label'=>'Настройки', 'url'=>array('/user/settings'), 'visible'=>!Yii::app()->user->isGuest),
 						array('label'=>'Войти', 'type'=>'modal', 'url'=>array('/googleapi/oauth/authenticate'), 'visible'=>Yii::app()->user->isGuest),
-						array('label'=>'('.Yii::app()->user->name.')', 'type'=>'profile', 'visible'=>!Yii::app()->user->isGuest,
+						array('label'=>'('.Yii::app()->user->name.')', 'type'=>'profile', 'img'=>Yii::app()->user->getField('avatar'), 'visible'=>!Yii::app()->user->isGuest,
 							'submenu' => [
 								[
 									'url'=>array('/site/logout'),

@@ -11,13 +11,21 @@ class UserIdentity extends CUserIdentity {
 
 	protected $user;
 
+	protected $googleInfo;
+
 	// Данный метод вызывается один раз при аутентификации пользователя.
-	public function authenticate(){
+	public function authenticate() {
+		if ($this->googleInfo->picture) {
+			$picture = $this->googleInfo->picture;
+		} else {
+			$picture = NULL;
+		}
 		 // Производим стандартную аутентификацию, описанную в руководстве.
 		 $user = User::model()->find('LOWER(email)=?', array(strtolower($this->username)));
 		 if($user===null) {
 			 $user = new User;
 			 $user->email = $this->username;
+			 $user->avatar = $picture;
 			 $user->role = 999;
 			 $user->ban = 0;
 			 $user->save(false);
@@ -39,7 +47,7 @@ class UserIdentity extends CUserIdentity {
 		return true;
 	}
 
-	public function getId(){
+	public function getId() {
 		 return $this->_id;
 	}
 
@@ -47,8 +55,12 @@ class UserIdentity extends CUserIdentity {
 		$this->user = $user->attributes;
 	}
 
-	public function getUser()
-	{
+	public function getUser() {
 		return $this->user;
+	}
+
+
+	public function setGoogleInfo($googleInfo) {
+		$this->googleInfo = $googleInfo;
 	}
 }
