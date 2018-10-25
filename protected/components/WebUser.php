@@ -3,20 +3,7 @@
 class WebUser extends CWebUser {
     private $_model = null;
 
-	public function getField($name)
-	{
-		if ($this->hasState('__userInfo')) {
-			$user=$this->getState('__userInfo',array());
-			if (isset($user[$name])) {
-				return $user[$name];
-			}
-		}
-
-		return;
-	}
-
 	public function login($identity, $duration = 0) {
-		$this->setState('__userInfo', $identity->getUser());
 		parent::login($identity, $duration);
 	}
 
@@ -25,11 +12,25 @@ class WebUser extends CWebUser {
             // в таблице User есть поле role
             return $user->role;
         }
-    }
+	}
+
+    function getAvatar() {
+        if($user = $this->getModel()){
+            return $user->avatar;
+        }
+	}
+
+
+    function getCity() {
+        if($user = $this->getModel()){
+			$city = $user->city;
+            return $city;
+        }
+	}
 
     public function getModel(){
         if (!$this->isGuest && $this->_model === null){
-            $this->_model = User::model()->findByPk($this->id, array('select' => 'role'));
+            $this->_model = User::model()->findByPk($this->id, array('select' => 'role,avatar,city_id'));
         }
         return $this->_model;
     }

@@ -20,7 +20,6 @@ class UserIdentity extends CUserIdentity {
 		} else {
 			$picture = NULL;
 		}
-		 // Производим стандартную аутентификацию, описанную в руководстве.
 		 $user = User::model()->find('LOWER(email)=?', array(strtolower($this->username)));
 		 if($user===null) {
 			 $user = new User;
@@ -35,12 +34,6 @@ class UserIdentity extends CUserIdentity {
 		// метод getId(см. ниже).
 		$this->_id = $user->id;
 
-		$this->setUser($user);
-
-		// Далее логин нам не понадобится, зато имя может пригодится
-		// в самом приложении. Используется как Yii::app()->user->name.
-		// realName есть в нашей модели. У вас это может быть name, firstName
-		// или что-либо ещё.
 		$this->username = $user->email;
 
 		$this->errorCode = self::ERROR_NONE;
@@ -52,7 +45,9 @@ class UserIdentity extends CUserIdentity {
 	}
 
 	protected function setUser(CActiveRecord $user) {
-		$this->user = $user->attributes;
+		$attributes = $user->attributes;
+		$attributes['city'] = $user->city->attributes;
+		$this->user = $attributes;
 	}
 
 	public function getUser() {
