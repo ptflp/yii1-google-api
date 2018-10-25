@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'tbl_city':
  * @property integer $id
- * @property string $city
+ * @property string $name
  */
 class City extends CActiveRecord
 {
@@ -25,12 +25,12 @@ class City extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('city', 'required'),
-			array('city', 'unique'),
-			array('city', 'length', 'max'=>255),
+			array('name', 'required'),
+			array('name', 'unique'),
+			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, city', 'safe', 'on'=>'search'),
+			array('id, name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,7 +52,7 @@ class City extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'city' => 'City',
+			'name' => 'Name',
 		);
 	}
 
@@ -75,7 +75,7 @@ class City extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('city',$this->city,true);
+		$criteria->compare('name',$this->name,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
