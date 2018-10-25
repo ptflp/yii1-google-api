@@ -56,7 +56,7 @@ class OauthController extends Controller
 		$this->GoogleOauth = $this->container
 				->get('GoogleOauth')
 				->loadFileConfig($configPath)
-				->setRedirectUri('http://localhost:8000/googleapi/oauth/authorize')
+				->setRedirectUri($redirectUrl.'googleapi/oauth/authorize')
 				->addScope(GoogleOauth::USERINFO_EMAIL)
 				->addScope(GoogleOauth::USERINFO_PROFILE);
 	}
