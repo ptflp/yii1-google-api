@@ -55,6 +55,8 @@ class UserController extends Controller
 	{
 		if(isset($_POST['city_id']))
 		{
+			$id = Yii::app()->user->id;
+			$model=$this->loadModel($id);
 			$cityId = $_POST['city_id'];
 			if($model->validate(array('city_id'=>$cityId))) {
 				// Вариант 1

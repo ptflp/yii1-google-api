@@ -120,7 +120,7 @@
         $( "#settingsCity" ).change(function() {
             var cityId = $(this).val();
             cityId = parseInt(cityId);
-            $.post( "/user/settings/", { city_id: cityId })
+            $.post( "/user/save/", { city_id: cityId })
             .done(function( data ) {
                 UIkit.notify("Операция успешна", {status:'success'})
             });
