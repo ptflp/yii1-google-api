@@ -30,7 +30,8 @@
 		<?php $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
 				array('label'=>'Главная', 'url'=>array('/site/index')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
+				array('label'=>'Управление пользователями', 'url'=>array('/admin/user')),
+				array('label'=>'Управление городами', 'url'=>array('/admin/city')),
 				array('label'=>'Login', 'url'=>array('/googleapi/oauth/authenticate'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),
