@@ -89,7 +89,7 @@ class PlaceSearch
    {
       $cityModel = $this->cityModel::model()->findByPk($cityId);
       if($cityModel !== NULL) {
-         $this->cityName = $cityModel->city;
+         $this->cityName = $cityModel->name;
       }
 
    }
