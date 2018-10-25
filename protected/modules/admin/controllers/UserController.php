@@ -81,6 +81,9 @@ class UserController extends Controller
 	{
 		$cityList = CityHelper::dropDownList();
 		$model=$this->loadModel($id);
+		if (empty(Yii::app()->user->getCity())) {
+			$cityList[''] = 'Выберите город';
+		}
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
