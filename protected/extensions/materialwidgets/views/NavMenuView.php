@@ -50,7 +50,9 @@ $icons = [
                               case 'profile':
                                     $img = '/main/img/avatar_11_tn.png';
                                     if(isset($item['img'])&&!empty($item['img'])){
-                                          $img = $item['img'];
+                                          if (strlen($item['img'])>10) {
+                                                $img = $item['img'];
+                                          }
                                     }
                                     ?>
                                     <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
