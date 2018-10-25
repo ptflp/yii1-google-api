@@ -48,6 +48,10 @@ class OauthController extends Controller
 
 	public function setGoogleOauth()
 	{
+		$redirectUrl = Yii::app()->params['redirectUrl'];
+		if(YII_DEBUG==true) {
+			$redirectUrl = 'http://localhost:8000/';
+		}
 		$configPath =Yii::app()->params['client_secrets'];
 		$this->GoogleOauth = $this->container
 				->get('GoogleOauth')
