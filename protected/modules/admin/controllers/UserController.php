@@ -27,21 +27,14 @@ class UserController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'roles'=>array(User::ROLE_ADMIN),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'roles'=>array(User::ROLE_ADMIN),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
+			 array('allow',  // allow all users to perform 'index' and 'view' actions
+				  'actions'=>array('index','view','create','update','admin','delete'),
+				  'roles'=>array(User::ROLE_ADMIN),
+			 ),
+			 array('deny',  // deny all users
+				 'users'=>array('*'),
+				 'deniedCallback' => function() { Yii::app()->controller->redirect(array ('/site/index')); }
+			 ),
 		);
 	}
 
@@ -86,6 +79,7 @@ class UserController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+		$cityList = CityHelper::dropDownList();
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -100,6 +94,7 @@ class UserController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
+			'cityList'=>$cityList
 		));
 	}
 
