@@ -170,7 +170,9 @@
             },
             created: function () {
                 var f = document.getElementById('firstSelect') ;
-                this.cityId = f.value;
+                if(f !== null) {
+                 this.cityId = f.value;
+                }
             },
             watch: {
                 placesInput: function() {
