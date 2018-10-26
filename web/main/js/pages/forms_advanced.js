@@ -304,10 +304,5 @@ altair_form_adv = {
             );
             return $state;
         };
-
-        $(".js-select2-template").select2({
-            templateResult: formatState,
-            templateSelection: formatState
-        });
     }
 };

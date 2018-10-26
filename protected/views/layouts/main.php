@@ -100,7 +100,7 @@
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/jsoneditor/dist/jsoneditor.min.js"></script>
     <!-- ionrangeslider -->
     <script src="/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
-    <script src="/main/js/pages/forms_advanced.min.js"></script>
+    <script src="/main/js/pages/forms_advanced.js"></script>
 
 
     <script>
@@ -164,9 +164,9 @@
             el: '#app',
             data: {
                 placesInput: '',
-                places: '',
                 cityId: '',
-                cancel: ''
+                cancel: '',
+                matchPercent: ''
             },
             created: function () {
                 var f = document.getElementById('firstSelect') ;
@@ -174,19 +174,19 @@
             },
             watch: {
                 placesInput: function() {
-                    this.places = ''
                     if (this.placesInput.length > 2) {
-                        if (typeof app.cancel !== "string") {
-                            app.cancel('Stop previous request');
-                        }
                         this.lookupPlacesInput()
                     }
                 }
             },
             methods: {
                 lookupPlacesInput: _.debounce(function() {
+
                     altair_helpers.content_preloader_show();
                     var app = this
+                    if (typeof app.cancel !== "string") {
+                        app.cancel('Stop previous request');
+                    }
                     var instance = axios.create();
                     instance.get('/googleapi/place/search', {
                             cancelToken: new CancelToken(function executor(c) {
@@ -195,7 +195,8 @@
                             }),
                             params: {
                                 city_id: app.cityId,
-                                keyword: app.placesInput
+                                keyword: app.placesInput,
+                                match_percent: app.matchPercent
                             }
                         })
                         .then(function (response) {
@@ -211,9 +212,16 @@
         });
 
         $( "#cityId" ).change(function() {
-            var cityId = $(this).val();
-            app.cityId = cityId;
-            app.lookupPlacesInput();
+            if (app.placesInput.length > 2) {
+                app.cityId = $(this).val();
+                app.lookupPlacesInput();
+            }
+        });
+        $( "#matchPercent" ).change(function() {
+            if (app.placesInput.length > 2) {
+                app.matchPercent =$(this).val();
+                app.lookupPlacesInput();
+            }
         });
     }
     </script>
