@@ -98,6 +98,9 @@
     <!-- altair common functions/helpers -->
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/main/js/altair_admin_common.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/jsoneditor/dist/jsoneditor.min.js"></script>
+    <!-- ionrangeslider -->
+    <script src="/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
+    <script src="/main/js/pages/forms_advanced.min.js"></script>
 
 
     <script>
