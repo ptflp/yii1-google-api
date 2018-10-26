@@ -214,8 +214,8 @@
         });
 
         $( "#cityId" ).change(function() {
+            app.cityId = $(this).val();
             if (app.placesInput.length > 2) {
-                app.cityId = $(this).val();
                 app.lookupPlacesInput();
             }
         });
