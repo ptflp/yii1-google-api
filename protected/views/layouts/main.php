@@ -149,11 +149,12 @@
 
 
   <script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
-  <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
 
     <script>
 
+    const CancelToken = axios.CancelToken;
     var checkApp = document.getElementById('app');
     if (checkApp !== null) {
         var app = new Vue({
@@ -161,7 +162,8 @@
             data: {
                 placesInput: '',
                 places: '',
-                cityId: ''
+                cityId: '',
+                cancel: ''
             },
             created: function () {
                 var f = document.getElementById('firstSelect') ;
@@ -171,6 +173,9 @@
                 placesInput: function() {
                     this.places = ''
                     if (this.placesInput.length > 2) {
+                        if (typeof app.cancel !== "string") {
+                            app.cancel('Stop previous request');
+                        }
                         this.lookupPlacesInput()
                     }
                 }
@@ -179,20 +184,26 @@
                 lookupPlacesInput: _.debounce(function() {
                     altair_helpers.content_preloader_show();
                     var app = this
-                    axios.get('/googleapi/place/search?city_id=' + app.cityId +'&keyword=' +app.placesInput)
+                    var instance = axios.create();
+                    instance.get('/googleapi/place/search', {
+                            cancelToken: new CancelToken(function executor(c) {
+                                // An executor function receives a cancel function as a parameter
+                                app.cancel = c;
+                            }),
+                            params: {
+                                city_id: app.cityId,
+                                keyword: app.placesInput
+                            }
+                        })
                         .then(function (response) {
                             altair_helpers.content_preloader_hide();
                             editorJSON.set(response.data);
                             editorObj.set(response.data);
-                            console.log(response.data);
-                            console.log(app.cityId);
                         })
                         .catch(function (error) {
+                            console.log(error);
                         })
-                }, 500),
-                test: function() {
-                    console.log('test');
-                }
+                }, 800)
             }
         });
 
