@@ -98,6 +98,9 @@
     <!-- altair common functions/helpers -->
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/main/js/altair_admin_common.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/jsoneditor/dist/jsoneditor.min.js"></script>
+    <!-- ionrangeslider -->
+    <script src="/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
+    <script src="/main/js/pages/forms_advanced.js"></script>
 
 
     <script>
@@ -149,19 +152,21 @@
 
 
   <script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
-  <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
 
     <script>
 
+    const CancelToken = axios.CancelToken;
     var checkApp = document.getElementById('app');
     if (checkApp !== null) {
         var app = new Vue({
             el: '#app',
             data: {
                 placesInput: '',
-                places: '',
-                cityId: ''
+                cityId: '',
+                cancel: '',
+                matchPercent: ''
             },
             created: function () {
                 var f = document.getElementById('firstSelect') ;
@@ -169,7 +174,6 @@
             },
             watch: {
                 placesInput: function() {
-                    this.places = ''
                     if (this.placesInput.length > 2) {
                         this.lookupPlacesInput()
                     }
@@ -177,29 +181,47 @@
             },
             methods: {
                 lookupPlacesInput: _.debounce(function() {
+
                     altair_helpers.content_preloader_show();
                     var app = this
-                    axios.get('/googleapi/place/search?city_id=' + app.cityId +'&keyword=' +app.placesInput)
+                    if (typeof app.cancel !== "string") {
+                        app.cancel('Stop previous request');
+                    }
+                    var instance = axios.create();
+                    instance.get('/googleapi/place/search', {
+                            cancelToken: new CancelToken(function executor(c) {
+                                // An executor function receives a cancel function as a parameter
+                                app.cancel = c;
+                            }),
+                            params: {
+                                city_id: app.cityId,
+                                keyword: app.placesInput,
+                                match_percent: app.matchPercent
+                            }
+                        })
                         .then(function (response) {
                             altair_helpers.content_preloader_hide();
                             editorJSON.set(response.data);
                             editorObj.set(response.data);
-                            console.log(response.data);
-                            console.log(app.cityId);
                         })
                         .catch(function (error) {
+                            console.log(error);
                         })
-                }, 500),
-                test: function() {
-                    console.log('test');
-                }
+                }, 800)
             }
         });
 
         $( "#cityId" ).change(function() {
-            var cityId = $(this).val();
-            app.cityId = cityId;
-            app.lookupPlacesInput();
+            if (app.placesInput.length > 2) {
+                app.cityId = $(this).val();
+                app.lookupPlacesInput();
+            }
+        });
+        $( "#matchPercent" ).change(function() {
+            if (app.placesInput.length > 2) {
+                app.matchPercent =$(this).val();
+                app.lookupPlacesInput();
+            }
         });
     }
     </script>

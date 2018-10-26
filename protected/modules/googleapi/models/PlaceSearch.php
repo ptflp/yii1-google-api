@@ -18,6 +18,12 @@ class PlaceSearch
 
    protected $placeTypes;
 
+   protected $addressLimit = 3;
+
+   protected $placesLimit = 5;
+
+   protected $matchPercent = 89;
+
    public function __construct(GooglePlacesApi $placesApiObj, City $cityModel)
    {
       $this->placesApi = $placesApiObj;
@@ -36,8 +42,8 @@ class PlaceSearch
             'ru' => 'кинотеатр'
          ],
          [
-               'en' => 'electronics_store',
-               'ru' => 'Магазин электроники'
+            'en' => 'electronics_store',
+            'ru' => 'Магазин электроники'
          ],
          [
             'en' => 'lodging', // сюда входят мини гостиницы и прочие
@@ -62,12 +68,38 @@ class PlaceSearch
       ];
    }
 
-   public function setApiKey()
+   public function setApiKey(string $keyInput = NULL)
    {
-      $jsonKey = file_get_contents($this->apiKeyPath);
-      $keyObj = json_decode($jsonKey);
-      $key = $keyObj->key;
+      $key = $keyInput;
+      if ($keyInput==NULL) {
+            $jsonKey = file_get_contents($this->apiKeyPath);
+            $keyObj = json_decode($jsonKey);
+            $key = $keyObj->key;
+      }
       $this->placesApi->setApiKey($key);
+
+      return $this;
+   }
+
+   public function setMatchPercent(int $matchPercent)
+   {
+      $this->matchPercent = $matchPercent;
+
+      return $this;
+   }
+
+   public function setAddressLimit(int $addressLimit)
+   {
+      $this->addressLimit = $addressLimit;
+
+      return $this;
+   }
+
+   public function setPlacesLimit(int $placesLimit)
+   {
+      $this->placesLimit = $placesLimit;
+
+      return $this;
    }
 
    public function requestData(int $cityId,string $input)
@@ -111,11 +143,11 @@ class PlaceSearch
    {
       $city = $this->cityName;
       $addressDetails = $this->placesApi
-								->requestAdressByCity($city,$address)
-								->requestDetails('geometry')
+                        ->requestAdressByCity($city,$address)
+                        ->requestDetails('geometry')
                         ->getResults();
 
-      array_slice($addressDetails,0,3);
+      array_slice($addressDetails,0,$this->addressLimit);
       foreach ($addressDetails as $addressObj) {
          $name = $addressObj->structured_formatting->main_text;
          $lng = $addressObj->details->geometry->location->lng;
@@ -143,7 +175,7 @@ class PlaceSearch
             $itemName = mb_strtolower($item->name);
             $percent = null;
             $returnValue = similar_text($itemName, $place, $percent);
-            if($percent > 60){
+            if($percent > $this->matchPercent){
                $name = $item->name . ', ' . $addType;
                $lat = $item->geometry->location->lat;
                $lng = $item->geometry->location->lng;

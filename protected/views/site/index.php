@@ -45,6 +45,10 @@ if(Yii::app()->user->isGuest):
 										<input type="text" class="md-input" v-model="placesInput">
 									</div>
 								</div>
+                        <div class="uk-width-medium-1-3">
+                            <input type="text" id="matchPercent" class="ion-slider" data-min1="0" data-max="100" data-from="89" />
+                            <span class="uk-form-help-block">Точность совпадения запросов в %</span>
+                        </div>
 							</div>
 						</div>
 				</div>
