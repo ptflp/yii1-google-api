@@ -1,5 +1,7 @@
 <?php
 
+namespace Modules\GoogleApi;
+
 class GooglePlacesApi implements GooglePlacesApiInterface
 {
     protected $placeId;

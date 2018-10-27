@@ -1,5 +1,7 @@
 <?php
 
+namespace Modules\GoogleApi;
+
 interface ClientAdaptorInterface
 {
     public function setUrl(string $url);

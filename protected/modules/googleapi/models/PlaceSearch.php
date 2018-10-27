@@ -1,5 +1,7 @@
 <?php
 
+use Modules\GoogleApi\GooglePlacesApi;
+
 class PlaceSearch
 {
    protected $placesApiObj;
