@@ -123,50 +123,13 @@
   <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
 
     <script>
-
-    const cities = [
-    {
-      "name": "Манила",
-      "place_id": "ChIJi8MeVwPKlzMRH8FpEHXV0Wk",
-      "longitude": 120.9842195,
-      "latitude": 14.5995124,
-      "description": "Манила, Столичный регион, Филиппины"
-    },
-    {
-      "name": "Манила",
-      "place_id": "ChIJRXO2mTaZpDsR9BTGV3SdBMo",
-      "longitude": 75.0676853,
-      "latitude": 12.6803374,
-      "description": "Манила, Карнатака, Индия"
-    },
-    {
-      "name": "Манила",
-      "place_id": "ChIJX0pIkh84p48RPujH2yeVbnQ",
-      "longitude": -83.4200819,
-      "latitude": 10.172397,
-      "description": "Лимон, Манила, Коста-Рика"
-    },
-    {
-      "name": "Манила",
-      "place_id": "ChIJTTDIgMPi1YcRQpwI1XS1N00",
-      "longitude": -90.1670393,
-      "latitude": 35.8800733,
-      "description": "Манила, Арканзас, США"
-    },
-    {
-      "name": "Манила",
-      "place_id": "ChIJXRzQNIQPUIcR5eWmN-pbv2w",
-      "longitude": -109.7226498,
-      "latitude": 40.98801419999999,
-      "description": "Манила, Юта, США"
-    }
-  ];
-
+  var searchCity = document.getElementById('searchCity');
+  if (searchCity !== null) {
     const CancelToken = axios.CancelToken;
     new Vue({
       el:"#searchCity",
       data:{
-        cities,
+        cities: [],
         search: '',
         cancel: ''
       },
@@ -180,102 +143,34 @@
       },
       methods: {
         lookupSearch: _.debounce(function() {
-
-            altair_helpers.content_preloader_show();
-            var app = this
-            if (typeof app.cancel !== "string") {
-                app.cancel('Stop previous request');
+          altair_helpers.content_preloader_show();
+          var app = this
+          if (typeof app.cancel !== "string") {
+              app.cancel('Stop previous request');
+          }
+          var instance = axios.create();
+          instance.get('/googleapi/place/findcity', {
+            cancelToken: new CancelToken(function executor(c) {
+                // An executor function receives a cancel function as a parameter
+                app.cancel = c;
+            }),
+            params: {
+                city_name: app.search,
             }
-            var instance = axios.create();
-            instance.get('/googleapi/place/findcity', {
-                    cancelToken: new CancelToken(function executor(c) {
-                        // An executor function receives a cancel function as a parameter
-                        app.cancel = c;
-                    }),
-                    params: {
-                        city_name: app.search,
-                    }
-                })
-                .then(function (response) {
-                  altair_helpers.content_preloader_hide();
-                  app.cities = response.data;
-                  console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
+          })
+          .then(function (response) {
+            altair_helpers.content_preloader_hide();
+            app.cities = response.data;
+            console.log(response);
+          })
+          .catch(function (error) {
+              altair_helpers.content_preloader_hide();
+              console.log(error);
+          })
         }, 800)
       }
     })
-
-    var checkApp = document.getElementById('app');
-    if (checkApp !== null) {
-        var app = new Vue({
-            el: '#app',
-            data: {
-                placesInput: '',
-                cityId: '',
-                cancel: '',
-                matchPercent: ''
-            },
-            created: function () {
-                var f = document.getElementById('firstSelect') ;
-                if(f !== null) {
-                 this.cityId = f.value;
-                }
-            },
-            watch: {
-                placesInput: function() {
-                    if (this.placesInput.length > 2) {
-                        this.lookupPlacesInput()
-                    }
-                }
-            },
-            methods: {
-                lookupPlacesInput: _.debounce(function() {
-
-                    altair_helpers.content_preloader_show();
-                    var app = this
-                    if (typeof app.cancel !== "string") {
-                        app.cancel('Stop previous request');
-                    }
-                    var instance = axios.create();
-                    instance.get('/googleapi/place/search', {
-                            cancelToken: new CancelToken(function executor(c) {
-                                // An executor function receives a cancel function as a parameter
-                                app.cancel = c;
-                            }),
-                            params: {
-                                city_id: app.cityId,
-                                keyword: app.placesInput,
-                                match_percent: app.matchPercent
-                            }
-                        })
-                        .then(function (response) {
-                            altair_helpers.content_preloader_hide();
-                            editorJSON.set(response.data);
-                            editorObj.set(response.data);
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        })
-                }, 800)
-            }
-        });
-
-        $( "#cityId" ).change(function() {
-            app.cityId = $(this).val();
-            if (app.placesInput.length > 2) {
-                app.lookupPlacesInput();
-            }
-        });
-        $( "#matchPercent" ).change(function() {
-            if (app.placesInput.length > 2) {
-                app.matchPercent =$(this).val();
-                app.lookupPlacesInput();
-            }
-        });
-    }
+  }
     </script>
 </body>
 </html>
