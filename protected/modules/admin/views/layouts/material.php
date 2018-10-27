@@ -42,9 +42,9 @@
         <div class="header_main_content">
 				<?php $this->widget('ext.materialwidgets.NavMenu',array(
 					'items'=>array(
-						array('label'=>'Главная', 'url'=>array('/', 'city'=>'якутск', 'place'=>'лена')),
-						array('label'=>'Настройки', 'url'=>array('/user/settings'), 'visible'=>!Yii::app()->user->isGuest),
-						array('label'=>'Войти', 'type'=>'modal', 'url'=>array('/googleapi/oauth/authenticate'), 'visible'=>Yii::app()->user->isGuest),
+						array('label'=>'Главная', 'url'=>array('/')),
+						array('label'=>'Пользователи', 'url'=>array('/admin/user'), 'visible'=>!Yii::app()->user->isGuest),
+						array('label'=>'Города', 'url'=>array('/admin/city'), 'visible'=>!Yii::app()->user->isGuest),
 						array('label'=>'('.Yii::app()->user->name.')', 'type'=>'profile', 'img'=>Yii::app()->user->getAvatar(), 'visible'=>!Yii::app()->user->isGuest,
 							'submenu' => [
                                 [
@@ -124,7 +124,90 @@
 
     <script>
 
+    const cities = [
+    {
+      "name": "Манила",
+      "place_id": "ChIJi8MeVwPKlzMRH8FpEHXV0Wk",
+      "longitude": 120.9842195,
+      "latitude": 14.5995124,
+      "description": "Манила, Столичный регион, Филиппины"
+    },
+    {
+      "name": "Манила",
+      "place_id": "ChIJRXO2mTaZpDsR9BTGV3SdBMo",
+      "longitude": 75.0676853,
+      "latitude": 12.6803374,
+      "description": "Манила, Карнатака, Индия"
+    },
+    {
+      "name": "Манила",
+      "place_id": "ChIJX0pIkh84p48RPujH2yeVbnQ",
+      "longitude": -83.4200819,
+      "latitude": 10.172397,
+      "description": "Лимон, Манила, Коста-Рика"
+    },
+    {
+      "name": "Манила",
+      "place_id": "ChIJTTDIgMPi1YcRQpwI1XS1N00",
+      "longitude": -90.1670393,
+      "latitude": 35.8800733,
+      "description": "Манила, Арканзас, США"
+    },
+    {
+      "name": "Манила",
+      "place_id": "ChIJXRzQNIQPUIcR5eWmN-pbv2w",
+      "longitude": -109.7226498,
+      "latitude": 40.98801419999999,
+      "description": "Манила, Юта, США"
+    }
+  ];
+
     const CancelToken = axios.CancelToken;
+    new Vue({
+      el:"#searchCity",
+      data:{
+        cities,
+        search: '',
+        cancel: ''
+      },
+      watch: {
+        search: function() {
+              if (this.search.length > 2) {
+                console.log('triggered');
+                  this.lookupSearch()
+              }
+          }
+      },
+      methods: {
+        lookupSearch: _.debounce(function() {
+
+            altair_helpers.content_preloader_show();
+            var app = this
+            if (typeof app.cancel !== "string") {
+                app.cancel('Stop previous request');
+            }
+            var instance = axios.create();
+            instance.get('/googleapi/place/findcity', {
+                    cancelToken: new CancelToken(function executor(c) {
+                        // An executor function receives a cancel function as a parameter
+                        app.cancel = c;
+                    }),
+                    params: {
+                        city_name: app.search,
+                    }
+                })
+                .then(function (response) {
+                  altair_helpers.content_preloader_hide();
+                  app.cities = response.data;
+                  console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }, 800)
+      }
+    })
+
     var checkApp = document.getElementById('app');
     if (checkApp !== null) {
         var app = new Vue({

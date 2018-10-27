@@ -6,7 +6,7 @@ class CityController extends Controller
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
-    public $layout='/layouts/column2';
+    public $layout='/layouts/material';
 
     /**
      * @return array action filters
@@ -28,7 +28,7 @@ class CityController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index','view','create','update','admin','delete'),
+                'actions'=>array('index','view','create','update','admin','delete','add'),
                 'roles'=>array(User::ROLE_ADMIN),
             ),
             array('deny',  // deny all users
@@ -107,13 +107,21 @@ class CityController extends Controller
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
     }
 
     /**
      * Lists all models.
-     */
-    public function actionIndex()
+    //  */
+    // public function actionIndex()
+    // {
+    //     $dataProvider=new CActiveDataProvider('City');
+    //     $this->render('index',array(
+    //         'dataProvider'=>$dataProvider,
+    //     ));
+    // }
+
+    public function actionAdd()
     {
         $dataProvider=new CActiveDataProvider('City');
         $this->render('index',array(
@@ -124,7 +132,7 @@ class CityController extends Controller
     /**
      * Manages all models.
      */
-    public function actionAdmin()
+    public function actionIndex()
     {
         $model=new City('search');
         $model->unsetAttributes();  // clear any default values
