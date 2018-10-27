@@ -146,12 +146,28 @@ class PlaceSearch
       if ($cityName !== NULL) {
             $this->cityName = $cityName;
       }
-      $this->results = $this->placesApi
+      $fields = 'geometry,name';
+      $rawCities = $this->placesApi
          ->requestCitiesByName($this->cityName)
-         ->requestDetails()
+         ->requestDetails($fields)
          ->getResults();
+      foreach ($rawCities as $city) {
+            $this->cities[] = [
+                  "name" => $city->details->name,
+                  "place_id" => $city->place_id,
+                  "longitude" => $city->details->geometry->location->lng,
+                  "latitude" => $city->details->geometry->location->lat,
+                  "description" => $city->description
+            ];
+      }
+
 
       return $this;
+   }
+
+   public function getCities()
+   {
+         return $this->cities;
    }
 
    protected function requestAddresses(string $address)

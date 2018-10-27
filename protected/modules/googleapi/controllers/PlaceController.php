@@ -38,13 +38,12 @@ class PlaceController extends Controller
 			$cityName = mb_strtolower($_GET['city_name']);
 			$cityName = trim($cityName);
 
-			$places = $this->container
+			$cities = $this->container
 								->get('PlaceSearch')
-								->setMatchPercent(1)
 								->requestCitiesByName($cityName)
-								->getResults();
+								->getCities();
 
-			$this->debug($places);
+			$this->renderJSON($cities);
 		} else {
 			$this->renderJSON([]);
 		}
