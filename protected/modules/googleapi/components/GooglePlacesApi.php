@@ -128,7 +128,8 @@ class GooglePlacesApi implements GooglePlacesApiInterface
     public function requestDetails(string $fields = NULL)
     {
         if (!is_array($this->results)) {
-            $this->results->details = $this->getPlaceDetailsById($this->placeId,$fields);
+            $rawDetails = $this->getPlaceDetailsById($this->placeId,$fields);
+            $this->results->details = $rawDetails->result;
             if(isset($this->results->geometry)) {
                 $this->location[] = $this->results->geometry->location->lat;
                 $this->location[] = $this->results->geometry->location->lng;
@@ -140,7 +141,8 @@ class GooglePlacesApi implements GooglePlacesApiInterface
             }
         } else {
             foreach ($this->results as $key => $value) {
-                $this->results[$key]->details=$this->getPlaceDetailsById($value->place_id,$fields);
+                $rawDetails = $this->getPlaceDetailsById($value->place_id,$fields);
+                $this->results[$key]->details = $rawDetails->result;
             }
         }
         return $this;
@@ -162,7 +164,7 @@ class GooglePlacesApi implements GooglePlacesApiInterface
 
         $data = $this->fetch($this->detailsUrl);
 
-        return $data->result;
+        return $data;
     }
 
     public function nearbySearch(string $keyword, string $type, int $radius=NULL, array $location=NULL)
