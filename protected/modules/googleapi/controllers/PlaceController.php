@@ -5,7 +5,7 @@ class PlaceController extends Controller
 	public function actionSearch()
 	{
 		if(isset($_GET['city_id']) && isset($_GET['keyword'])) {
-			if(is_numeric($_GET['city_id']) && strlen($_GET['keyword'])>1) {
+			if(is_numeric($_GET['city_id']) && mb_strlen($_GET['keyword'])>1) {
 				$matchPercent = 89;
 				if(isset($_GET['match_percent'])) {
 					if(is_numeric($_GET['match_percent'])){
