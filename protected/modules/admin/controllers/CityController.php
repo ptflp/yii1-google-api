@@ -123,6 +123,15 @@ class CityController extends Controller
 
     public function actionAdd()
     {
+        $jsonKey = file_get_contents(Yii::app()->params['g_api_key']);
+        $keyObj = json_decode($jsonKey);
+        $key = $keyObj->key;
+
+        $city = $this->container->get('Modules\GoogleApi\GooglePlacesApi')
+                        ->setApiKey($key)
+                        ->getPlaceDetailsById("ChIJ3X3hWOnMl0YRmnXkblVM1n0");
+        $this->debug($city);
+
         $dataProvider=new CActiveDataProvider('City');
         $this->render('index',array(
             'dataProvider'=>$dataProvider,
