@@ -30,7 +30,7 @@ class PlaceSearch
       $this->apiKeyPath = Yii::app()->params['g_api_key'];
       $this->setApiKey();
       $this->cityModel = $cityModel;
-      /*
+      /* Hardcoded
       // надо бы найти и сопоставить google types
       // то есть найти руссифицированные типы
       // нашел в гугл мапс русские аналоги типов.
@@ -165,9 +165,18 @@ class PlaceSearch
    {
       foreach ($this->placeTypes as $type) {
          $addType = '';
-         if(strpos($place,$type['ru']) == false) {
-            $addType = $type['ru'];
-         }
+         $words = explode(' ',$place);
+         $match = false;
+            foreach ($words as $word) {
+                  $percent = null;
+                  $returnValue = similar_text($type['ru'], $word, $percent);
+                  if($percent > 89) {
+                        $match = true;
+                  }
+            }
+            if($match == false) {
+                  $addType = $type['ru'];
+            }
          $temp = $this->placesApi
                      ->nearbySearch($addType.' '.$place,$type['en'])
                      ->getResults();
