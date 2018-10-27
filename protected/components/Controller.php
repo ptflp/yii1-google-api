@@ -42,4 +42,11 @@ class Controller extends CController
 		}
 		Yii::app()->end();
 	}
+
+	protected function debug($data)
+	{
+		echo '<pre>';
+		print_r($data);
+		echo '</pre>';
+	}
 }

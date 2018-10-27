@@ -31,4 +31,22 @@ class PlaceController extends Controller
 			$this->renderJSON([]);
 		}
 	}
+
+	public function actionFindcity()
+	{
+		if(($_GET['city_name'])) {
+			$cityName = mb_strtolower($_GET['city_name']);
+			$cityName = trim($cityName);
+
+			$places = $this->container
+								->get('PlaceSearch')
+								->setMatchPercent(1)
+								->requestCitiesByName($cityName)
+								->getResults();
+
+			$this->debug($places);
+		} else {
+			$this->renderJSON([]);
+		}
+	}
 }

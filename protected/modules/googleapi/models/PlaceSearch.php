@@ -14,6 +14,8 @@ class PlaceSearch
 
    protected $addressData = [];
 
+   protected $citiesData = [];
+
    protected $cityName;
 
    protected $placeTypes;
@@ -135,8 +137,21 @@ class PlaceSearch
       $this->placesApi
          ->requestCitiesByName($this->cityName)
          ->findOne()
-         ->requestDetails('geometry')
+         ->requestDetails('geometry');
+   }
+
+
+   public function requestCitiesByName(string $cityName = NULL)
+   {
+      if ($cityName !== NULL) {
+            $this->cityName = $cityName;
+      }
+      $this->results = $this->placesApi
+         ->requestCitiesByName($this->cityName)
+         ->requestDetails()
          ->getResults();
+
+      return $this;
    }
 
    protected function requestAddresses(string $address)
