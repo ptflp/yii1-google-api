@@ -151,8 +151,9 @@ class PlaceSearch
          ->requestCitiesByName($this->cityName)
          ->requestDetails($fields)
          ->getResults();
+
       foreach ($rawCities as $city) {
-            $this->cities[] = [
+            $this->citiesData[] = [
                   "name" => $city->details->name,
                   "place_id" => $city->place_id,
                   "longitude" => $city->details->geometry->location->lng,
@@ -167,7 +168,7 @@ class PlaceSearch
 
    public function getCities()
    {
-         return $this->cities;
+         return $this->citiesData;
    }
 
    protected function requestAddresses(string $address)

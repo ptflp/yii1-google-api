@@ -161,13 +161,17 @@
           .then(function (response) {
             altair_helpers.content_preloader_hide();
             app.cities = response.data;
-            console.log(response);
           })
           .catch(function (error) {
               altair_helpers.content_preloader_hide();
               console.log(error);
           })
-        }, 800)
+        }, 800),
+        addCity: function(city,input) {
+            UIkit.modal.confirm('Добавить город ' + city.description, function(){ UIkit.modal.alert('Confirmed!'); });
+            console.log(city);
+            console.log(input);
+        }
       }
     })
   }

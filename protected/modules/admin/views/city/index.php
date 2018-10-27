@@ -27,6 +27,7 @@ $this->menu=array(
 				<div class="md-card uk-margin-medium-bottom">
 					<div class="md-card-content">
 							<div class="uk-overflow-container">
+								<h2>Результаты поиска</h2>
 								<table class="uk-table uk-table-nowrap table_check">
 									<thead>
 										<tr>
@@ -44,8 +45,7 @@ $this->menu=array(
 												<td class="uk-text-center">{{city.longitude}}</td>
 												<td class="uk-text-center">{{city.latitude}}</td>
 												<td class="uk-text-center">
-													<a href="#"><i class="md-icon material-icons"></i></a>
-													<a href="#"><i class="md-icon material-icons"></i></a>
+													<a href="#"><i class="md-icon material-icons" v-on:click="addCity(city,search)">add_circle</i></a>
 												</td>
 										</tr>
 									</tbody>
