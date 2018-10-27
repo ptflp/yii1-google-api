@@ -28,7 +28,7 @@ $this->menu=array(
 					<div class="md-card-content">
 							<div class="uk-overflow-container">
 								<h2>Результаты поиска</h2>
-								<table class="uk-table uk-table-nowrap table_check">
+								<table class="uk-table uk-table-striped uk-table-hover">
 									<thead>
 										<tr>
 												<th class="uk-width-2-10">Название города</th>
@@ -38,14 +38,14 @@ $this->menu=array(
 												<th class="uk-width-1-10 uk-text-center">Действие</th>
 										</tr>
 									</thead>
-									<tbody v-for="city in cities">
-										<tr class="">
+									<tbody>
+										<tr v-for="city in cities">
 												<td>{{city.name}}</td>
 												<td>{{city.description}}</td>
 												<td class="uk-text-center">{{city.longitude}}</td>
 												<td class="uk-text-center">{{city.latitude}}</td>
 												<td class="uk-text-center">
-													<a href="#"><i class="md-icon material-icons" v-on:click="addCity(city,search)">add_circle</i></a>
+													<a href="#"><i class="md-icon material-icons" v-on:click="addCity(city)">add_circle</i></a>
 												</td>
 										</tr>
 									</tbody>

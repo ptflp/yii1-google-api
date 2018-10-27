@@ -167,10 +167,9 @@
               console.log(error);
           })
         }, 800),
-        addCity: function(city,input) {
+        addCity: function(city) {
             UIkit.modal.confirm('Добавить город ' + city.description, function(){ UIkit.modal.alert('Confirmed!'); });
             console.log(city);
-            console.log(input);
         }
       }
     })
