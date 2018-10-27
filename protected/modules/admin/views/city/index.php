@@ -28,29 +28,29 @@ $this->menu=array(
 					<div class="md-card-content">
 							<div class="uk-overflow-container">
 								<table class="uk-table uk-table-nowrap table_check">
-										<thead>
-											<tr>
-													<th class="uk-width-2-10">Название города</th>
-													<th class="uk-width-3-10">Описание</th>
-													<th class="uk-width-2-10 uk-text-center">longitude</th>
-													<th class="uk-width-2-10 uk-text-center">latitude</th>
-													<th class="uk-width-1-10 uk-text-center">Действие</th>
-											</tr>
-										</thead>
-										<tbody v-for="city in cities">
-											<tr class="">
-													<td>{{city.name}}</td>
-													<td>{{city.description}}</td>
-													<td class="uk-text-center">{{city.longitude}}</td>
-													<td class="uk-text-center">{{city.latitude}}</td>
-													<td class="uk-text-center">
-														<a href="#"><i class="md-icon material-icons"></i></a>
-														<a href="#"><i class="md-icon material-icons"></i></a>
-													</td>
-											</tr>
-										</tbody>
-								</table>
-							</div>
+									<thead>
+										<tr>
+												<th class="uk-width-2-10">Название города</th>
+												<th class="uk-width-3-10">Описание</th>
+												<th class="uk-width-2-10 uk-text-center">longitude</th>
+												<th class="uk-width-2-10 uk-text-center">latitude</th>
+												<th class="uk-width-1-10 uk-text-center">Действие</th>
+										</tr>
+									</thead>
+									<tbody v-for="city in cities">
+										<tr class="">
+												<td>{{city.name}}</td>
+												<td>{{city.description}}</td>
+												<td class="uk-text-center">{{city.longitude}}</td>
+												<td class="uk-text-center">{{city.latitude}}</td>
+												<td class="uk-text-center">
+													<a href="#"><i class="md-icon material-icons"></i></a>
+													<a href="#"><i class="md-icon material-icons"></i></a>
+												</td>
+										</tr>
+									</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
