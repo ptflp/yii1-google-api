@@ -168,8 +168,31 @@
           })
         }, 800),
         addCity: function(city) {
-            UIkit.modal.confirm('Добавить город ' + city.description, function(){ UIkit.modal.alert('Confirmed!'); });
-            console.log(city);
+          console.log(city);
+
+          UIkit.modal.confirm('Добавить город ' + city.description, function(){
+            const form = new FormData();
+            form.append('City[name]', city.name);
+            form.append('City[description]', city.description);
+            form.append('City[place_id]', city.place_id);
+            form.append('City[longitude]', city.longitude);
+            form.append('City[latitude]', city.latitude);
+            axios({
+              method: 'post',
+              url: '/admin/city/create',
+              data: form,
+              config: { headers: {'Content-Type': 'multipart/form-data' }}
+            })
+            .then(function (response) {
+                UIkit.modal.alert('Город успешно добавлен!');
+                //handle success
+                console.log(response);
+            })
+            .catch(function (response) {
+                //handle error
+                console.log(response);
+            });
+          });
         }
       }
     })
