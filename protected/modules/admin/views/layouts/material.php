@@ -329,6 +329,24 @@
                 console.log(response);
             });
           });
+        },
+        clearCityList: function () {
+          var app = this
+
+          UIkit.modal.confirm('Очистить таблицу tbl_city?', function(){
+            axios({
+              method: 'post',
+              url: '/admin/city/clear',
+              config: { headers: {'Content-Type': 'multipart/form-data' }}
+            })
+            .then(function (response) {
+                app.getCityList();
+                UIkit.modal.alert('Таблица очищена');
+            })
+            .catch(function (response) {
+                console.log(response);
+            });
+          });
         }
       }
     })

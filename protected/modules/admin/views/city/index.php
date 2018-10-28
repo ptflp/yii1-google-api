@@ -18,6 +18,7 @@ $this->menu=array(
 		<div class="uk-grid">
       <div class="uk-width-medium-1-3">
           <button class="md-btn" data-uk-modal="{target:'#addCity'}">Добавить город</button>
+          <button class="md-btn" v-on:click="clearCityList">Очистить список городов</button>
           <div class="uk-modal" id="addCity">
               <div class="uk-modal-dialog uk-modal-dialog-large">
                 <div class="uk-width-medium-1-1 uk-row-first">
