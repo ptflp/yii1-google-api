@@ -10,6 +10,7 @@ $this->menu=array(
 	array('label'=>'Create City', 'url'=>array('create')),
 	array('label'=>'Manage City', 'url'=>array('admin')),
 );
+
 ?>
 
 <h1>Управление городами</h1>
@@ -17,8 +18,10 @@ $this->menu=array(
 	<div class="md-card-content" id="searchCity">
 		<div class="uk-grid">
       <div class="uk-width-medium-1-3">
-          <button class="md-btn" data-uk-modal="{target:'#addCity'}">Добавить город</button>
-          <button class="md-btn" v-on:click="clearCityList">Очистить список городов</button>
+          <div class="md-btn-group">
+              <a href="javascript:void(0)" class="md-btn md-btn-primary md-btn-wave waves-effect waves-button" data-uk-modal="{target:'#addCity'}"><i class="material-icons">add_circle</i> Добавить город</a>
+              <a href="javascript:void(0)" class="md-btn md-btn-danger md-btn-wave waves-effect waves-button" v-on:click="clearCityList"><i class="material-icons">delete_forever</i> Очистить список городов</a>
+          </div>
           <div class="uk-modal" id="addCity">
               <div class="uk-modal-dialog uk-modal-dialog-large">
                 <div class="uk-width-medium-1-1 uk-row-first">
