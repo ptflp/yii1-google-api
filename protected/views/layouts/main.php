@@ -49,7 +49,7 @@
 							'submenu' => [
                                 [
                                     'label'=>'Админка',
-                                    'url'=>array('/admin/user'),
+                                    'url'=>array('/admin/'),
                                     'visible'=>Yii::app()->user->checkAccess(User::ROLE_ADMIN)
                                 ],
 								[

@@ -3,7 +3,7 @@
 class AdminModule extends CWebModule
 {
 
-	public $defaultController='user';
+	public $defaultController='city';
 
 	public function init()
 	{
