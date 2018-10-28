@@ -142,7 +142,7 @@ class CityController extends Controller
       $this->renderJSON($cityList);
     }
 
-    public function actionAdd()
+    public function actionIndex()
     {
         // $jsonKey = file_get_contents(Yii::app()->params['g_api_key']);
         // $keyObj = json_decode($jsonKey);
@@ -162,7 +162,7 @@ class CityController extends Controller
     /**
      * Manages all models.
      */
-    public function actionIndex()
+    public function actionAdd()
     {
         $model=new City('search');
         $model->unsetAttributes();  // clear any default values

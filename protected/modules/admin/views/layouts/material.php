@@ -141,7 +141,7 @@
             {{entry[key]}}
           </td>
           <td class="uk-text-center">
-            <a href="#"><i class="md-icon material-icons" v-on:click="removeById(entry['id'],$event)">add_circle</i></a>
+            <a href="#"><i class="md-icon material-icons" v-on:click="removeById(entry,$event)">delete</i></a>
           </td>
         </tr>
       </tbody>
@@ -201,9 +201,9 @@
         this.sortKey = key
         this.sortOrders[key] = this.sortOrders[key] * -1
       },
-      removeById: function (id,e) {
+      removeById: function (entry,e) {
         e.preventDefault();
-        this.$emit('removeid', id)
+        this.$emit('removeid', entry)
       }
     }
   })
@@ -306,21 +306,23 @@
             });
           });
         },
-        removeCity: function (id) {
+        removeCity: function (city) {
           var app = this
 
-          axios({
-            method: 'post',
-            url: '/admin/city/delete/id/'+id,
-            config: { headers: {'Content-Type': 'multipart/form-data' }}
-          })
-          .then(function (response) {
-              app.getCityList();
-              UIkit.modal.alert('Город успешно удален!');
-          })
-          .catch(function (response) {
-              //handle error
-              console.log(response);
+          UIkit.modal.confirm('Удалить город ' + city.description, function(){
+            axios({
+              method: 'post',
+              url: '/admin/city/delete/id/'+city.id,
+              config: { headers: {'Content-Type': 'multipart/form-data' }}
+            })
+            .then(function (response) {
+                app.getCityList();
+                UIkit.modal.alert('Город успешно удален!');
+            })
+            .catch(function (response) {
+                //handle error
+                console.log(response);
+            });
           });
         }
       }
