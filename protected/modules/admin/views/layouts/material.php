@@ -138,6 +138,9 @@
             <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
             </span>
           </th>
+          <th class="uk-text-center">
+            Действие
+          </th>
         </tr>
       </thead>
       <tbody>

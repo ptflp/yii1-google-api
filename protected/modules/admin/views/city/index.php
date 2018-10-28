@@ -17,7 +17,7 @@ $this->menu=array(
 <div class="md-card">
 	<div class="md-card-content" id="searchCity">
 		<div class="uk-grid">
-      <div class="uk-width-medium-1-3">
+      <div class="uk-width-medium-1-1">
           <div class="md-btn-group">
               <a href="javascript:void(0)" class="md-btn md-btn-primary md-btn-wave waves-effect waves-button" data-uk-modal="{target:'#addCity'}"><i class="material-icons">add_circle</i> Добавить город</a>
               <a href="javascript:void(0)" class="md-btn md-btn-danger md-btn-wave waves-effect waves-button" v-on:click="clearCityList"><i class="material-icons">delete_forever</i> Очистить список городов</a>
@@ -65,6 +65,7 @@ $this->menu=array(
                 </div>
               </div>
           </div>
+      <hr>
       </div>
 			<div class="uk-width-medium-1-1 uk-row-first">
 				<h2>Список городов в системе</h2>
