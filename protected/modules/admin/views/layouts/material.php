@@ -23,9 +23,14 @@
 
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
     <style>
-         div#jsoneditorTree, div#jsoneditorCode {
+          div#jsoneditorTree, div#jsoneditorCode {
             height: 377px;
-         }
+          }
+          body>.content-preloader {
+            position: fixed;
+            z-index: 1999;
+            top: -48px;
+          }
     </style>
 
     <!-- matchMedia polyfill for testing media queries in JS -->
