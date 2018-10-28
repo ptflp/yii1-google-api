@@ -28,7 +28,7 @@ class CityController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index','view','create','update','admin','delete','add'),
+                'actions'=>array('index','view','create','update','admin','delete','add','clear'),
                 'roles'=>array(User::ROLE_ADMIN),
             ),
             array('deny',  // deny all users
@@ -120,17 +120,22 @@ class CityController extends Controller
     //         'dataProvider'=>$dataProvider,
     //     ));
     // }
+    public function actionClear()
+    {
+      $sql = Yii::app()->db->createCommand()->truncateTable('tbl_city');
+      $this->redirect(array('index'));
+    }
 
     public function actionAdd()
     {
-        $jsonKey = file_get_contents(Yii::app()->params['g_api_key']);
-        $keyObj = json_decode($jsonKey);
-        $key = $keyObj->key;
+        // $jsonKey = file_get_contents(Yii::app()->params['g_api_key']);
+        // $keyObj = json_decode($jsonKey);
+        // $key = $keyObj->key;
 
-        $city = $this->container->get('Modules\GoogleApi\GooglePlacesApi')
-                        ->setApiKey($key)
-                        ->getPlaceDetailsById("ChIJ3X3hWOnMl0YRmnXkblVM1n0");
-        $this->debug($city);
+        // $city = $this->container->get('Modules\GoogleApi\GooglePlacesApi')
+        //                 ->setApiKey($key)
+        //                 ->getPlaceDetailsById("ChIJ3X3hWOnMl0YRmnXkblVM1n0");
+        // $this->debug($city);
 
         $dataProvider=new CActiveDataProvider('City');
         $this->render('index',array(
