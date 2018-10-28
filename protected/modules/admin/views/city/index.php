@@ -12,14 +12,24 @@ $this->menu=array(
 );
 ?>
 
-<h1>Добавление городов</h1>
+<h1>Управление городами</h1>
 <div class="md-card">
 	<div class="md-card-content" id="searchCity">
+
+  <form>
+		<label>Поиск города</label>
+    <input name="query" class="md-input uk-form-width-large" v-model="cityListSearch">
+  </form>
+  <city-list @removeid="removeCity"
+    :data="cityList"
+    :columns="cityColumns"
+    :filter-key="cityListSearch">
+  </city-list>
 		<div class="uk-grid">
 			<div class="uk-width-medium-1-1 uk-row-first">
 					<div class="md-input-wrapper">
 						<label>Поиск города</label>
-						<input type="text" class="md-input uk-form-width-large" v-model="search">
+						<input type="text" class="md-input uk-form-width-large" v-model="gapiSearch">
 						<span class="md-input-bar uk-form-width-large"></span>
 					</div>
 			</div>
@@ -45,7 +55,7 @@ $this->menu=array(
 												<td class="uk-text-center">{{city.longitude}}</td>
 												<td class="uk-text-center">{{city.latitude}}</td>
 												<td class="uk-text-center">
-													<a href="#"><i class="md-icon material-icons" v-on:click="addCity(city)">add_circle</i></a>
+													<a href="#"><i class="md-icon material-icons" v-on:click="addCity(city,$event)">add_circle</i></a>
 												</td>
 										</tr>
 									</tbody>

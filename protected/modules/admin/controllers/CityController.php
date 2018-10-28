@@ -28,7 +28,7 @@ class CityController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index','view','create','update','admin','delete','add','clear'),
+                'actions'=>array('index','view','create','update','admin','delete','add','clear','list'),
                 'roles'=>array(User::ROLE_ADMIN),
             ),
             array('deny',  // deny all users
@@ -124,6 +124,22 @@ class CityController extends Controller
     {
       $sql = Yii::app()->db->createCommand()->truncateTable('tbl_city');
       $this->redirect(array('index'));
+    }
+
+    public function actionList()
+    {
+      $model=new City;
+
+      $dataProvider = $model->search();
+      $dataProvider->setPagination(false);
+      $data = $dataProvider->getData();
+
+      $cityList = [];
+      foreach ($data as $item) {
+        $cityList[]=$item->attributes;
+      }
+
+      $this->renderJSON($cityList);
     }
 
     public function actionAdd()

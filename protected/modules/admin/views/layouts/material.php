@@ -121,27 +121,136 @@
   <script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+  <!-- component template -->
+  <script type="text/x-template" id="city-list">
+    <table class="uk-table uk-table-striped uk-table-hover">
+      <thead>
+        <tr>
+          <th v-for="key in columns"
+            @click="sortBy(key)"
+            :class="{ active: sortKey == key }">
+            {{ key | capitalize }}
+            <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="entry in filteredData">
+          <td v-for="key in columns">
+            {{entry[key]}}
+          </td>
+          <td class="uk-text-center">
+            <a href="#"><i class="md-icon material-icons" v-on:click="removeById(entry['id'],$event)">add_circle</i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </script>
 
     <script>
+  // register the grid component
+  Vue.component('city-list', {
+    template: '#city-list',
+    props: {
+      data: Array,
+      columns: Array,
+      filterKey: String,
+      removeId: Number
+    },
+    data: function () {
+      var sortOrders = {}
+      this.columns.forEach(function (key) {
+        sortOrders[key] = 1
+      })
+      return {
+        sortKey: '',
+        sortOrders: sortOrders
+      }
+    },
+    computed: {
+      filteredData: function () {
+        var sortKey = this.sortKey
+        var filterKey = this.filterKey && this.filterKey.toLowerCase()
+        var order = this.sortOrders[sortKey] || 1
+        var data = this.data
+        if (filterKey) {
+          data = data.filter(function (row) {
+            return Object.keys(row).some(function (key) {
+              return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+            })
+          })
+        }
+        if (sortKey) {
+          data = data.slice().sort(function (a, b) {
+            a = a[sortKey]
+            b = b[sortKey]
+            return (a === b ? 0 : a > b ? 1 : -1) * order
+          })
+        }
+        return data
+      }
+    },
+    filters: {
+      capitalize: function (str) {
+        return str.charAt(0).toUpperCase() + str.slice(1)
+      }
+    },
+    methods: {
+      sortBy: function (key) {
+        this.sortKey = key
+        this.sortOrders[key] = this.sortOrders[key] * -1
+      },
+      removeById: function (id,e) {
+        e.preventDefault();
+        this.$emit('removeid', id)
+      }
+    }
+  })
+  // end register the grid component
+
+
   var searchCity = document.getElementById('searchCity');
   if (searchCity !== null) {
     const CancelToken = axios.CancelToken;
     new Vue({
       el:"#searchCity",
       data:{
-        cities: [],
-        search: '',
-        cancel: ''
+        cities: Array,
+        gapiSearch: '',
+        cancel: '',
+        removeId: Number,
+        cityListSearch: '',
+        cityColumns: ['id', 'name', 'description', 'place_id', 'longitude', 'latitude'],
+        cityList: [
+        ]
+      },
+      created: function () {
+        // `this` указывает на экземпляр vm
+        this.getCityList();
       },
       watch: {
-        search: function() {
-              if (this.search.length > 2) {
-                console.log('triggered');
-                  this.lookupSearch()
-              }
+        gapiSearch: function() {
+          if (this.gapiSearch.length > 2) {
+            this.lookupSearch()
           }
+        }
       },
       methods: {
+        getCityList: function() {
+          var app = this
+          var instance = axios.create();
+          instance.get('/admin/city/list')
+          .then(function (response) {
+            console.log(response.data);
+            altair_helpers.content_preloader_hide();
+            app.cityList = response.data;
+          })
+          .catch(function (error) {
+              altair_helpers.content_preloader_hide();
+              console.log(error);
+          })
+        },
         lookupSearch: _.debounce(function() {
           altair_helpers.content_preloader_show();
           var app = this
@@ -155,7 +264,7 @@
                 app.cancel = c;
             }),
             params: {
-                city_name: app.search,
+                city_name: app.gapiSearch,
             }
           })
           .then(function (response) {
@@ -167,8 +276,10 @@
               console.log(error);
           })
         }, 800),
-        addCity: function(city) {
+        addCity: function(city,e) {
+          e.preventDefault();
           console.log(city);
+          var app = this
 
           UIkit.modal.confirm('Добавить город ' + city.description, function(){
             const form = new FormData();
@@ -184,6 +295,7 @@
               config: { headers: {'Content-Type': 'multipart/form-data' }}
             })
             .then(function (response) {
+                app.getCityList();
                 UIkit.modal.alert('Город успешно добавлен!');
                 //handle success
                 console.log(response);
@@ -193,10 +305,28 @@
                 console.log(response);
             });
           });
+        },
+        removeCity: function (id) {
+          var app = this
+
+          axios({
+            method: 'post',
+            url: '/admin/city/delete/id/'+id,
+            config: { headers: {'Content-Type': 'multipart/form-data' }}
+          })
+          .then(function (response) {
+              app.getCityList();
+              UIkit.modal.alert('Город успешно удален!');
+          })
+          .catch(function (response) {
+              //handle error
+              console.log(response);
+          });
         }
       }
     })
   }
-    </script>
+
+  </script>
 </body>
 </html>
