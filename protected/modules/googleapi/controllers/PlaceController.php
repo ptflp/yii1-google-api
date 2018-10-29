@@ -33,8 +33,6 @@ class PlaceController extends Controller
     if ($redis !== NULL) {
       $key = $this->createCacheKey($cityId,$keyword);
       $rlist=$redis->lrange($key, 0, -1);
-
-      $this->debug($rlist);
     }
 
     $data = [];
@@ -42,7 +40,7 @@ class PlaceController extends Controller
       foreach ($rlist as $item) {
         $data[] = $redis->hgetall($item);
       }
-      $this->debug($data);
+      $this->renderJSON($data);
       return;
     }
 
@@ -53,7 +51,6 @@ class PlaceController extends Controller
 
     $placesRaw = $placesApi->getPlacesRaw();
     $placesArray = PlaceSearch::preparePlacesRaw($placesRaw);
-    $this->debug($placesArray);
 
     foreach ($placesArray as $placeItem) {
       $rlist=$redis->lrange($key, 0, -1);
@@ -74,7 +71,7 @@ class PlaceController extends Controller
       ];
     }
 
-    $this->debug($data);
+    $this->renderJSON($data);
   }
 
   public function createCacheKey(int $cityId, string $keyword) : string
