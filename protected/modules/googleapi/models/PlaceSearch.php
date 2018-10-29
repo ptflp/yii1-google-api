@@ -279,10 +279,20 @@ class PlaceSearch
     }
   }
 
-  public function prepareOnePlace($place)
+  public static function preparePlacesRaw($raw)
+  {
+    $data = [];
+    foreach ($raw as $item) {
+      $data[] = self::prepareOnePlace($item);
+    }
+
+    return $data;
+  }
+
+  public static function prepareOnePlace($place)
   {
     $item = $place;
-    $name = $item->name;
+    $name = $item->name; # code...
     $lat = $item->geometry->location->lat;
     $lng = $item->geometry->location->lng;
     $address = substr($item->vicinity, 0, strrpos($item->vicinity, ","));

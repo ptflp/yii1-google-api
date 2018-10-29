@@ -29,97 +29,67 @@ class PlaceController extends Controller
       $redis = $this->cache;
     }
 
-    
+    $rlist = [];
+    if ($redis !== NULL) {
+      $key = $this->createCacheKey($cityId,$keyword);
+      $rlist=$redis->lrange($key, 0, -1);
 
-	}
+      $this->debug($rlist);
+    }
 
-  public function actionTest()
-  {
-    $placeTypes = $this->testData();
-		if(isset($_GET['city_id']) && isset($_GET['keyword'])) {
-			if(is_numeric($_GET['city_id']) && mb_strlen($_GET['keyword'])>1) {
-				$matchPercent = 61.8;
+    $data = [];
+    if (count($rlist)>0) {
+      foreach ($rlist as $item) {
+        $data[] = $redis->hgetall($item);
+      }
+      $this->debug($data);
+      return;
+    }
 
-        $cityId = $_GET['city_id'];
-        $place = mb_strtolower($_GET['keyword']);
-        $place = trim($place);
+    $placesApi = $this->container
+                      ->get('PlaceSearch')
+                      ->setMatchPercent($matchPercent)
+                      ->requestData($cityId,$keyword);
 
-        $redis = $this->cache;
-        if (mb_strlen($place)<10) {
-          $keyword = base64_encode($_GET['keyword']);
-        } else {
-          $keyword = md5($_GET['keyword']);
-        }
-        $keyList = 'c:'.$cityId.':q:'.$keyword;
+    $placesRaw = $placesApi->getPlacesRaw();
+    $placesArray = PlaceSearch::preparePlacesRaw($placesRaw);
+    $this->debug($placesArray);
 
-        $rlist=$redis->lrange($keyList, 0, -1);
-        $data = [];
-        foreach ($rlist as $item) {
-          $data[] = $redis->hgetall($item);
-        }
-        if(count($data)<0) {
-          $this->renderJSON($data);
-        } else {
-          $places = $this->container
-                    ->get('PlaceSearch')
-                    ->setMatchPercent($matchPercent)
-                    ->requestData($cityId,$place);
+    foreach ($placesArray as $placeItem) {
+      $rlist=$redis->lrange($key, 0, -1);
+      $search = array_search($placeItem['place_id'],$rlist);
+      if (!is_int($search)) {
+        $redis->rpush($key, $placeItem['place_id']);
+      }
 
-          $placesRaw = $places->getPlacesRaw();
+      $redis->hmset($placeItem['place_id'], $placeItem);
+    }
 
-          $addressRaw = $places->getAddressRaw();
+    foreach ($placesArray as $item) {
+      $data[] = [
+        "name" => $item['name'],
+        "longitude" => $item['longitude'],
+        "latitude" => $item['latitude'],
+        "address" => $item['address']
+      ];
+    }
 
-          // $this->debug($addressRaw);
-          $placesList = [];
-          foreach ($placesRaw as $item) {
-            $itemName = mb_strtolower($item->name);
-            $words = explode(' ', $place);
-            $input = $place;
-            if (count($words) == 2) {
-              $key0 = array_search($words[0], array_column($placeTypes, 'ru'));
-              $key1 = array_search($words[1], array_column($placeTypes, 'ru'));
-              if (is_int($key0)) {
-                $input = $words[1];
-              }
-              if (is_int($key1)) {
-                $input = $words[0];
-              }
-            }
-            similar_text($itemName, $input, $percent);
-
-            $key = $item->place_id;
-            $arrayKey = array_search($item->types[0], array_column($placeTypes, 'en'));
-            $name = $item->name . ', ' . $placeTypes[$arrayKey]['ru'];
-            $lat = $item->geometry->location->lat;
-            $lng = $item->geometry->location->lng;
-            $address = substr($item->vicinity, 0, strrpos($item->vicinity, ","));
-            $placeItem = [
-              "name" => $name,
-              "longitude" => (int)$lng,
-              "latitude" => (int)$lat,
-              "address" => $address
-            ];
-            $redis->hmset($key, $placeItem);
-            if($percent > $matchPercent) {
-              $rlist=$redis->lrange($keyList, 0, -1);
-              $search = array_search($item->place_id,$rlist);
-              if (!is_int($search)) {
-                $redis->rpush($keyList, $item->place_id);
-                $placesList[] = $placeItem;
-              }
-            }
-          }
-
-          $this->renderJSON($placesList);
-
-        }
-			} else {
-				$this->renderJSON([]);
-			}
-		} else {
-			$this->renderJSON([]);
-		}
+    $this->debug($data);
   }
+
+  public function createCacheKey(int $cityId, string $keyword) : string
+  {
+    if (mb_strlen($keyword)<10) {
+      $keyword = base64_encode($keyword);
+    } else {
+      $keyword = md5($keyword);
+    }
+
+    $key = 'c:'.$cityId.':q:'.$keyword;
+
+    return $key;
+  }
+
 	public function actionFindcity()
 	{
 		if(($_GET['city_name'])) {
