@@ -21,11 +21,21 @@ class Controller extends CController
 	 */
 	public $breadcrumbs=array();
 
-	public $container;
+  public $container;
+
+  public $cache;
 
 	protected function beforeAction($action)
 	{
-		$this->container = new DI\Container();
+    $this->container = new DI\Container();
+    try {
+      $this->cache = new Predis\Client([
+          'scheme' => 'unix',
+          'path' => '/tmp/docker/redis.sock',
+      ]); }
+    catch(Exception $e) {
+      //log fault;
+    }
 		return parent::beforeAction($action);
 	}
 
