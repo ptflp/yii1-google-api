@@ -4,36 +4,7 @@ class PlaceController extends Controller
 {
 	public function actionSearch()
 	{
-    $placeTypes = [
-      [
-        'en' => 'movie_theater',
-        'ru' => 'кинотеатр'
-      ],
-      [
-        'en' => 'electronics_store',
-        'ru' => 'Магазин электроники'
-      ],
-      [
-        'en' => 'lodging', // сюда входят мини гостиницы и прочие
-        'ru' => 'гостиница'
-      ],
-      [
-        'en' => 'cafe',
-        'ru' => 'кафе'
-      ],
-      [
-        'en' => 'bar',
-        'ru' => 'бар'
-      ],
-      [
-        'en' => 'liquor_store',
-        'ru' => 'Магазин спиртных напитков'
-      ],
-      [
-        'en' => 'supermarket',
-        'ru' => 'супермаркет'
-      ]
-    ];
+    $placeTypes = $this->testData();
 		if(isset($_GET['city_id']) && isset($_GET['keyword'])) {
 			if(is_numeric($_GET['city_id']) && mb_strlen($_GET['keyword'])>1) {
 				$matchPercent = 61.8;
@@ -61,16 +32,16 @@ class PlaceController extends Controller
         foreach ($placesRaw as $item) {
           $itemName = mb_strtolower($item->name);
           $words = explode(' ', $place);
+          $input = $place;
           if (count($words) == 2) {
             $key0 = array_search($words[0], array_column($placeTypes, 'ru'));
             $key1 = array_search($words[1], array_column($placeTypes, 'ru'));
-          }
-          $input = $place;
-          if (is_int($key0)) {
-            $input = $words[1];
-          }
-          if (is_int($key1)) {
-            $input = $words[0];
+            if (is_int($key0)) {
+              $input = $words[1];
+            }
+            if (is_int($key1)) {
+              $input = $words[0];
+            }
           }
           similar_text($itemName, $input, $percent);
           if($percent > $matchPercent) {
@@ -88,7 +59,8 @@ class PlaceController extends Controller
             }
           }
           $key = $item->place_id;
-          $name = $item->name . ', ' . $item->types[0];
+          $arrayKey = array_search($item->types[0], array_column($placeTypes, 'en'));
+          $name = $item->name . ', ' . $placeTypes[$arrayKey]['ru'];
           $lat = $item->geometry->location->lat;
           $lng = $item->geometry->location->lng;
           $address = substr($item->vicinity, 0, strrpos($item->vicinity, ","));
@@ -135,5 +107,39 @@ class PlaceController extends Controller
 		} else {
 			$this->renderJSON([]);
 		}
-	}
+  }
+  
+  public function testData()
+  {
+    return $placeTypes = [
+      [
+        'en' => 'movie_theater',
+        'ru' => 'кинотеатр'
+      ],
+      [
+        'en' => 'electronics_store',
+        'ru' => 'Магазин электроники'
+      ],
+      [
+        'en' => 'lodging', // сюда входят мини гостиницы и прочие
+        'ru' => 'гостиница'
+      ],
+      [
+        'en' => 'cafe',
+        'ru' => 'кафе'
+      ],
+      [
+        'en' => 'bar',
+        'ru' => 'бар'
+      ],
+      [
+        'en' => 'liquor_store',
+        'ru' => 'Магазин спиртных напитков'
+      ],
+      [
+        'en' => 'supermarket',
+        'ru' => 'супермаркет'
+      ]
+    ];
+  }
 }
