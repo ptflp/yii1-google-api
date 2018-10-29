@@ -6,7 +6,7 @@ class PlaceController extends Controller
 	{
 		if(isset($_GET['city_id']) && isset($_GET['keyword'])) {
 			if(is_numeric($_GET['city_id']) && mb_strlen($_GET['keyword'])>1) {
-				$matchPercent = 89;
+				$matchPercent = 61.8;
 				if(isset($_GET['match_percent'])) {
 					if(is_numeric($_GET['match_percent'])){
 						$matchPercent = $_GET['match_percent'];
@@ -20,10 +20,16 @@ class PlaceController extends Controller
 				$places = $this->container
 									->get('PlaceSearch')
 									->setMatchPercent($matchPercent)
-									->requestData($cityId,$place)
-									->getResults();
+                  ->requestData($cityId,$place);
 
-				$this->renderJSON($places);
+        $placesRaw = $places->getPlacesRaw();
+
+        // $addressRaw = $places->getAddressRaw();
+
+        // $this->debug($addressRaw);
+        $this->debug($placesRaw);
+
+				// $this->renderJSON($places);
 			} else {
 				$this->renderJSON([]);
 			}
