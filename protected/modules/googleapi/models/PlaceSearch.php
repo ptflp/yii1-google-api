@@ -20,6 +20,8 @@ class PlaceSearch
 
    protected $cityName;
 
+   protected $cityAttributes;
+
    protected $placeTypes;
 
    protected $addressLimit = 3;
@@ -27,6 +29,8 @@ class PlaceSearch
    protected $placesLimit = 5;
 
    protected $matchPercent = 89;
+
+   protected $addressDataRaw = [];
 
    public function __construct(GooglePlacesApi $placesApiObj, City $cityModel)
    {
@@ -106,16 +110,27 @@ class PlaceSearch
       return $this;
    }
 
+   public function setPlacesApiCity()
+   {
+      $this->placesApi
+         ->requestCitiesByName($this->cityName)
+         ->findOne()
+         ->requestDetails('geometry');
+   }
+
+
    public function requestData(int $cityId,string $input)
    {
       $input = trim($input);
 
       $this->requestCityById($cityId);
 
-      if(is_string($this->cityName)) {
+      if(is_array($this->cityAttributes)) {
+
          $this->setPlacesApiCity();
 
-         $this->requestAddresses($input);
+         $this->requestAddresses($input)
+              ->prepareAddressData();
 
          $this->requestPlaces($input);
       }
@@ -130,18 +145,10 @@ class PlaceSearch
       $cityModel = $this->cityModel::model()->findByPk($cityId);
       if($cityModel !== NULL) {
          $this->cityName = $cityModel->name;
+         $this->cityAttributes = $cityModel->attributes;
       }
 
    }
-
-   public function setPlacesApiCity()
-   {
-      $this->placesApi
-         ->requestCitiesByName($this->cityName)
-         ->findOne()
-         ->requestDetails('geometry');
-   }
-
 
    public function requestCitiesByName(string $cityName = NULL)
    {
@@ -180,59 +187,67 @@ class PlaceSearch
                         ->requestAdressByCity($city,$address)
                         ->requestDetails('geometry')
                         ->getResults();
+      $this->addressDataRaw = $addressDetails;
+      return $this;
+   }
 
-      array_slice($addressDetails,0,$this->addressLimit);
-      foreach ($addressDetails as $addressObj) {
-         $name = $addressObj->structured_formatting->main_text;
-         $lng = $addressObj->details->geometry->location->lng;
-         $lat = $addressObj->details->geometry->location->lat;
-         $this->addressData[] = [
-            "name" => $name,
-            "longitude" => $lng,
-            "latitude" => $lat,
-            "address" => $name
-         ];
-      }
+   public function prepareAddressData()
+   {
+    $addressDetails = $this->addressDataRaw;
+    array_slice($addressDetails,0,$this->addressLimit);
+    foreach ($addressDetails as $addressObj) {
+       $name = $addressObj->structured_formatting->main_text;
+       $lng = $addressObj->details->geometry->location->lng;
+       $lat = $addressObj->details->geometry->location->lat;
+       $this->addressData[] = [
+          "name" => $name,
+          "longitude" => $lng,
+          "latitude" => $lat,
+          "address" => $name
+       ];
+    }
+
+    return $this;
    }
 
    public function requestPlaces(string $place)
    {
-      foreach ($this->placeTypes as $type) {
-         $addType = '';
-         $words = explode(' ',$place);
-         $match = false;
-            foreach ($words as $word) {
-                  $percent = null;
-                  $returnValue = similar_text($type['ru'], $word, $percent);
-                  if($percent > 89) {
-                        $match = true;
-                  }
-            }
-            if($match == false) {
-                  $addType = $type['ru'];
-            }
-         $temp = $this->placesApi
-                     ->nearbySearch($addType.' '.$place,$type['en'])
-                     ->getResults();
-         foreach ($temp as $item) {
-            $itemName = mb_strtolower($item->name);
-            $percent = null;
-            $returnValue = similar_text($itemName, $place, $percent);
-            if($percent > $this->matchPercent){
-               $name = $item->name . ', ' . $addType;
-               $lat = $item->geometry->location->lat;
-               $lng = $item->geometry->location->lng;
-               $address = substr($item->vicinity, 0, strrpos($item->vicinity, ","));
-               // $address = $item->vicinity;
-               $this->placesData[] = [
-                  "name" => $name,
-                  "longitude" => $lng,
-                  "latitude" => $lat,
-                  "address" => $address
-               ];
-            }
-         }
-      }
+      // foreach ($this->placeTypes as $type) {
+      //    $addType = '';
+      //    $words = explode(' ',$place);
+      //    $match = false;
+      //       foreach ($words as $word) {
+      //             $percent = null;
+      //             $returnValue = similar_text($type['ru'], $word, $percent);
+      //             if($percent > 89) {
+      //                   $match = true;
+      //             }
+      //       }
+      //       if($match == false) {
+      //             $addType = $type['ru'];
+      //       }
+      //    $temp = $this->placesApi
+      //                ->nearbySearch($addType.' '.$place,$type['en'])
+      //                ->getResults();
+      //    foreach ($temp as $item) {
+      //       $itemName = mb_strtolower($item->name);
+      //       $percent = null;
+      //       $returnValue = similar_text($itemName, $place, $percent);
+      //       if($percent > $this->matchPercent){
+      //          $name = $item->name . ', ' . $addType;
+      //          $lat = $item->geometry->location->lat;
+      //          $lng = $item->geometry->location->lng;
+      //          $address = substr($item->vicinity, 0, strrpos($item->vicinity, ","));
+      //          // $address = $item->vicinity;
+      //          $this->placesData[] = [
+      //             "name" => $name,
+      //             "longitude" => $lng,
+      //             "latitude" => $lat,
+      //             "address" => $address
+      //          ];
+      //       }
+      //    }
+      // }
    }
 
    public function getResults()
