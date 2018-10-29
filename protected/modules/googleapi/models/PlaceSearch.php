@@ -282,22 +282,20 @@ class PlaceSearch
   public function prepareOnePlace($place)
   {
     $item = $place;
-    $itemName = mb_strtolower($item->name);
-    similar_text($itemName, $this->input, $percent);
-    $data = [];
-    if($percent > $this->matchPercent) {
-      $name = $item->name . ', ' . $item->types[0];
-      $lat = $item->geometry->location->lat;
-      $lng = $item->geometry->location->lng;
-      $address = substr($item->vicinity, 0, strrpos($item->vicinity, ","));
+    $name = $item->name;
+    $lat = $item->geometry->location->lat;
+    $lng = $item->geometry->location->lng;
+    $address = substr($item->vicinity, 0, strrpos($item->vicinity, ","));
+    $shortName = $item->name;
 
-      $data = [
-        "name" => $name,
-        "longitude" => $lng,
-        "latitude" => $lat,
-        "address" => $address
-      ];
-    }
+    $data = [
+      "name" => $name,
+      "type" => $item->types[0],
+      "place_id" => $item->place_id,
+      "longitude" => $lng,
+      "latitude" => $lat,
+      "address" => $address
+    ];
 
     return $data;
   }
