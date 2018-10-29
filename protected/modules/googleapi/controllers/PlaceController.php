@@ -27,7 +27,27 @@ class PlaceController extends Controller
         // $addressRaw = $places->getAddressRaw();
 
         // $this->debug($addressRaw);
-        $this->debug($placesRaw);
+        $redis = $this->cache;
+        foreach ($placesRaw as $item) {
+          $key = 'c:'.$cityId.':p:'.$item->place_id;
+          $name = $item->name . ', ' . $item->types[0];
+          $lat = $item->geometry->location->lat;
+          $lng = $item->geometry->location->lng;
+          $address = substr($item->vicinity, 0, strrpos($item->vicinity, ","));
+          $redis->hmset($key, [
+            "name" => $name,
+            "longitude" => $lng,
+            "latitude" => $lat,
+            "address" => $address
+          ]);
+        }
+        $data = [];
+        foreach ($placesRaw as $item) {
+          $key = 'c:'.$cityId.':p:'.$item->place_id;
+          $data[] = $redis->hgetall($key);
+        }
+        $this->debug($data);
+        // $this->debug($placesRaw);
 
 				// $this->renderJSON($places);
 			} else {
