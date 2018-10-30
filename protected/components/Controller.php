@@ -27,8 +27,7 @@ class Controller extends CController
 
 	protected function beforeAction($action)
 	{
-    $this->container = include __DIR__ . '/../config/php-di.php';;
-    $this->cache = $this->container->get('Predis\Client');
+    $this->container = include __DIR__ . '/../config/php-di.php';
 		return parent::beforeAction($action);
 	}
 
