@@ -24,22 +24,37 @@ class DataWrapper
 
     public function requestData(int $cityId, string $keyword)
     {
+        $this->setRequestParams($cityId, $keyword);
+
+        if (!$this->checkCache()) {
+            $this->placeSearch();
+        }
+
+        $this->prepareAddressesOutput();
+
+        return $this;
+    }
+
+    protected function setRequestParams(int $cityId, string $keyword)
+    {
         $this->cityId = $cityId;
         $keyword = mb_strtolower($keyword);
         $keyword = trim($keyword);
         $this->keyword = $keyword;
-        if ($this->checkCache()) {
-        } else {
-            $this->placeSearch();
-        }
-        foreach ($this->addressesData as $item) {
-            $this->data[] = $item;
-        }
-        foreach ($this->placesData as $item) {
-            $this->data[] = $item;
-        }
+    }
 
-        return $this;
+    protected function prepareAddressesOutput()
+    {
+        $temp = [];
+        foreach ($this->addressesData as $item) {
+            $temp[] = [
+                "name" => $item['name'],
+                "logitude" => floatval($item['longitude']),
+                "latitude" => floatval($item['latitude']),
+                "address" => $item['address']
+            ];
+        }
+        $this->addressesData = $temp;
     }
 
     protected function requestCache()
@@ -107,8 +122,20 @@ class DataWrapper
         }
     }
 
+    public function concatData()
+    {
+        foreach ($this->addressesData as $item) {
+            $this->data[] = $item;
+        }
+        foreach ($this->placesData as $item) {
+            $this->data[] = $item;
+        }
+    }
+
     public function getData()
     {
+        $this->concatData();
+
         return $this->data;
     }
 }
