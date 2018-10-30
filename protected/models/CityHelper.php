@@ -7,7 +7,7 @@ class CityHelper extends City
       $list = self::model()->findAll(array('order'=>'id'));
       $dropDownList = [];
       foreach ($list as $item) {
-         $dropDownList[$item->id] = $item->name;
+         $dropDownList[$item->id] = $item->description;
       }
 
       return $dropDownList;
