@@ -31,8 +31,19 @@ class PlaceController extends Controller
                   ->requestData();
 
     $dataCache = $cache->getData();
-
-    $this->debug($dataCache);
+    if (count($dataCache)>0) {
+      $data = [];
+      foreach ($dataCache as $item) {
+        $data[] = [
+          "name" => $item['name']. ', ' . $item['type'],
+          "longitude" => $item['longitude'],
+          "latitude" => $item['latitude'],
+          "address" => $item['address']
+        ];
+      }
+      $this->debug($data);
+      return;
+    }
 
     $placesApi = $this->container
                       ->get('PlaceSearch')
@@ -44,9 +55,10 @@ class PlaceController extends Controller
     $cache->setData($placesArray)
           ->saveData();
 
+    $data = [];
     foreach ($placesArray as $item) {
       $data[] = [
-        "name" => $item['name'],
+        "name" => $item['name']. ', ' . $item['type'],
         "longitude" => $item['longitude'],
         "latitude" => $item['latitude'],
         "address" => $item['address']
@@ -54,19 +66,6 @@ class PlaceController extends Controller
     }
 
     $this->debug($data);
-  }
-
-  public function createCacheKey(int $cityId, string $keyword) : string
-  {
-    if (mb_strlen($keyword)<10) {
-      $keyword = base64_encode($keyword);
-    } else {
-      $keyword = md5($keyword);
-    }
-
-    $key = 'c:'.$cityId.':q:'.$keyword;
-
-    return $key;
   }
 
 	public function actionFindcity()
