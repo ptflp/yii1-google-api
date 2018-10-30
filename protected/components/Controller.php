@@ -27,15 +27,8 @@ class Controller extends CController
 
 	protected function beforeAction($action)
 	{
-    $this->container = new DI\Container();
-    try {
-      $this->cache = new Predis\Client([
-          'scheme' => 'unix',
-          'path' => '/tmp/docker/redis.sock',
-      ]); }
-    catch(Exception $e) {
-      //log fault;
-    }
+    $this->container = include __DIR__ . '/../config/php-di.php';;
+    $this->cache = $this->container->get('Predis\Client');
 		return parent::beforeAction($action);
 	}
 
