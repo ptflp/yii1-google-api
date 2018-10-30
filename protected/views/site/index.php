@@ -20,7 +20,7 @@ if (Yii::app()->user->isGuest) :?>
                                     <?php if (!empty(Yii::app()->user->getCity()['description'])) : ?>
                                         <option selected value="<?=Yii::app()->user->getCity()['id']?>"><?=Yii::app()->user->getCity()['description']?></option>
                                     <?php else : ?>
-                            <option value="">Установите город по умолчанию в настройках</option>
+                                        <option value="">Установите город по умолчанию в настройках</option>
                                     <?php endif;?>
 
                                     <?php foreach ($cityList as $city) :?>
