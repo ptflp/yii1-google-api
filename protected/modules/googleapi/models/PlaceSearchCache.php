@@ -6,12 +6,23 @@ class PlaceSearchCache
   protected $data=[];
   protected $rlist;
   protected $key;
+  protected $connection = false;
 
   public function __construct(Predis\Client $redis)
   {
-    $this->redis = $redis;
+    try {
+      $redis->ping();
+      $this->redis = $redis;
+      $this->connection = true;
+    } catch (Exception $e) {
+      $this->connection = false;
+    }
   }
 
+  public function connect()
+  {
+    return $this->connection;
+  }
   public function createListKey(int $cityId, string $keyword)
   {
     if (mb_strlen($keyword)<10) {
