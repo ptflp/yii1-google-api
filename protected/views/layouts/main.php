@@ -40,33 +40,33 @@
     <!-- main header -->
     <header id="header_main">
         <div class="header_main_content">
-				<?php $this->widget('ext.materialwidgets.NavMenu',array(
-					'items'=>array(
-						array('label'=>'Главная', 'url'=>array('/', 'city'=>'якутск', 'place'=>'лена')),
-						array('label'=>'Настройки', 'url'=>array('/user/settings'), 'visible'=>!Yii::app()->user->isGuest),
-						array('label'=>'Войти', 'type'=>'modal', 'url'=>array('/googleapi/oauth/authenticate'), 'visible'=>Yii::app()->user->isGuest),
-						array('label'=>'('.Yii::app()->user->name.')', 'type'=>'profile', 'img'=>Yii::app()->user->getAvatar(), 'visible'=>!Yii::app()->user->isGuest,
-							'submenu' => [
-                                [
-                                    'label'=>'Админка',
-                                    'url'=>array('/admin/'),
-                                    'visible'=>Yii::app()->user->checkAccess(User::ROLE_ADMIN)
-                                ],
-								[
-									'url'=>array('/site/logout'),
-									'label'=>'logout'
-                                ]
-							]
-						)
-					),
-				)); ?>
+            <?php $this->widget('ext.materialwidgets.NavMenu', array(
+                'items'=>array(
+                    array('label'=>'Главная', 'url'=>array('/', 'city'=>'якутск', 'place'=>'лена')),
+                    array('label'=>'Настройки', 'url'=>array('/user/settings'), 'visible'=>!Yii::app()->user->isGuest),
+                    array('label'=>'Войти', 'type'=>'modal', 'url'=>array('/googleapi/oauth/authenticate'), 'visible'=>Yii::app()->user->isGuest),
+                    array('label'=>'('.Yii::app()->user->name.')', 'type'=>'profile', 'img'=>Yii::app()->user->getAvatar(), 'visible'=>!Yii::app()->user->isGuest,
+                        'submenu' => [
+                            [
+                                'label'=>'Админка',
+                                'url'=>array('/admin/'),
+                                'visible'=>Yii::app()->user->checkAccess(User::ROLE_ADMIN)
+                            ],
+                            [
+                                'url'=>array('/site/logout'),
+                                'label'=>'logout'
+                            ]
+                        ]
+                    )
+                ),
+            )); ?>
         </div>
     </header><!-- main header end -->
     <!-- main sidebar -->
     <div id="page_content">
         <div id="page_content_inner">
 
-				<?php echo $content; ?>
+            <?php echo $content; ?>
 
         </div>
     </div>
@@ -184,7 +184,11 @@
             },
             methods: {
                 lookupPlacesInput: _.debounce(function() {
-                    this.queryUrl = 'GET ' + document.URL + 'googleapi/place/search?city_id'+this.cityId+'&keyword='+this.placesInput+'&match_percent='+this.matchPercent;
+                    this.queryUrl = 'GET ' +
+                        document.URL +
+                        'googleapi/place/search?city_id='+
+                        this.cityId+'&keyword='+this.placesInput+
+                        '&match_percent='+this.matchPercent;
 
                     altair_helpers.content_preloader_show();
                     var app = this
