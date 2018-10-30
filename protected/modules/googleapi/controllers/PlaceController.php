@@ -24,15 +24,15 @@ class PlaceController extends Controller
     $keyword = mb_strtolower($_GET['keyword']);
     $keyword = trim($keyword);
 
-    $cache = $this->container
-                  ->get('PlaceSearchCache');
-    if($cache->connect()) {
-      $cache->createListKey($cityId,$keyword)
+    $placesCache = $this->container
+                  ->get('PlacesCache');
+    if($placesCache->connect()) {
+      $placesCache->createListKey($cityId,$keyword)
             ->requestList()
             ->requestData();
     }
 
-    $dataCache = $cache->getData();
+    $dataCache = $placesCache->getData();
     if (count($dataCache)>0) {
       $data = [];
       foreach ($dataCache as $item) {
@@ -54,14 +54,15 @@ class PlaceController extends Controller
     $placesRaw = $placesApi->getPlacesRaw();
     $addressRaw = $placesApi->getAddressRaw();
     $addressArray = PlaceSearch::prepareAddressRaw($addressRaw);
+
     echo 'address';
     $this->debug($addressArray);
     $this->debug($addressRaw);
     $placesArray = PlaceSearch::preparePlacesRaw($placesRaw);
 
 
-    if($cache->connect()) {
-      $cache->setData($placesArray)
+    if($placesCache->connect()) {
+      $placesCache->setData($placesArray)
             ->saveData();
     }
 
