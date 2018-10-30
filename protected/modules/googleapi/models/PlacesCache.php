@@ -32,7 +32,7 @@ class PlacesCache
       $keyword = md5($keyword);
     }
 
-    $this->key = 'c:'.$cityId.':q:'.$keyword;
+    $this->key = 'c:'.$cityId.':p:'.$keyword;
 
     return $this;
   }
@@ -63,12 +63,13 @@ class PlacesCache
 
     foreach ($data as $item) {
       $rlist=$redis->lrange($this->key, 0, -1);
-      $search = array_search($item['place_id'],$rlist);
+      $key = "p:".$item['place_id'];
+      $search = array_search($key,$rlist);
       if (!is_int($search)) {
-        $redis->rpush($this->key, $item['place_id']);
+        $redis->rpush($this->key, $key);
       }
 
-      $redis->hmset($item['place_id'], $item);
+      $redis->hmset($key, $item);
     }
 
     return $this;

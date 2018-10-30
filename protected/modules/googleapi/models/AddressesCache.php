@@ -63,12 +63,13 @@ class AddressesCache
 
     foreach ($data as $item) {
       $rlist=$redis->lrange($this->key, 0, -1);
-      $search = array_search($item['id'],$rlist);
+      $key ="a:".$item['id'];
+      $search = array_search($key,$rlist);
       if (!is_int($search)) {
-        $redis->rpush($this->key, $item['id']);
+        $redis->rpush($this->key, $key);
       }
 
-      $redis->hmset($item['id'], $item);
+      $redis->hmset($key, $item);
     }
 
     return $this;
