@@ -25,6 +25,8 @@ class DataWrapper
     public function requestData(int $cityId, string $keyword)
     {
         $this->cityId = $cityId;
+        $keyword = mb_strtolower($keyword);
+        $keyword = trim($keyword);
         $this->keyword = $keyword;
         if ($this->checkCache()) {
         } else {
@@ -77,8 +79,6 @@ class DataWrapper
     protected function placeSearch()
     {
         $cityId = $this->cityId;
-        $keyword = mb_strtolower($keyword);
-        $keyword = trim($keyword);
         $keyword = $this->keyword;
         $this->placeSearch->requestData($cityId, $keyword);
 
