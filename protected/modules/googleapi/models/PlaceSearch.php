@@ -171,7 +171,6 @@ class PlaceSearch
     $id = $addressObj->id;
     $data =  [
       "name" => $name,
-      "id" => $id,
       "longitude" => $lng,
       "latitude" => $lat,
       "address" => $name
