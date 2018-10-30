@@ -10,8 +10,6 @@ class PlaceSearch
 
   protected $cityModel;
 
-  protected $results = [];
-
   protected $placesData = [];
 
   protected $placesDataRaw = [];
@@ -91,17 +89,15 @@ class PlaceSearch
 
     $this->requestCityById($cityId);
     if(is_array($this->cityAttributes)) {
+      $cityAttrib = $this->cityAttributes;
+        $location = [$cityAttrib['latitude'],$cityAttrib['longitude']];
 
         $this->setPlacesApiCity();
 
-        $this->requestAddresses($input)
-            ->prepareAddressData();
+        $this->requestAddresses($input);
 
-        $this->requestPlaces($input)
-             ->preparePlacesData();
+        $this->requestPlaces($input,$location);
     }
-
-    $this->results = array_merge($this->addressData,$this->placesData);
 
     return $this;
   }
@@ -203,7 +199,7 @@ class PlaceSearch
     }
   }
 
-  public function requestPlaces(string $place)
+  public function requestPlaces(string $place, array $location)
   {
     $detect = $this->detectTypes($place);
     if ($detect) {
@@ -218,7 +214,7 @@ class PlaceSearch
         $input = $type['ru'] . ' ' . $place;
       }
       $result = $this->placesApi
-                    ->nearbySearch($input,$type['en'])
+                    ->nearbySearch($input,$type['en'], NULL, $location)
                     ->getResults();
       foreach ($result as $item) {
         $temp[]=$item;
@@ -322,10 +318,5 @@ class PlaceSearch
   {
     $raw = array_merge($this->addressDataRaw,$this->placesDataRaw);
     return $raw;
-  }
-
-  public function getResults()
-  {
-    return $this->results;
   }
 }
