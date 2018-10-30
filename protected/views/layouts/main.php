@@ -164,9 +164,10 @@
             el: '#app',
             data: {
                 placesInput: '',
-                cityId: '',
+                cityId: Number,
                 cancel: '',
-                matchPercent: ''
+                matchPercent: 61.8,
+                queryUrl: 'GET ' + document.URL + 'googleapi/place/search'
             },
             created: function () {
                 var f = document.getElementById('firstSelect') ;
@@ -183,6 +184,7 @@
             },
             methods: {
                 lookupPlacesInput: _.debounce(function() {
+                    this.queryUrl = 'GET ' + document.URL + 'googleapi/place/search?city_id'+this.cityId+'&keyword='+this.placesInput+'&match_percent='+this.matchPercent;
 
                     altair_helpers.content_preloader_show();
                     var app = this
@@ -220,8 +222,8 @@
             }
         });
         $( "#matchPercent" ).change(function() {
-            if (app.placesInput.length > 2) {
                 app.matchPercent =$(this).val();
+            if (app.placesInput.length > 2) {
                 app.lookupPlacesInput();
             }
         });
