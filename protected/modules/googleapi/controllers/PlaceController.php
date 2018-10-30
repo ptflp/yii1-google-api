@@ -24,25 +24,15 @@ class PlaceController extends Controller
     $keyword = mb_strtolower($_GET['keyword']);
     $keyword = trim($keyword);
 
-    $redis = NULL;
-    if ($this->cache instanceof Predis\Client) {
-      $redis = $this->cache;
-    }
+    $cache = $this->container
+                  ->get('PlaceSearchCache')
+                  ->createListKey($cityId,$keyword)
+                  ->requestList()
+                  ->requestData();
 
-    $rlist = [];
-    if ($redis !== NULL) {
-      $key = $this->createCacheKey($cityId,$keyword);
-      $rlist=$redis->lrange($key, 0, -1);
-    }
+    $dataCache = $cache->getData();
 
-    $data = [];
-    if (count($rlist)>0) {
-      foreach ($rlist as $item) {
-        $data[] = $redis->hgetall($item);
-      }
-      $this->debug($data);
-      return;
-    }
+    $this->debug($dataCache);
 
     $placesApi = $this->container
                       ->get('PlaceSearch')
@@ -51,15 +41,8 @@ class PlaceController extends Controller
     $placesRaw = $placesApi->getPlacesRaw();
     $placesArray = PlaceSearch::preparePlacesRaw($placesRaw);
 
-    foreach ($placesArray as $placeItem) {
-      $rlist=$redis->lrange($key, 0, -1);
-      $search = array_search($placeItem['place_id'],$rlist);
-      if (!is_int($search)) {
-        $redis->rpush($key, $placeItem['place_id']);
-      }
-
-      $redis->hmset($placeItem['place_id'], $placeItem);
-    }
+    $cache->setData($placesArray)
+          ->saveData();
 
     foreach ($placesArray as $item) {
       $data[] = [
