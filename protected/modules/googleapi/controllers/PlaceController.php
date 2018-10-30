@@ -39,7 +39,7 @@ class PlaceController extends Controller
 
         $dataCache = $placesCache->getData();
         $addressesData = $addressesCache->getData();
-        if (count($dataCache)>0) {
+        if (count($dataCache)>0 || count($addressesData)>0) {
             foreach ($dataCache as $item) {
                 $addressesData[] = [
                     "name" => $item['name']. ', ' . $item['type'],
