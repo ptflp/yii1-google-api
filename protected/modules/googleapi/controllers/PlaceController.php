@@ -40,17 +40,15 @@ class PlaceController extends Controller
     $dataCache = $placesCache->getData();
     $addressesData = $addressesCache->getData();
     if (count($dataCache)>0) {
-      $data = [];
       foreach ($dataCache as $item) {
-        $data[] = [
+        $addressesData[] = [
           "name" => $item['name']. ', ' . $item['type'],
           "longitude" => $item['longitude'],
           "latitude" => $item['latitude'],
           "address" => $item['address']
         ];
       }
-      $this->debug($addressesData);
-      $this->debug($data);
+      $this->renderJSON($addressesData);
       return;
     }
 
@@ -61,7 +59,6 @@ class PlaceController extends Controller
     $placesRaw = $placesApi->getPlacesRaw();
     $addressRaw = $placesApi->getAddressRaw();
     $addressArray = PlaceSearch::prepareAddressRaw($addressRaw);
-    $this->debug($addressArray);
     $placesArray = PlaceSearch::preparePlacesRaw($placesRaw);
 
 
@@ -72,9 +69,8 @@ class PlaceController extends Controller
                      ->saveData();
     }
 
-    $data = [];
     foreach ($placesArray as $item) {
-      $data[] = [
+      $addressArray[] = [
         "name" => $item['name']. ', ' . $item['type'],
         "longitude" => $item['longitude'],
         "latitude" => $item['latitude'],
@@ -82,8 +78,7 @@ class PlaceController extends Controller
       ];
     }
 
-    $this->debug($placesArray);
-    $this->debug($data);
+    $this->renderJSON($addressArray);
   }
 
 	public function actionFindcity()
