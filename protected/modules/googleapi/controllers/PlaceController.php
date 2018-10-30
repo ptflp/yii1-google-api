@@ -43,8 +43,8 @@ class PlaceController extends Controller
             foreach ($dataCache as $item) {
                 $addressesData[] = [
                     "name" => $item['name']. ', ' . $item['type'],
-                    "longitude" => $item['longitude'],
-                    "latitude" => $item['latitude'],
+                    "longitude" => floatval($item['longitude']),
+                    "latitude" => floatval($item['latitude']),
                     "address" => $item['address']
                 ];
             }
