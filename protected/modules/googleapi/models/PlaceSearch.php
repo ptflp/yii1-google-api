@@ -124,13 +124,13 @@ class PlaceSearch
         ->getResults();
 
     foreach ($rawCities as $city) {
-          $this->citiesData[] = [
-            "name" => $city->details->name,
-            "place_id" => $city->place_id,
-            "longitude" => $city->details->geometry->location->lng,
-            "latitude" => $city->details->geometry->location->lat,
-            "description" => $city->description
-          ];
+      $this->citiesData[] = [
+        "name" => $city->details->name,
+        "place_id" => $city->place_id,
+        "longitude" => $city->details->geometry->location->lng,
+        "latitude" => $city->details->geometry->location->lat,
+        "description" => $city->description
+      ];
     }
 
 
@@ -171,6 +171,7 @@ class PlaceSearch
     $id = $addressObj->id;
     $data =  [
       "name" => $name,
+      "id" => $id,
       "longitude" => $lng,
       "latitude" => $lat,
       "address" => $name

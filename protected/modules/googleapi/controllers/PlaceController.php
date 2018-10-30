@@ -26,13 +26,19 @@ class PlaceController extends Controller
 
     $placesCache = $this->container
                   ->get('PlacesCache');
+    $addressesCache = $this->container
+                  ->get('AddressesCache');
     if($placesCache->connect()) {
       $placesCache->createListKey($cityId,$keyword)
+            ->requestList()
+            ->requestData();
+      $addressesCache->createListKey($cityId,$keyword)
             ->requestList()
             ->requestData();
     }
 
     $dataCache = $placesCache->getData();
+    $addressesData = $addressesCache->getData();
     if (count($dataCache)>0) {
       $data = [];
       foreach ($dataCache as $item) {
@@ -43,6 +49,7 @@ class PlaceController extends Controller
           "address" => $item['address']
         ];
       }
+      $this->debug($addressesData);
       $this->debug($data);
       return;
     }
@@ -54,16 +61,15 @@ class PlaceController extends Controller
     $placesRaw = $placesApi->getPlacesRaw();
     $addressRaw = $placesApi->getAddressRaw();
     $addressArray = PlaceSearch::prepareAddressRaw($addressRaw);
-
-    echo 'address';
     $this->debug($addressArray);
-    $this->debug($addressRaw);
     $placesArray = PlaceSearch::preparePlacesRaw($placesRaw);
 
 
     if($placesCache->connect()) {
       $placesCache->setData($placesArray)
-            ->saveData();
+                  ->saveData();
+      $addressesCache->setData($addressArray)
+                     ->saveData();
     }
 
     $data = [];
@@ -76,6 +82,7 @@ class PlaceController extends Controller
       ];
     }
 
+    $this->debug($placesArray);
     $this->debug($data);
   }
 
