@@ -23,10 +23,11 @@ class PlaceController extends Controller
         $cityId = $_GET['city_id'];
         $keyword = $_GET['keyword'];
 
-        $dataWrapper = $this->container
-                            ->get('DataWrapper');
-        $data = $dataWrapper->requestData($cityId, $keyword)
-                            ->getData();
+        $data = $this   ->container
+                        ->get('DataWrapper')
+                        ->requestData($cityId, $keyword)
+                        ->getData();
+
         $this->renderJSON($data);
     }
 
