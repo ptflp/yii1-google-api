@@ -40,13 +40,12 @@ class PlaceController extends Controller
       foreach ($rlist as $item) {
         $data[] = $redis->hgetall($item);
       }
-      $this->renderJSON($data);
+      $this->debug($data);
       return;
     }
 
     $placesApi = $this->container
                       ->get('PlaceSearch')
-                      ->setMatchPercent($matchPercent)
                       ->requestData($cityId,$keyword);
 
     $placesRaw = $placesApi->getPlacesRaw();
@@ -71,7 +70,7 @@ class PlaceController extends Controller
       ];
     }
 
-    $this->renderJSON($data);
+    $this->debug($data);
   }
 
   public function createCacheKey(int $cityId, string $keyword) : string
@@ -102,39 +101,5 @@ class PlaceController extends Controller
 		} else {
 			$this->renderJSON([]);
 		}
-  }
-
-  public function testData()
-  {
-    return $placeTypes = [
-      [
-        'en' => 'movie_theater',
-        'ru' => 'кинотеатр'
-      ],
-      [
-        'en' => 'electronics_store',
-        'ru' => 'Магазин электроники'
-      ],
-      [
-        'en' => 'lodging', // сюда входят мини гостиницы и прочие
-        'ru' => 'гостиница'
-      ],
-      [
-        'en' => 'cafe',
-        'ru' => 'кафе'
-      ],
-      [
-        'en' => 'bar',
-        'ru' => 'бар'
-      ],
-      [
-        'en' => 'liquor_store',
-        'ru' => 'Магазин спиртных напитков'
-      ],
-      [
-        'en' => 'supermarket',
-        'ru' => 'супермаркет'
-      ]
-    ];
   }
 }

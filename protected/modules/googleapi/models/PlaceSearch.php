@@ -34,8 +34,6 @@ class PlaceSearch
 
   protected $placesLimit = 5;
 
-  protected $matchPercent = 89;
-
   public function __construct(GooglePlacesApi $placesApiObj, City $cityModel)
   {
     $this->placesApi = $placesApiObj;
@@ -48,36 +46,7 @@ class PlaceSearch
     // нашел в гугл мапс русские аналоги типов.
     // Multiple types queries depricated прийдется по каждому типу выводить по очередно.
     */
-    $this->placeTypes = [
-      [
-        'en' => 'movie_theater',
-        'ru' => 'кинотеатр'
-      ],
-      [
-        'en' => 'electronics_store',
-        'ru' => 'Магазин электроники'
-      ],
-      [
-        'en' => 'lodging', // сюда входят мини гостиницы и прочие
-        'ru' => 'гостиница'
-      ],
-      [
-        'en' => 'cafe',
-        'ru' => 'кафе'
-      ],
-      [
-        'en' => 'bar',
-        'ru' => 'бар'
-      ],
-      [
-        'en' => 'liquor_store',
-        'ru' => 'Магазин спиртных напитков'
-      ],
-      [
-        'en' => 'supermarket',
-        'ru' => 'супермаркет'
-      ]
-    ];
+    $this->placeTypes = self::getTypes();
   }
 
   public function setApiKey(string $keyInput = NULL)
@@ -89,13 +58,6 @@ class PlaceSearch
           $key = $keyObj->key;
     }
     $this->placesApi->setApiKey($key);
-
-    return $this;
-  }
-
-  public function setMatchPercent(int $matchPercent)
-  {
-    $this->matchPercent = $matchPercent;
 
     return $this;
   }
@@ -227,7 +189,7 @@ class PlaceSearch
       foreach ($words as $word) {
         similar_text($type['ru'], $word, $percent);
 
-        if($percent > $this->matchPercent) {
+        if($percent > 61.8) {
           $temp[] = $this->placeTypes[$key];
         }
       }
@@ -272,14 +234,16 @@ class PlaceSearch
   {
     $temp = $this->placesDataRaw;
     foreach ($temp as $item) {
-      $onePlace = $this->prepareOnePlace($item);
+      $onePlace = self::prepareOnePlace($item);
       if (!empty($onePlace)) {
         $this->placesData[] = $onePlace;
       }
     }
+
+    return $this;
   }
 
-  public static function preparePlacesRaw($raw)
+  public static function preparePlacesRaw($raw) : array
   {
     $data = [];
     foreach ($raw as $item) {
@@ -289,10 +253,10 @@ class PlaceSearch
     return $data;
   }
 
-  public static function prepareOnePlace($place)
+  public static function prepareOnePlace($place) : array
   {
     $item = $place;
-    $name = $item->name; # code...
+    $name = $item->name;
     $lat = $item->geometry->location->lat;
     $lng = $item->geometry->location->lng;
     $address = substr($item->vicinity, 0, strrpos($item->vicinity, ","));
@@ -308,6 +272,40 @@ class PlaceSearch
     ];
 
     return $data;
+  }
+
+  public static function getTypes() : array
+  {
+    return $placeTypes = [
+      [
+        'en' => 'movie_theater',
+        'ru' => 'кинотеатр'
+      ],
+      [
+        'en' => 'electronics_store',
+        'ru' => 'Магазин электроники'
+      ],
+      [
+        'en' => 'lodging', // сюда входят мини гостиницы и прочие
+        'ru' => 'гостиница'
+      ],
+      [
+        'en' => 'cafe',
+        'ru' => 'кафе'
+      ],
+      [
+        'en' => 'bar',
+        'ru' => 'бар'
+      ],
+      [
+        'en' => 'liquor_store',
+        'ru' => 'Магазин спиртных напитков'
+      ],
+      [
+        'en' => 'supermarket',
+        'ru' => 'супермаркет'
+      ]
+    ];
   }
 
   public function getPlacesRaw()
