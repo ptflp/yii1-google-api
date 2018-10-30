@@ -1,6 +1,6 @@
 <?php
 
-class PlaceSearchCache
+class PlacesCache
 {
   protected $redis;
   protected $data=[];
@@ -23,6 +23,7 @@ class PlaceSearchCache
   {
     return $this->connection;
   }
+
   public function createListKey(int $cityId, string $keyword)
   {
     if (mb_strlen($keyword)<10) {
