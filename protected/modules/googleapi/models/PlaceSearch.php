@@ -153,23 +153,30 @@ class PlaceSearch
     return $this;
   }
 
-  public function prepareAddressData()
+  public static function prepareAddressRaw(array $addressDataRaw) : array
   {
-    $addressDetails = $this->addressDataRaw;
-    array_slice($addressDetails,0,$this->addressLimit);
-    foreach ($addressDetails as $addressObj) {
-        $name = $addressObj->structured_formatting->main_text;
-        $lng = $addressObj->details->geometry->location->lng;
-        $lat = $addressObj->details->geometry->location->lat;
-        $this->addressData[] = [
-          "name" => $name,
-          "longitude" => $lng,
-          "latitude" => $lat,
-          "address" => $name
-        ];
+    $addressData = [];
+    foreach ($addressDataRaw as $addressObj) {
+        $addressData[] = self::prepareOneAddress($addressObj);
     }
 
-    return $this;
+    return $addressData;
+  }
+
+  public static function prepareOneAddress($addressObj)
+  {
+    $name = $addressObj->structured_formatting->main_text;
+    $lng = $addressObj->details->geometry->location->lng;
+    $lat = $addressObj->details->geometry->location->lat;
+    $id = $addressObj->id;
+    $data =  [
+      "name" => $name,
+      "id" => $id,
+      "longitude" => $lng,
+      "latitude" => $lat,
+      "address" => $name
+    ];
+    return $data;
   }
 
   public function detectTypes($input = NULL)
