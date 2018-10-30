@@ -21,64 +21,13 @@ class PlaceController extends Controller
         }
 
         $cityId = $_GET['city_id'];
-        $keyword = mb_strtolower($_GET['keyword']);
-        $keyword = trim($keyword);
+        $keyword = $_GET['keyword'];
 
-        $placesCache = $this->container
-                    ->get('PlacesCache');
-        $addressesCache = $this->container
-                    ->get('AddressesCache');
-        if ($placesCache->connect()) {
-            $placesCache->createListKey($cityId, $keyword)
-                ->requestList()
-                ->requestData();
-            $addressesCache->createListKey($cityId, $keyword)
-                ->requestList()
-                ->requestData();
-        }
-
-        $dataCache = $placesCache->getData();
-        $addressesData = $addressesCache->getData();
-        if (count($dataCache)>0 || count($addressesData)>0) {
-            foreach ($dataCache as $item) {
-                $addressesData[] = [
-                    "name" => $item['name']. ', ' . $item['type'],
-                    "longitude" => floatval($item['longitude']),
-                    "latitude" => floatval($item['latitude']),
-                    "address" => $item['address']
-                ];
-            }
-            $this->renderJSON($addressesData);
-            return;
-        }
-
-        $placesApi = $this->container
-                        ->get('PlaceSearch')
-                        ->requestData($cityId, $keyword);
-
-        $placesRaw = $placesApi->getPlacesRaw();
-        $addressRaw = $placesApi->getAddressRaw();
-        $addressArray = PlaceSearch::prepareAddressRaw($addressRaw);
-        $placesArray = PlaceSearch::preparePlacesRaw($placesRaw);
-
-
-        if ($placesCache->connect()) {
-            $placesCache->setData($placesArray)
-                        ->saveData();
-            $addressesCache->setData($addressArray)
-                            ->saveData();
-        }
-
-        foreach ($placesArray as $item) {
-            $addressArray[] = [
-                "name" => $item['name']. ', ' . $item['type'],
-                "longitude" => $item['longitude'],
-                "latitude" => $item['latitude'],
-                "address" => $item['address']
-            ];
-        }
-
-        $this->renderJSON($addressArray);
+        $dataWrapper = $this->container
+                            ->get('DataWrapper');
+        $data = $dataWrapper->requestData($cityId, $keyword)
+                            ->getData();
+        $this->renderJSON($data);
     }
 
     public function actionFindcity()
