@@ -2,6 +2,36 @@
 
 class PlaceController extends Controller
 {
+
+	/**
+	 * @return array action filters
+	 */
+	public function filters()
+	{
+		return array(
+			'accessControl', // perform access control
+		);
+	}
+
+	/**
+	 * Specifies the access control rules.
+	 * This method is used by the 'accessControl' filter.
+	 * @return array access control rules
+	 */
+	public function accessRules()
+	{
+		return array(
+			 array('allow',  // allow all users to perform 'index' and 'view' actions
+				  'actions'=>array('search','findcity'),
+				  'users'=>array('@'),
+			 ),
+			 array('deny',  // deny all users
+				 'users'=>array('*'),
+				 'deniedCallback' => function() { Yii::app()->controller->redirect(array ('/site/index')); }
+			 ),
+		);
+    }
+
     public function actionSearch()
     {
         if (!isset($_GET['city_id']) || !isset($_GET['keyword'])) {
@@ -62,76 +92,6 @@ class PlaceController extends Controller
             $this->renderJSON($cities);
         } else {
             $this->renderJSON([]);
-        }
-    }
-
-    public function actionTest()
-    {
-        $jsonKey = file_get_contents(Yii::app()->params['g_api_key']);
-        $keyObj = json_decode($jsonKey);
-        $key = $keyObj->key;
-
-        $client = $this->container->get('Modules\GoogleApi\ClientAdaptor');
-
-        $client->setUrl('https://maps.googleapis.com/maps/api/place/nearbysearch/json');
-
-        $types = [
-            "administrative_area_level_1",
-            "administrative_area_level_2",
-            "administrative_area_level_3",
-            "administrative_area_level_4",
-            "administrative_area_level_5",
-            "colloquial_area",
-            "country",
-            "establishment",
-            "finance",
-            "floor",
-            "food",
-            "general_contractor",
-            "geocode",
-            "health",
-            "intersection",
-            "locality",
-            "natural_feature",
-            "neighborhood",
-            "place_of_worship",
-            "political",
-            "point_of_interest",
-            "post_box",
-            "postal_code",
-            "postal_code_prefix",
-            "postal_code_suffix",
-            "postal_town",
-            "premise",
-            "room",
-            "route",
-            "street_address",
-            "street_number",
-            "sublocality",
-            "sublocality_level_4",
-            "sublocality_level_5",
-            "sublocality_level_3",
-            "sublocality_level_2",
-            "sublocality_level_1",
-            "subpremise"
-        ];
-
-        foreach ($types as $type) {
-            echo $type;
-            $paramsUrl = [
-                'location'=>"62.0354523,129.6754745",
-                'radius'=>17000,
-                'type'=>$type,
-                'language'=>"ru",
-                'keyword'=>"синет",
-                'key'=> $key,
-            ];
-
-            $client->setParamsUrl($paramsUrl);
-            $client->fetch();
-            $json = $client->getResponse();
-            $data = json_decode($json, true);
-            $this->debug($data);
         }
     }
 }
