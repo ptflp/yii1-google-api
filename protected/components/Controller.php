@@ -27,7 +27,7 @@ class Controller extends CController
 
     protected function beforeAction($action)
     {
-        $this->container = include __DIR__ . '/../config/php-di.php';
+        $this->container = Yii::app()->DI->container;
         return parent::beforeAction($action);
     }
 

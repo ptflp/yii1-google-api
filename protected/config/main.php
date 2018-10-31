@@ -38,7 +38,11 @@ return array(
 			'class' => 'PhpAuthManager',
 			// Роль по умолчанию. Все, кто не админы, модераторы и юзеры — гости.
 			'defaultRoles' => array('guest'),
-	   ),
+       ),
+
+        'DI' => array(
+            'class' => 'DI',
+        ),
 
 		'user'=>array(
 			// enable cookie-based authentication
@@ -89,7 +93,8 @@ return array(
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// this is used in contact page
-		'redirectUrl'=>'http://places.ptflp.ru/',
+        'redirectUrl'=>'http://places.ptflp.ru/',
+        'dicConfig'=>dirname(__FILE__).'/php-di.php',
 		'adminEmail'=>'webmaster@example.com',
 		'client_secrets'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'../../client_secrets.json',
 		'g_api_key'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'../../g_api_key.json'
