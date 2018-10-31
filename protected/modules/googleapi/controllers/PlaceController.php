@@ -20,11 +20,28 @@ class PlaceController extends Controller
             }
         }
 
+        $addressLimit = 8;
+        if (isset($_GET['address_limit'])) {
+            if (is_numeric($_GET['address_limit'])) {
+                $addressLimit = $_GET['address_limit'];
+            }
+        }
+
+        $placesLimit = 8;
+        if (isset($_GET['places_limit'])) {
+            if (is_numeric($_GET['places_limit'])) {
+                $placesLimit = $_GET['places_limit'];
+            }
+        }
+
         $cityId = $_GET['city_id'];
         $keyword = $_GET['keyword'];
 
         $data = $this   ->container
                         ->get('DataWrapper')
+                        ->setPlacesMatch($matchPercent)
+                        ->setAddressesLimit($addressLimit)
+                        ->setPlacesLimit($placesLimit)
                         ->requestData($cityId, $keyword)
                         ->getData();
 

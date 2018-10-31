@@ -47,16 +47,22 @@ class DataWrapper
     public function setAddressesLimit(int $addressesLimit)
     {
         $this->addressesLimit = $addressesLimit;
+
+        return $this;
     }
 
     public function setPlacesLimit(int $placesLimit)
     {
         $this->placesLimit = $placesLimit;
+
+        return $this;
     }
 
-    public function placesMatch(int $placesMatch)
+    public function setPlacesMatch(int $placesMatch)
     {
         $this->placesMatch = $placesMatch;
+
+        return $this;
     }
 
     protected function prepareAddressesOutput()
@@ -80,25 +86,43 @@ class DataWrapper
         $types = $this->placeSearch->getTypes();
         $data = array_slice($this->placesData, 0, $this->placesLimit);
         foreach ($data as $item) {
-            /**
-             * Сравнить всю строку в процентах
-             * Если менее лимита, разбиваем слова и ищем максимум совпадения
-             */
-            $itemName = mb_strtolower($item['name']);
-            $nameWords = explode(' ', $itemName);
-            foreach ($nameWords as $name) {
-                similar_text($name, $this->keyword, $percent);
-                echo "$this->keyword ".$item['name']." $percent % <br>";
+            $percent = $this->checkMatch($item['name']);
+            if ($percent > $this->placesMatch) {
+                $key = array_search($item['type'], array_column($types, 'en'));
+                $temp[] = [
+                    "name" => $item['name']. ', ' . $types[$key]['ru'],
+                    "logitude" => floatval($item['longitude']),
+                    "latitude" => floatval($item['latitude']),
+                    "address" => $item['address']
+                ];
             }
-            $key = array_search($item['type'], array_column($types, 'en'));
-            $temp[] = [
-                "name" => $item['name']. ', ' . $types[$key]['ru'],
-                "logitude" => floatval($item['longitude']),
-                "latitude" => floatval($item['latitude']),
-                "address" => $item['address']
-            ];
-        } die();
+        }
         $this->placesData = $temp;
+    }
+
+    protected function checkMatch(string $itemName)
+    {
+        $itemName = mb_strtolower($itemName);
+        similar_text($itemName, $this->keyword, $percent);
+        if ($percent > $this->placesMatch) {
+            return $percent;
+        }
+        $nameWords = explode(' ', $itemName);
+        foreach ($nameWords as $name) {
+            similar_text($name, $this->keyword, $percent);
+            if ($percent > $this->placesMatch) {
+                return $percent;
+            }
+        }
+        $keyWords = explode(' ', $this->keyword);
+        foreach ($keyWords as $keyword) {
+            similar_text($itemName, $keyword, $percent);
+            if ($percent > $this->placesMatch) {
+                return $percent;
+            }
+        }
+
+        return $percent;
     }
 
     protected function requestCache()
