@@ -41,7 +41,7 @@ class City extends CActiveRecord
 
     public function checkCity($attribute, $params)
     {
-        $container = include __DIR__ . '/../config/php-di.php';
+        $container = Yii::app()->DI->container;
         $cities = $container->get('Modules\GoogleApi\Models\PlaceSearch')
                     ->requestCitiesByName($this->description)
                     ->getCities();
