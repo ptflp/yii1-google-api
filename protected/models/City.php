@@ -30,7 +30,8 @@ class City extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, description, place_id, longitude, latitude', 'required'),
-			array('place_id', 'unique'),
+            array('place_id', 'unique'),
+            array('place_id', 'checkCity'),
 			array('name, description, place_id, longitude, latitude', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -38,6 +39,26 @@ class City extends CActiveRecord
 		);
 	}
 
+    public function checkCity($attribute, $params)
+    {
+        $container = include __DIR__ . '/../config/php-di.php';
+        $cities = $container->get('Modules\GoogleApi\Models\PlaceSearch')
+                    ->requestCitiesByName($this->description)
+                    ->getCities();
+        $key = array_search($this->place_id, array_column($cities, 'place_id'));
+
+        if (isset($key)) {
+            $city = $cities[$key];
+            $this->attributes = NULL;
+            $this->name = $city['name'];
+            $this->place_id = $city['place_id'];
+            $this->description =  $city['description'];
+            $this->longitude = $city['longitude'];
+            $this->latitude = $city['latitude'];
+        } else {
+            $this->addError($attribute, 'Попытка записи несуществующего города');
+        }
+    }
 	/**
 	 * @return array relational rules.
 	 */
