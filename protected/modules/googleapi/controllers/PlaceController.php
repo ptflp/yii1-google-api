@@ -38,7 +38,7 @@ class PlaceController extends Controller
             $this->renderJSON([]);
             return;
         }
-        if (!is_numeric($_GET['city_id']) || mb_strlen($_GET['keyword'])<1) {
+        if (!is_numeric($_GET['city_id']) || mb_strlen($_GET['keyword'])<1 || mb_strlen($_GET['keyword'])>20) {
             $this->renderJSON([]);
             return;
         }
