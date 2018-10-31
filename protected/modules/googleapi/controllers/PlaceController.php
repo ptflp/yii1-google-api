@@ -21,9 +21,9 @@ class PlaceController extends Controller
         }
 
         $addressLimit = 8;
-        if (isset($_GET['address_limit'])) {
-            if (is_numeric($_GET['address_limit'])) {
-                $addressLimit = $_GET['address_limit'];
+        if (isset($_GET['addresses_limit'])) {
+            if (is_numeric($_GET['addresses_limit'])) {
+                $addressLimit = $_GET['addresses_limit'];
             }
         }
 
