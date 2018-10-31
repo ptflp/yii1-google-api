@@ -182,7 +182,7 @@
             el: '#app',
             data: {
                 placesInput: '',
-                cityId: 1,
+                cityId: '',
                 cancel: '',
                 matchPercent: 61.8,
                 queryUrl: 'GET ' + document.URL + 'googleapi/place/search',
