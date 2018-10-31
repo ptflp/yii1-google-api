@@ -11,6 +11,8 @@ class DataWrapper
     protected $addressesCache;
     protected $cityId;
     protected $keyword;
+    protected $addressesLimit = 8;
+    protected $placesLimit = 13;
     protected $placesData = [];
     protected $addressesData = [];
     protected $data = [];
@@ -41,10 +43,21 @@ class DataWrapper
         $this->keyword = $keyword;
     }
 
+    public function setAddressesLimit(int $addressesLimit)
+    {
+        $this->addressesLimit = $addressesLimit;
+    }
+
+    public function setPlacesLimit(int $placesLimit)
+    {
+        $this->placesLimit = $placesLimit;
+    }
+
     protected function prepareAddressesOutput()
     {
         $temp = [];
-        foreach ($this->addressesData as $item) {
+        $data = array_slice($this->addressesData, 0, $this->addressesLimit);
+        foreach ($data as $item) {
             $temp[] = [
                 "name" => $item['name'],
                 "logitude" => floatval($item['longitude']),
@@ -59,7 +72,8 @@ class DataWrapper
     {
         $temp = [];
         $types = $this->placeSearch->getTypes();
-        foreach ($this->placesData as $item) {
+        $data = array_slice($this->placesData, 0, $this->placesLimit);
+        foreach ($data as $item) {
             $key = array_search($item['type'], array_column($types, 'en'));
             $temp[] = [
                 "name" => $item['name']. ', ' . $types[$key]['ru'],
