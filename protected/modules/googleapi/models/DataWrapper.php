@@ -13,6 +13,7 @@ class DataWrapper
     protected $keyword;
     protected $addressesLimit = 8;
     protected $placesLimit = 13;
+    protected $placesMatch = 61.8;
     protected $placesData = [];
     protected $addressesData = [];
     protected $data = [];
@@ -53,6 +54,11 @@ class DataWrapper
         $this->placesLimit = $placesLimit;
     }
 
+    public function placesMatch(int $placesMatch)
+    {
+        $this->placesMatch = $placesMatch;
+    }
+
     protected function prepareAddressesOutput()
     {
         $temp = [];
@@ -74,6 +80,12 @@ class DataWrapper
         $types = $this->placeSearch->getTypes();
         $data = array_slice($this->placesData, 0, $this->placesLimit);
         foreach ($data as $item) {
+            $itemName = mb_strtolower($item['name']);
+            $nameWords = explode(' ', $itemName);
+            foreach ($nameWords as $name) {
+                similar_text($name, $this->keyword, $percent);
+                echo "$this->keyword ".$item['name']." $percent % <br>";
+            }
             $key = array_search($item['type'], array_column($types, 'en'));
             $temp[] = [
                 "name" => $item['name']. ', ' . $types[$key]['ru'],
@@ -81,7 +93,7 @@ class DataWrapper
                 "latitude" => floatval($item['latitude']),
                 "address" => $item['address']
             ];
-        }
+        } die();
         $this->placesData = $temp;
     }
 
