@@ -22,7 +22,7 @@ class PlaceController extends Controller
 	{
 		return array(
 			 array('allow',  // allow all users to perform 'index' and 'view' actions
-				  'actions'=>array('search','findcity'),
+				  'actions'=>array('search','findcity','test'),
 				  'users'=>array('@'),
 			 ),
 			 array('deny',  // deny all users
@@ -93,5 +93,38 @@ class PlaceController extends Controller
         } else {
             $this->renderJSON([]);
         }
+    }
+
+    public function actionTest()
+    {
+        $arr = [
+            [
+                1, 37, 8, 9, 140, 217
+            ],
+            [
+                21, 75, 38, 97, 10, 17
+            ],
+            [
+                31, 76, 8, 49, 10, 147
+            ],
+            [
+                1, 76, 83, 9, 180, 137
+            ],
+        ];
+        dump_r($arr);
+
+        $temp = [];
+        foreach ($arr as $subArray) {
+            $max1 = max($subArray);
+            $key=array_search($max1,$subArray);
+            unset($subArray[$key]);
+            $max2 = max($subArray);
+            $temp[] = $max1 + $max2;
+        }
+        $maxSumm = max($temp);
+
+        $key = array_search($maxSumm, $temp);
+
+        dump_r($arr[$key]);
     }
 }
