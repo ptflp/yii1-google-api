@@ -307,6 +307,18 @@ class PlaceSearch
       [
         'en' => 'supermarket',
         'ru' => 'супермаркет'
+      ],
+      [
+          'en' => 'point_of_interest',
+          'ru' => ''
+      ],
+      [
+          'en' => 'establishment',
+          'ru' => ''
+      ],
+      [
+          'en' => 'university',
+          'ru' => ''
       ]
     ];
   }
