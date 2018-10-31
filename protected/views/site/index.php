@@ -45,10 +45,16 @@ if (Yii::app()->user->isGuest) :?>
                             <input type="text" class="md-input" disabled="" v-model="queryUrl">
                         </div>
                         <div class="uk-width-medium-1-6">
-                            <input type="text" class="md-input" disabled="" >
+                            <div class="md-input-wrapper">
+                                <input type="text" class="uk-form-width-medium k-input" id="addressesLimit" value="8" min="0" max="100">
+                                <span class="uk-form-help-block">Лимит выдачи адресов</span>
+                            </div>
                         </div>
                         <div class="uk-width-medium-1-6">
-                            <input type="text" class="md-input" disabled="" >
+                            <div class="md-input-wrapper">
+                                <input type="text" class="uk-form-width-medium k-input" id="placesLimit" value="13" min="0" max="100">
+                                <span class="uk-form-help-block">Лимит выдачи мест</span>
+                            </div>
                         </div>
                     </div>
                 </div>

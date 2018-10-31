@@ -15,6 +15,11 @@
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
 
+    <!-- additional styles for plugins -->
+    <!-- kendo UI -->
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/bower_components/kendo-ui/styles/kendo.common-material.min.css"/>
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/bower_components/kendo-ui/styles/kendo.material.min.css" id="kendoCSS"/>
+
     <!-- uikit -->
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/bower_components/uikit/css/uikit.almost-flat.min.css" media="all">
 
@@ -102,6 +107,13 @@
     <script src="/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
     <script src="/main/js/pages/forms_advanced.js"></script>
 
+    <!-- page specific plugins -->
+    <!-- kendo UI -->
+    <script src="/main/js/kendoui_custom.js"></script>
+
+    <!--  kendoui functions -->
+    <script src="/main/js/pages/kendoui.min.js"></script>
+
 
     <script>
         $(function() {
@@ -119,6 +131,12 @@
         $window.load(function() {
             // ie fixes
             altair_helpers.ie_fix();
+            $('.k-input').kendoNumericTextBox({
+                format: "n0",
+                min: 0,
+                max: 50,
+                step: 1
+            });
         });
         $( "#settingsCity" ).change(function() {
             var cityId = $(this).val();
@@ -167,7 +185,9 @@
                 cityId: Number,
                 cancel: '',
                 matchPercent: 61.8,
-                queryUrl: 'GET ' + document.URL + 'googleapi/place/search'
+                queryUrl: 'GET ' + document.URL + 'googleapi/place/search',
+                addressesLimit: 8,
+                placesLimit: 13
             },
             created: function () {
                 var f = document.getElementById('firstSelect') ;
@@ -204,7 +224,9 @@
                             params: {
                                 city_id: app.cityId,
                                 keyword: app.placesInput,
-                                match_percent: app.matchPercent
+                                match_percent: app.matchPercent,
+                                places_limit: app.placesLimit,
+                                addresses_limit: app.addressesLimit
                             }
                         })
                         .then(function (response) {
@@ -225,9 +247,28 @@
                 app.lookupPlacesInput();
             }
         });
+
         $( "#matchPercent" ).change(function() {
                 app.matchPercent =$(this).val();
             if (app.placesInput.length > 2) {
+                app.lookupPlacesInput();
+            }
+        });
+
+        $( "#addressesLimit" ).change(function() {
+            console.log('addressesLimit');
+                app.addressesLimit =$(this).val();
+            if (app.placesInput.length > 2) {
+            console.log('addressesLimit');
+                app.lookupPlacesInput();
+            }
+        });
+
+        $( "#placesLimit" ).change(function() {
+            console.log('placesLimit');
+                app.placesLimit =$(this).val();
+            if (app.placesInput.length > 2) {
+                console.log('placesLimit');
                 app.lookupPlacesInput();
             }
         });
