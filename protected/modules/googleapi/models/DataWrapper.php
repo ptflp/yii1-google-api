@@ -88,8 +88,12 @@ class DataWrapper
             $percent = $this->checkMatch($item['name']);
             if ($percent > $this->placesMatch) {
                 $key = array_search($item['type'], array_column($types, 'en'));
+                $type = '';
+                if (mb_strlen($types[$key]['ru'])>0) {
+                    $type =', ' . $types[$key]['ru'];
+                }
                 $temp[] = [
-                    "name" => $item['name']. ', ' . $types[$key]['ru'],
+                    "name" => $item['name']. $type,
                     "logitude" => floatval($item['longitude']),
                     "latitude" => floatval($item['latitude']),
                     "address" => $item['address']
@@ -168,10 +172,26 @@ class DataWrapper
         $addressRaw = $this->placeSearch->getAddressRaw();
         $placesRaw = $this->placeSearch->getPlacesRaw();
         $this->addressesData = PlaceSearch::prepareAddressRaw($addressRaw);
-        $this->placesData = PlaceSearch::preparePlacesRaw($placesRaw);
+        $tempPlacesData = PlaceSearch::preparePlacesRaw($placesRaw);
+        $this->placesData = $this->unique_multidim_array($tempPlacesData,"place_id");
 
         $this->cacheAddresses();
         $this->cachePlaces();
+    }
+
+    public function unique_multidim_array($array, $key) {
+        $temp_array = array();
+        $i = 0;
+        $key_array = array();
+
+        foreach($array as $val) {
+            if (!in_array($val[$key], $key_array)) {
+                $key_array[$i] = $val[$key];
+                $temp_array[$i] = $val;
+            }
+            $i++;
+        }
+        return $temp_array;
     }
 
     protected function cacheAddresses()
