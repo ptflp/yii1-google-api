@@ -229,7 +229,7 @@
         cancel: '',
         removeId: Number,
         cityListSearch: '',
-        cityColumns: ['id', 'name', 'description', 'place_id', 'longitude', 'latitude'],
+        cityColumns: ['id', 'name', 'description', 'place_id', 'latitude', 'longitude'],
         cityList: [
         ]
       },
