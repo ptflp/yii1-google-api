@@ -88,6 +88,10 @@
     <!-- ionrangeslider -->
     <script src="/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
     <script src="/main/js/pages/forms_advanced.js"></script>
+    <!-- htmleditor (codeMirror) -->
+    <!-- <script src="/main/js/uikit_htmleditor_custom.js"></script> -->
+    <!--  snippets functions -->
+    <script src="/main/js/pages/page_snippets.js"></script>
 
     <!-- page specific plugins -->
     <!-- kendo UI -->
