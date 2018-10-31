@@ -5,6 +5,13 @@
       "yiisoft/yii": "1.1.16",
       "leeoniya/dump-r": "^2.1",
       "guzzlehttp/guzzle": "^6.3",
-      "php-di/php-di": "^6.0"
+      "php-di/php-di": "^6.0",
+      "predis/predis": "^1.1"
+   },
+   "autoload": {
+       "psr-4": {
+           "Modules\\GoogleApi\\": "protected/modules/googleapi/components",
+           "Modules\\GoogleApi\\Models\\": "protected/modules/googleapi/models"
+       }
    }
 }

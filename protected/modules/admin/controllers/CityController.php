@@ -6,7 +6,7 @@ class CityController extends Controller
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
-    public $layout='/layouts/column2';
+    public $layout='/layouts/material';
 
     /**
      * @return array action filters
@@ -16,6 +16,7 @@ class CityController extends Controller
         return array(
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
+            'postOnly + clear', // we only allow deletion via POST request
         );
     }
 
@@ -28,12 +29,14 @@ class CityController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index','view','create','update','admin','delete'),
+                'actions'=>array('index','view','create','update','admin','delete','add','clear','list'),
                 'roles'=>array(User::ROLE_ADMIN),
             ),
             array('deny',  // deny all users
-               'users'=>array('*'),
-               'deniedCallback' => function() { Yii::app()->controller->redirect(array ('/site/index')); }
+                'users'=>array('*'),
+                'deniedCallback' => function () {
+                    Yii::app()->controller->redirect(array ('/site/index'));
+                }
             ),
         );
     }
@@ -44,7 +47,7 @@ class CityController extends Controller
      */
     public function actionView($id)
     {
-        $this->render('view',array(
+        $this->render('view', array(
             'model'=>$this->loadModel($id),
         ));
     }
@@ -60,16 +63,14 @@ class CityController extends Controller
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
-        if(isset($_POST['City']))
-        {
+        if (isset($_POST['City'])) {
             $model->attributes=$_POST['City'];
-            if($model->save())
-                $this->redirect(array('view','id'=>$model->id));
+            if ($model->save()) {
+                $this->renderJSON(['success']);
+            } else {
+                $this->renderJSON(['error']);
+            }
         }
-
-        $this->render('create',array(
-            'model'=>$model,
-        ));
     }
 
     /**
@@ -84,14 +85,14 @@ class CityController extends Controller
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
-        if(isset($_POST['City']))
-        {
+        if (isset($_POST['City'])) {
             $model->attributes=$_POST['City'];
-            if($model->save())
+            if ($model->save()) {
                 $this->redirect(array('view','id'=>$model->id));
+            }
         }
 
-        $this->render('update',array(
+        $this->render('update', array(
             'model'=>$model,
         ));
     }
@@ -106,17 +107,56 @@ class CityController extends Controller
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        if (!isset($_GET['ajax'])) {
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+        }
     }
 
     /**
      * Lists all models.
-     */
+     * */
+    // public function actionIndex()
+    // {
+    //     $dataProvider=new CActiveDataProvider('City');
+    //     $this->render('index', array(
+    //         'dataProvider'=>$dataProvider,
+    //     ));
+    // }
+    public function actionClear()
+    {
+        $sql = Yii::app()->db->createCommand()->truncateTable('tbl_city');
+        $this->redirect(array('index'));
+    }
+
+    public function actionList()
+    {
+        $model=new City;
+
+        $dataProvider = $model->search();
+        $dataProvider->setPagination(false);
+        $data = $dataProvider->getData();
+
+        $cityList = [];
+        foreach ($data as $item) {
+            $cityList[]=$item->attributes;
+        }
+
+        $this->renderJSON($cityList);
+    }
+
     public function actionIndex()
     {
+        // $jsonKey = file_get_contents(Yii::app()->params['g_api_key']);
+        // $keyObj = json_decode($jsonKey);
+        // $key = $keyObj->key;
+
+        // $city = $this->container->get('Modules\GoogleApi\GooglePlacesApi')
+        //                 ->setApiKey($key)
+        //                 ->getPlaceDetailsById("ChIJ3X3hWOnMl0YRmnXkblVM1n0");
+        // $this->debug($city);
+
         $dataProvider=new CActiveDataProvider('City');
-        $this->render('index',array(
+        $this->render('index', array(
             'dataProvider'=>$dataProvider,
         ));
     }
@@ -124,14 +164,15 @@ class CityController extends Controller
     /**
      * Manages all models.
      */
-    public function actionAdmin()
+    public function actionAdd()
     {
         $model=new City('search');
         $model->unsetAttributes();  // clear any default values
-        if(isset($_GET['City']))
+        if (isset($_GET['City'])) {
             $model->attributes=$_GET['City'];
+        }
 
-        $this->render('admin',array(
+        $this->render('admin', array(
             'model'=>$model,
         ));
     }
@@ -146,8 +187,9 @@ class CityController extends Controller
     public function loadModel($id)
     {
         $model=City::model()->findByPk($id);
-        if($model===null)
-            throw new CHttpException(404,'The requested page does not exist.');
+        if ($model===null) {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
         return $model;
     }
 
@@ -157,8 +199,7 @@ class CityController extends Controller
      */
     protected function performAjaxValidation($model)
     {
-        if(isset($_POST['ajax']) && $_POST['ajax']==='city-form')
-        {
+        if (isset($_POST['ajax']) && $_POST['ajax']==='city-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }

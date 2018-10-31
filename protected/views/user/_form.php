@@ -10,10 +10,10 @@
 				<div class="uk-width-medium-1-1">
 						<div class="uk-form-row">
 							<div class="uk-grid" data-uk-grid-margin>
-								<div class="uk-width-medium-1-3">
+								<div class="uk-width-medium-1-2">
 										<select id="settingsCity" data-md-selectize data-md-selectize-bottom data-uk-tooltip="{pos:'top'}" title="Выберите город">
 											<?php if(!empty(Yii::app()->user->getCity()['name'])): ?>
-												<option value="<?=Yii::app()->user->getCity()['id']?>"><?=Yii::app()->user->getCity()['name']?></option>
+												<option value="<?=Yii::app()->user->getCity()['id']?>"><?=Yii::app()->user->getCity()['description']?></option>
 											<?php else: ?>
                                  	<option value=""></option>
 											<?php endif;?>

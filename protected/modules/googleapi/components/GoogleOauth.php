@@ -36,7 +36,7 @@ class GoogleOauth implements GoogleOauthInterface
 
     protected $httpClient;
 
-    public function __construct(ClientAdaptor $httpClient)
+    public function __construct(\Modules\GoogleApi\ClientAdaptor $httpClient)
     {
         $this->httpClient = $httpClient;
     }

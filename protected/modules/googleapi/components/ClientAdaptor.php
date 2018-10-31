@@ -1,5 +1,7 @@
 <?php
 
+namespace Modules\GoogleApi;
+
 class ClientAdaptor implements ClientAdaptorInterface
 {
     protected $url;
@@ -14,7 +16,7 @@ class ClientAdaptor implements ClientAdaptorInterface
 
     protected $requestType = 'GET';
 
-    public function __construct(GuzzleHttp\Client $client)
+    public function __construct(\GuzzleHttp\Client $client)
     {
         $this->client = $client;
     }
@@ -49,7 +51,7 @@ class ClientAdaptor implements ClientAdaptorInterface
 
     public function fetch()
     {
-        if($this->requestType == 'POST') {
+        if ($this->requestType == 'POST') {
             $params = [
                 'form_params' => $this->paramsUrl,
             ];

@@ -1,5 +1,7 @@
 <?php
 
+namespace Modules\GoogleApi;
+
 interface GooglePlacesApiInterface
 {
     public function requestCitiesByName(string $name);

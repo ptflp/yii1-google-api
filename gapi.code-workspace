@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+    ],
+    "settings": {
+        "phpcs.standard": "PSR2",
+        "phpcs.ignorePatterns": [
+            "/vendor/*"
+        ]
+    }
+}
