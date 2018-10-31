@@ -3,33 +3,35 @@
 class PlaceController extends Controller
 {
 
-	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control
-		);
-	}
+    /**
+     * @return array action filters
+     */
+    public function filters()
+    {
+        return array(
+            'accessControl', // perform access control
+        );
+    }
 
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			 array('allow',  // allow all users to perform 'index' and 'view' actions
-				  'actions'=>array('search','findcity','test'),
-				  'users'=>array('@'),
-			 ),
-			 array('deny',  // deny all users
-				 'users'=>array('*'),
-				 'deniedCallback' => function() { Yii::app()->controller->redirect(array ('/site/index')); }
-			 ),
-		);
+    /**
+     * Specifies the access control rules.
+     * This method is used by the 'accessControl' filter.
+     * @return array access control rules
+     */
+    public function accessRules()
+    {
+        return array(
+                array('allow',  // allow all users to perform 'index' and 'view' actions
+                    'actions'=>array('search','findcity','test'),
+                    'users'=>array('@'),
+                ),
+                array('deny',  // deny all users
+                    'users'=>array('*'),
+                    'deniedCallback' => function () {
+                        Yii::app()->controller->redirect(array ('/site/index'));
+                    }
+                ),
+        );
     }
 
     public function actionSearch()
@@ -68,7 +70,7 @@ class PlaceController extends Controller
         $keyword = $_GET['keyword'];
 
         $data = $this   ->container
-                        ->get('DataWrapper')
+                        ->get('Modules\GoogleApi\Models\DataWrapper')
                         ->setPlacesMatch($matchPercent)
                         ->setAddressesLimit($addressLimit)
                         ->setPlacesLimit($placesLimit)
@@ -116,7 +118,7 @@ class PlaceController extends Controller
         $temp = [];
         foreach ($arr as $subArray) {
             $max1 = max($subArray);
-            $key=array_search($max1,$subArray);
+            $key=array_search($max1, $subArray);
             unset($subArray[$key]);
             $max2 = max($subArray);
             $temp[] = $max1 + $max2;

@@ -1,10 +1,14 @@
 <?php
 
+namespace Modules\GoogleApi\Models;
+
 use Modules\GoogleApi\Models\PlaceSearch;
+
 /**
  * Google Places API data wrapper
  * returns places data && addresses data
  */
+
 class DataWrapper
 {
     protected $placeSearch;
@@ -174,18 +178,19 @@ class DataWrapper
         $placesRaw = $this->placeSearch->getPlacesRaw();
         $this->addressesData = PlaceSearch::prepareAddressRaw($addressRaw);
         $tempPlacesData = PlaceSearch::preparePlacesRaw($placesRaw);
-        $this->placesData = $this->unique_multidim_array($tempPlacesData,"place_id");
+        $this->placesData = $this->uniqueMultidimArray($tempPlacesData, "place_id");
 
         $this->cacheAddresses();
         $this->cachePlaces();
     }
 
-    public function unique_multidim_array($array, $key) {
+    public function uniqueMultidimArray($array, $key)
+    {
         $temp_array = array();
         $i = 0;
         $key_array = array();
 
-        foreach($array as $val) {
+        foreach ($array as $val) {
             if (!in_array($val[$key], $key_array)) {
                 $key_array[$i] = $val[$key];
                 $temp_array[$i] = $val;

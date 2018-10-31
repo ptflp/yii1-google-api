@@ -51,7 +51,7 @@ class ClientAdaptor implements ClientAdaptorInterface
 
     public function fetch()
     {
-        if($this->requestType == 'POST') {
+        if ($this->requestType == 'POST') {
             $params = [
                 'form_params' => $this->paramsUrl,
             ];

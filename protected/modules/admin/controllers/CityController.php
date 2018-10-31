@@ -33,8 +33,10 @@ class CityController extends Controller
                 'roles'=>array(User::ROLE_ADMIN),
             ),
             array('deny',  // deny all users
-               'users'=>array('*'),
-               'deniedCallback' => function() { Yii::app()->controller->redirect(array ('/site/index')); }
+                'users'=>array('*'),
+                'deniedCallback' => function () {
+                    Yii::app()->controller->redirect(array ('/site/index'));
+                }
             ),
         );
     }
@@ -45,7 +47,7 @@ class CityController extends Controller
      */
     public function actionView($id)
     {
-        $this->render('view',array(
+        $this->render('view', array(
             'model'=>$this->loadModel($id),
         ));
     }
@@ -61,16 +63,14 @@ class CityController extends Controller
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
-        if(isset($_POST['City']))
-        {
+        if (isset($_POST['City'])) {
             $model->attributes=$_POST['City'];
-            if($model->save())
+            if ($model->save()) {
                 $this->renderJSON(['success']);
+            } else {
+                $this->renderJSON(['error']);
+            }
         }
-
-        $this->render('create',array(
-            'model'=>$model,
-        ));
     }
 
     /**
@@ -85,14 +85,14 @@ class CityController extends Controller
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
-        if(isset($_POST['City']))
-        {
+        if (isset($_POST['City'])) {
             $model->attributes=$_POST['City'];
-            if($model->save())
+            if ($model->save()) {
                 $this->redirect(array('view','id'=>$model->id));
+            }
         }
 
-        $this->render('update',array(
+        $this->render('update', array(
             'model'=>$model,
         ));
     }
@@ -107,40 +107,41 @@ class CityController extends Controller
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if(!isset($_GET['ajax']))
+        if (!isset($_GET['ajax'])) {
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+        }
     }
 
     /**
      * Lists all models.
-    //  */
+     * */
     // public function actionIndex()
     // {
     //     $dataProvider=new CActiveDataProvider('City');
-    //     $this->render('index',array(
+    //     $this->render('index', array(
     //         'dataProvider'=>$dataProvider,
     //     ));
     // }
     public function actionClear()
     {
-      $sql = Yii::app()->db->createCommand()->truncateTable('tbl_city');
-      $this->redirect(array('index'));
+        $sql = Yii::app()->db->createCommand()->truncateTable('tbl_city');
+        $this->redirect(array('index'));
     }
 
     public function actionList()
     {
-      $model=new City;
+        $model=new City;
 
-      $dataProvider = $model->search();
-      $dataProvider->setPagination(false);
-      $data = $dataProvider->getData();
+        $dataProvider = $model->search();
+        $dataProvider->setPagination(false);
+        $data = $dataProvider->getData();
 
-      $cityList = [];
-      foreach ($data as $item) {
-        $cityList[]=$item->attributes;
-      }
+        $cityList = [];
+        foreach ($data as $item) {
+            $cityList[]=$item->attributes;
+        }
 
-      $this->renderJSON($cityList);
+        $this->renderJSON($cityList);
     }
 
     public function actionIndex()
@@ -155,7 +156,7 @@ class CityController extends Controller
         // $this->debug($city);
 
         $dataProvider=new CActiveDataProvider('City');
-        $this->render('index',array(
+        $this->render('index', array(
             'dataProvider'=>$dataProvider,
         ));
     }
@@ -167,10 +168,11 @@ class CityController extends Controller
     {
         $model=new City('search');
         $model->unsetAttributes();  // clear any default values
-        if(isset($_GET['City']))
+        if (isset($_GET['City'])) {
             $model->attributes=$_GET['City'];
+        }
 
-        $this->render('admin',array(
+        $this->render('admin', array(
             'model'=>$model,
         ));
     }
@@ -185,8 +187,9 @@ class CityController extends Controller
     public function loadModel($id)
     {
         $model=City::model()->findByPk($id);
-        if($model===null)
-            throw new CHttpException(404,'The requested page does not exist.');
+        if ($model===null) {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
         return $model;
     }
 
@@ -196,8 +199,7 @@ class CityController extends Controller
      */
     protected function performAjaxValidation($model)
     {
-        if(isset($_POST['ajax']) && $_POST['ajax']==='city-form')
-        {
+        if (isset($_POST['ajax']) && $_POST['ajax']==='city-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }

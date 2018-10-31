@@ -5,6 +5,9 @@
 		}
     ],
     "settings": {
-        "phpcs.standard": "PSR2"
+        "phpcs.standard": "PSR2",
+        "phpcs.ignorePatterns": [
+            "/vendor/*"
+        ]
     }
 }
