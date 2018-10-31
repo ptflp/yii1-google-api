@@ -73,7 +73,7 @@ class DataWrapper
         foreach ($data as $item) {
             $temp[] = [
                 "name" => $item['name'],
-                "logitude" => floatval($item['longitude']),
+                "longitude" => floatval($item['longitude']),
                 "latitude" => floatval($item['latitude']),
                 "address" => $item['address']
             ];
@@ -95,7 +95,7 @@ class DataWrapper
                 }
                 $temp[] = [
                     "name" => $item['name']. $type,
-                    "logitude" => floatval($item['longitude']),
+                    "longitude" => floatval($item['longitude']),
                     "latitude" => floatval($item['latitude']),
                     "address" => $item['address']
                 ];
