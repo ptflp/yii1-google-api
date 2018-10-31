@@ -80,6 +80,10 @@ class DataWrapper
         $types = $this->placeSearch->getTypes();
         $data = array_slice($this->placesData, 0, $this->placesLimit);
         foreach ($data as $item) {
+            /**
+             * Сравнить всю строку в процентах
+             * Если менее лимита, разбиваем слова и ищем максимум совпадения
+             */
             $itemName = mb_strtolower($item['name']);
             $nameWords = explode(' ', $itemName);
             foreach ($nameWords as $name) {
