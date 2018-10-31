@@ -55,7 +55,7 @@ class PlaceController extends Controller
             $cityName = trim($cityName);
 
             $cities = $this->container
-                            ->get('PlaceSearch')
+                            ->get('Modules\GoogleApi\Models\PlaceSearch')
                             ->requestCitiesByName($cityName)
                             ->getCities();
 

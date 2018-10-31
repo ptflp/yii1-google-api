@@ -10,7 +10,8 @@
    },
    "autoload": {
        "psr-4": {
-           "Modules\\GoogleApi\\": "protected/modules/googleapi/components"
+           "Modules\\GoogleApi\\": "protected/modules/googleapi/components",
+           "Modules\\GoogleApi\\Models\\": "protected/modules/googleapi/models"
        }
    }
 }

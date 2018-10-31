@@ -1,5 +1,6 @@
 <?php
 
+use Modules\GoogleApi\Models\PlaceSearch;
 /**
  * Google Places API data wrapper
  * returns places data && addresses data

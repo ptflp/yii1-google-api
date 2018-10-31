@@ -1,6 +1,10 @@
 <?php
 
+namespace Modules\GoogleApi\Models;
+
 use Modules\GoogleApi\GooglePlacesApi;
+use \City;
+use \Yii;
 
 class PlaceSearch
 {
