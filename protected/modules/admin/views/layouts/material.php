@@ -250,7 +250,6 @@
           var instance = axios.create();
           instance.get('/admin/city/list')
           .then(function (response) {
-            console.log(response.data);
             altair_helpers.content_preloader_hide();
             app.cityList = response.data;
           })
@@ -286,7 +285,6 @@
         }, 800),
         addCity: function(city,e) {
           e.preventDefault();
-          console.log(city);
           var app = this
 
           UIkit.modal.confirm('Добавить город ' + city.description, function(){
