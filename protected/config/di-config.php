@@ -1,5 +1,7 @@
 <?php
+
 use Predis\Client;
+
 return [
     // Configure Twig
     Client::class => function () {

@@ -39,7 +39,7 @@ class OauthController extends Controller
                         ->getUserInfo();
 
         $authorize = $this->container
-                            ->get('UserAuthorize')
+                            ->get('Modules\GoogleApi\Models\UserAuthorize')
                             ->setGoogleInfo($userInfo)
                             ->setEmail($userInfo->email)
                             ->login();

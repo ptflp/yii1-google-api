@@ -1,5 +1,7 @@
 <?php
 
+namespace Modules\GoogleApi\Models;
+
 class UserAuthorize
 {
     protected $email;
@@ -26,12 +28,12 @@ class UserAuthorize
     public function login()
     {
         if ($this->_identity===null) {
-            $this->_identity=new UserIdentity($this->email, null);
+            $this->_identity=new \UserIdentity($this->email, null);
             $this->_identity->setGoogleInfo($this->googleInfo);
             $this->_identity->authenticate();
         }
-        if ($this->_identity->errorCode === UserIdentity::ERROR_NONE) {
-            Yii::app()->user->login($this->_identity, false);
+        if ($this->_identity->errorCode === \UserIdentity::ERROR_NONE) {
+            \Yii::app()->user->login($this->_identity, false);
             return true;
         } else {
             return false;
