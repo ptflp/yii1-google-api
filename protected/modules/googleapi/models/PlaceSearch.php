@@ -88,7 +88,7 @@ class PlaceSearch
     $input = trim($input);
 
     $this->requestCityById($cityId);
-    if(is_array($this->cityAttributes)) {
+    if(count($this->cityAttributes)>0) {
       $cityAttrib = $this->cityAttributes;
         $location = [$cityAttrib['latitude'],$cityAttrib['longitude']];
 
