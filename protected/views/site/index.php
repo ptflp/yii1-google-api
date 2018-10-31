@@ -58,7 +58,7 @@ if (Yii::app()->user->isGuest) :?>
 </div>
 <div class="md-card">
     <div class="md-card-content">
-        <h3 class="heading_a">Input fields</h3>
+        <h3 class="heading_a">Output data</h3>
         <div class="uk-grid" data-uk-grid-margin>
             <div class="uk-width-medium-1-2">
                     <div id="jsoneditorCode"></div>
