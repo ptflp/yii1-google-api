@@ -30,8 +30,6 @@ class DataWrapper
             $this->placeSearch();
         }
 
-        $this->prepareAddressesOutput();
-
         return $this;
     }
 
@@ -55,6 +53,22 @@ class DataWrapper
             ];
         }
         $this->addressesData = $temp;
+    }
+
+    public function preparePlacesOutput()
+    {
+        $temp = [];
+        $types = $this->placeSearch->getTypes();
+        foreach ($this->placesData as $item) {
+            $key = array_search($item['type'], array_column($types, 'en'));
+            $temp[] = [
+                "name" => $item['name']. ', ' . $types[$key]['ru'],
+                "logitude" => floatval($item['longitude']),
+                "latitude" => floatval($item['latitude']),
+                "address" => $item['address']
+            ];
+        }
+        $this->placesData = $temp;
     }
 
     protected function requestCache()
@@ -124,6 +138,9 @@ class DataWrapper
 
     public function concatData()
     {
+        $this->prepareAddressesOutput();
+        $this->preparePlacesOutput();
+
         foreach ($this->addressesData as $item) {
             $this->data[] = $item;
         }
