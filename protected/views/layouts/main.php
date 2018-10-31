@@ -206,9 +206,11 @@
                 lookupPlacesInput: _.debounce(function() {
                     this.queryUrl = 'GET ' +
                         document.URL +
-                        'googleapi/place/search?city_id='+
-                        this.cityId+'&keyword='+this.placesInput+
-                        '&match_percent='+this.matchPercent;
+                        'googleapi/place/search?city_id='+this.cityId+
+                        '&match_percent='+this.matchPercent+
+                        '&places_limit='+this.placesLimit+
+                        '&addresses_limit='+this.addressesLimit+
+                        '&keyword='+this.placesInput;
 
                     altair_helpers.content_preloader_show();
                     var app = this

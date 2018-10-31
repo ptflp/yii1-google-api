@@ -31,17 +31,17 @@ if (Yii::app()->user->isGuest) :?>
                                 </select>
                                 <span class="uk-form-help-block">Выберите город</span>
                         </div>
-                        <div class="uk-width-medium-2-3">
+                        <div class="uk-width-medium-3-4">
                             <div class="md-input-wrapper">
                                 <label>Введите адрес или место</label>
                                 <input type="text" class="md-input" v-model="placesInput">
                             </div>
                         </div>
                         <div class="uk-width-medium-1-4">
-                            <input type="text" id="matchPercent" class="ion-slider" data-min1="0" data-max="100" data-from="61.8" />
+                            <input type="text" id="matchPercent" class="ion-slider" data-min="0" data-max="100" data-from="61.8" />
                             <span class="uk-form-help-block">Точность совпадения запросов в %</span>
                         </div>
-                        <div class="uk-width-medium-2-3">
+                        <div class="uk-width-medium-3-4">
                             <input type="text" class="md-input" disabled="" v-model="queryUrl">
                         </div>
                         <div class="uk-width-medium-1-6">
