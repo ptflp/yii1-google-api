@@ -1,8 +1,46 @@
 # Google Places API
 ## Разворачивание приложения
+Добавить файл
+``` g_api_key.json, client_secrets.json ``` в корень проекта (в той же папке где composer.json, docker-compose.yml)
+
+g_api_key.json должен содержать API ключ, полученный в [Google API console](https://console.developers.google.com/apis/credentials):
+
+```json
+{
+   "key": "FIzaSyFQbldR-7IWggcUOg_RVlckIwJXDGnKreY"
+}
+```
+
+``` client_secrets.json ``` так же создается в [Google API console](https://console.developers.google.com/apis/credentials), в разделе Идентификаторы клиентов OAuth 2.0. Надо вписать редирект Url
+
+Так же заменить редирект URL в конфиге /protected/confing/main.php
+В разделе params, вписывается только домен с слэшем - http://places.ptflp.ru/
+
+Для локального разворачивания изменить порт приложения с 80 на 8000 :
+
+```yml
+...
+  php:
+    image: yiisoftware/yii2-php:7.1-apache
+    container_name: g-api-app
+    volumes:
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./:/app:delegated
+    volumes_from:
+      - tmp
+    ports:
+      - '8000:80'
+    networks:
+      - skynet
+```
+
+В ``` index.php ``` изменить YII_DEBUG в значение true
+
 ```bash
 git clone https://github.com/ptflp/yii1-google-api.git
 cd yii1-google-api
+docker network create skynet # использую для внутреннюю свою сеть для управления контейнерами
+docker-compose up
 docker exec -it g-api-db mysql -proot
 create database googleApi
 exit
