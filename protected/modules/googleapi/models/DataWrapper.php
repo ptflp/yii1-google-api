@@ -92,16 +92,19 @@ class DataWrapper
         foreach ($this->placesData as $item) {
             $percent = $this->checkMatch($item['name']);
             if ($percent > $this->placesMatch) {
+                // dump_r($key);
                 $key = array_search($item['type'], array_column($types, 'en'));
                 $type = '';
-                if (mb_strlen($types[$key]['ru'])>0) {
-                    $type =', ' . $types[$key]['ru'];
+                if ($key !== false) {
+                    if (mb_strlen($types[$key]['ru'])>0) {
+                        $type =', ' . $types[$key]['ru'];
+                    }
                 }
                 $temp[] = [
                     "name" => $item['name']. $type,
                     "longitude" => floatval($item['longitude']),
                     "latitude" => floatval($item['latitude']),
-                    "address" => $item['address']
+                    "address" => $item['address'],
                 ];
             }
         }
