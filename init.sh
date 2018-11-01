@@ -1,5 +1,6 @@
 #!/bin/bash
 sed -i "s/- '80:80'/- '8000:80'/" ./docker-compose.yml
+sed -i "s/'YII_DEBUG',false/'YII_DEBUG',true/" ./web/index.php
 docker network create skynet
 docker-compose up -d
 echo 'Wait for db initialization'
