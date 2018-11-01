@@ -11,11 +11,13 @@
 }
 ```
 
-``` client_secret.json ``` так же создается в [Google API console](https://console.developers.google.com/apis/credentials), в разделе Идентификаторы клиентов OAuth 2.0. Надо вписать редирект Url
+``` client_secret.json ``` так же создается в [Google API console](https://console.developers.google.com/apis/credentials), в разделе Идентификаторы клиентов OAuth 2.0. Надо вписать редирект Url ``` http://localhost:8000/googleapi/oauth/authorize ``` для локальной версии
 
 Для локального разворачивания использовать скрипт ``` init.sh ``` :
 
 ```bash
+git clone https://github.com/ptflp/yii1-google-api.git
+cd yii1-google-api
 ./init.sh
 ```
 Внимание ваш пользователь должен состоять в группе docker подробнее [тут](https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user)

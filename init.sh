@@ -4,7 +4,7 @@ sed -i "s/'YII_DEBUG',false/'YII_DEBUG',true/" ./web/index.php
 docker network create skynet
 docker-compose up -d
 echo 'Wait for db initialization'
-sleep 30s
+sleep 34s
 docker exec g-api-db mysql -proot -e "create database googleApi"
 docker exec g-api-app composer install
 docker exec g-api-app mkdir /app/protected/runtime
