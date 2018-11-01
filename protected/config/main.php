@@ -96,7 +96,7 @@ return array(
         'redirectUrl'=>'http://places.ptflp.ru/',
         'dicConfig'=>dirname(__FILE__).'/php-di.php',
         'adminEmail'=>'webmaster@example.com',
-        'client_secrets'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'../../client_secrets.json',
-        'g_api_key'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'../../g_api_key.json'
+        'client_secrets'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'../../client_secret.json',
+        'g_api_key'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'../../key.json'
     ),
 );
