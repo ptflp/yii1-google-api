@@ -50,7 +50,7 @@
                                 <span class="uk-form-help-block">Лимит выдачи заведений</span>
                             </div>
                         </div>
-                        <div class="uk-width-medium-1-6">
+                        <div class="uk-width-medium-1-5">
                             <div class="md-btn-group">
                                 <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" href="javascript:void(0)" v-on:click="redis('flushall')">
                                     <i class="material-icons">cached</i>
@@ -66,6 +66,12 @@
                                 </a>
                             </div>
                             <p class="uk-text-large">Redis</p>
+                        </div>
+                        <div class="uk-width-medium-1-6">
+                                <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" href="javascript:void(0)" v-on:click="redis('webhook-restart')">
+                                    <i class="material-icons">cached</i>
+                                    Webhook restart
+                                </a>
                         </div>
                     </div>
                 </div>

@@ -13,5 +13,10 @@
       "id": "redis-start",
       "execute-command": "/etc/webhook/start.sh",
       "response-message": "Start Redis serving"
+    },
+    {
+      "id": "webhook-restart",
+      "execute-command": "/etc/webhook/restart.sh",
+      "response-message": "Start Redis serving"
     }
 ]

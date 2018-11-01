@@ -43,6 +43,9 @@ class SiteController extends Controller
                 case 'start':
                     $url = 'http://webhook:9000/hooks/redis-start';
                     break;
+                case 'webhook-restart':
+                    $url = 'http://webhook:9000/hooks/webhook-restart';
+                    break;
                 default:
                     $url = 'http://webhook:9000/hooks/';
                     break;
