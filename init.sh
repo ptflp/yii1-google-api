@@ -7,5 +7,6 @@ echo 'Wait for db initialization'
 sleep 30s
 docker exec g-api-db mysql -proot -e "create database googleApi"
 docker exec g-api-app composer install
+docker exec g-api-app mkdir /app/protected/runtime
 docker exec g-api-app bash ./fix_perm.sh
 docker exec g-api-app /app/protected/yiic migrate --interactive=0
