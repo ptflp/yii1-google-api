@@ -1,4 +1,22 @@
 # Google Places API
+## Разворачивание приложения
+```bash
+git clone https://github.com/ptflp/yii1-google-api.git
+cd yii1-google-api
+docker exec -it g-api-db mysql -proot
+create database googleApi
+exit
+docker exec -it g-api-app bash
+cd protected
+./yiic migrate up
+yes
+```
+Можно пользоваться
+
+если происходит ошибка, то нужно пофиксить permission
+```bash
+chown -R www-data:www-data .
+```
 
 ## Стэк
 1. Server side:
