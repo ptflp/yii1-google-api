@@ -47,7 +47,7 @@
                         <div class="uk-width-medium-1-6">
                             <div class="md-input-wrapper">
                                 <input type="text" class="uk-form-width-medium k-input" id="placesLimit" value="13" min="0" max="100">
-                                <span class="uk-form-help-block">Лимит выдачи мест</span>
+                                <span class="uk-form-help-block">Лимит выдачи заведений</span>
                             </div>
                         </div>
                     </div>
