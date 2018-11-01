@@ -1,9 +1,9 @@
 # Google Places API
 ## Разворачивание приложения
 Добавить файл
-``` g_api_key.json, client_secrets.json ``` в корень проекта (в той же папке где composer.json, docker-compose.yml)
+``` key.json, client_secret.json ``` в корень проекта (в той же папке где composer.json, docker-compose.yml)
 
-g_api_key.json должен содержать API ключ, полученный в [Google API console](https://console.developers.google.com/apis/credentials):
+``` key.json ``` должен содержать API ключ, полученный в [Google API console](https://console.developers.google.com/apis/credentials):
 
 ```json
 {
@@ -11,47 +11,34 @@ g_api_key.json должен содержать API ключ, полученны�
 }
 ```
 
-``` client_secrets.json ``` так же создается в [Google API console](https://console.developers.google.com/apis/credentials), в разделе Идентификаторы клиентов OAuth 2.0. Надо вписать редирект Url
+``` client_secret.json ``` так же создается в [Google API console](https://console.developers.google.com/apis/credentials), в разделе Идентификаторы клиентов OAuth 2.0. Надо вписать редирект Url
 
-Для локального разворачивания изменить порт приложения с 80 на 8000 :
-
-```yml
-...
-  php:
-    image: yiisoftware/yii2-php:7.1-apache
-    container_name: g-api-app
-    volumes:
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      - ./:/app:delegated
-    volumes_from:
-      - tmp
-    ports:
-      - '8000:80'
-    networks:
-      - skynet
-```
-
-В ``` index.php ``` изменить YII_DEBUG в значение true
+Для локального разворачивания использовать скрипт ``` init.sh ``` :
 
 ```bash
-git clone https://github.com/ptflp/yii1-google-api.git
-cd yii1-google-api
-docker network create skynet # использую для внутреннюю свою сеть для управления контейнерами
-docker-compose up
-docker exec -it g-api-db mysql -proot
-create database googleApi
-exit
-docker exec -it g-api-app bash
-cd protected
-./yiic migrate up
-yes
+./init.sh
 ```
+Внимание ваш пользователь должен состоять в группе docker подробнее [тут](https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user)
+
+содержимое скрипта ``` init.sh ```
+
+```bash
+#!/bin/bash
+sed -i "s/- '80:80'/- '8000:80'/" ./docker-compose.yml
+sed -i "s/'YII_DEBUG',false/'YII_DEBUG',true/" ./web/index.php
+docker network create skynet
+docker-compose up -d
+echo 'Wait for db initialization'
+sleep 30s
+docker exec g-api-db mysql -proot -e "create database googleApi"
+docker exec g-api-app composer install
+docker exec g-api-app mkdir /app/protected/runtime
+docker exec g-api-app bash ./fix_perm.sh
+docker exec g-api-app /app/protected/yiic migrate --interactive=0
+```
+
 Можно пользоваться
 
-если происходит ошибка, то нужно пофиксить permission
-```bash
-chown -R www-data:www-data .
-```
 
 ## Стэк
 1. Server side:
