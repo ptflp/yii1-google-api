@@ -103,7 +103,7 @@
     <script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
-    <script src="/main/js/main.js"></script>
+    <script src="/main/js/main.1.2.js"></script>
 
     <script>
     </script>
