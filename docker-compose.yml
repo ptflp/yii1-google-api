@@ -25,6 +25,16 @@ services:
       - ./redis/redis.conf:/etc/redis.conf
     volumes_from:
       - tmp
+  webhook:
+    image: ptflp/docker-webhook
+    command: ["-verbose", "-hooks=/etc/webhook/hooks.json", "-hotreload"]
+    container_name: webhook
+    volumes:
+      - "./webhook/:/etc/webhook/"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    restart: always
+    networks:
+      - skynet
   db:
     image: mysql
     container_name: g-api-db
