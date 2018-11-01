@@ -77,7 +77,7 @@ if (checkApp !== null) {
         methods: {
             lookupPlacesInput: _.debounce(function() {
                 this.queryUrl = 'GET ' +
-                    document.URL +
+                    window.location.origin +
                     'googleapi/place/search?city_id='+this.cityId+
                     '&match_percent='+this.matchPercent+
                     '&places_limit='+this.placesLimit+
@@ -111,7 +111,20 @@ if (checkApp !== null) {
                     .catch(function (error) {
                         console.log(error);
                     })
-            }, 800)
+            }, 800),
+            redis: function (action) {
+                axios.post('/site/redis', {
+                        action: action,
+                })
+                .then(function (response) {
+                    UIkit.notify("Операция успешна "+response.data, {status:'success'})
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    UIkit.notify("Ошибка операции", {status:'danger'})
+                    console.log(error);
+                });
+            }
         }
     });
 

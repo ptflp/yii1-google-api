@@ -5,7 +5,7 @@
         <div class="uk-grid" data-uk-grid-margin>
             <div class="uk-width-medium-1-1">
                 <div class="uk-form-row">
-                    <div class="uk-grid" data-uk-grid-margin v-on:load="test()">
+                    <div class="uk-grid" data-uk-grid-margin >
                         <div class="uk-width-medium-1-4">
                                 <?php if (!empty(Yii::app()->user->getCity()['description'])) : ?>
                                 <input id="firstSelect" type="hidden" value="<?=Yii::app()->user->getCity()['id']?>" />
@@ -49,6 +49,23 @@
                                 <input type="text" class="uk-form-width-medium k-input" id="placesLimit" value="13" min="0" max="100">
                                 <span class="uk-form-help-block">Лимит выдачи заведений</span>
                             </div>
+                        </div>
+                        <div class="uk-width-medium-1-6">
+                            <div class="md-btn-group">
+                                <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" href="javascript:void(0)" v-on:click="redis('flushall')">
+                                    <i class="material-icons">cached</i>
+                                    Flushall
+                                </a>
+                                <a class="md-btn md-btn-success md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" href="javascript:void(0)" v-on:click="redis('start')">
+                                <i class="material-icons">settings_power</i>
+                                    Start
+                                </a>
+                                <a class="md-btn md-btn-danger md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" href="javascript:void(0)" v-on:click="redis('stop')">
+                                <i class="material-icons">power_settings_new</i>
+                                    Stop
+                                </a>
+                            </div>
+                            <p class="uk-text-large">Redis</p>
                         </div>
                     </div>
                 </div>
