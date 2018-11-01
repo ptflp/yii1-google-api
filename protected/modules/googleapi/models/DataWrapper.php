@@ -91,7 +91,7 @@ class DataWrapper
         $types = $this->placeSearch->getTypes();
         foreach ($this->placesData as $item) {
             $percent = $this->checkMatch($item['name']);
-            if ($percent > $this->placesMatch) {
+            if ($percent >= $this->placesMatch ) {
                 // dump_r($key);
                 $key = array_search($item['type'], array_column($types, 'en'));
                 $type = '';
