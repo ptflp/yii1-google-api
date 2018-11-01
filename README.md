@@ -23,6 +23,7 @@
 
 4. Tools:
     - phpcs (PSR fix)
+    - [git flow](https://danielkummer.github.io/git-flow-cheatsheet/index.ru_RU.html) git branching system
 
 ## Описание
 
