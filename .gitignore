@@ -9,3 +9,4 @@ protected/runtime/gii-1.1.16/
 web/node_modules
 web/package-lock.json
 client_secret.json
+key.json
