@@ -4,20 +4,20 @@
 1. Server side:
     - docker-compose
     - [busybox](https://hub.docker.com/_/busybox/) (data container for unix sock)
-    - [yiisoftware/yii2-php:7.1-apache](https://hub.docker.com/r/yiisoftware/yii2-php/tags/)
-    - [redis](https://hub.docker.com/_/redis/)
-    - [mysql](https://hub.docker.com/_/mysql/)
+    - [yiisoftware/yii2-php:7.1-apache](https://hub.docker.com/r/yiisoftware/yii2-php/tags/) Можно наверно было использовать 7.2 Не тестировал, взял из используемых.
+    - [redis](https://hub.docker.com/_/redis/) Кэширование
+    - [mysql](https://hub.docker.com/_/mysql/) используется latest
 
 2. Backend:
-    - [yiisoft/yii 1.1.16](https://github.com/yiisoft/yii/tree/1.1.16)
-    - [guzzlehttp/guzzle](https://packagist.org/packages/guzzlehttp/guzzle)
-    - [php-di/php-di](https://packagist.org/packages/php-di/php-di)
-    - [predis/predis](https://packagist.org/packages/predis/predis)
+    - [yiisoft/yii 1.1.16](https://github.com/yiisoft/yii/tree/1.1.16) не знаю почему именно эта версия
+    - [guzzlehttp/guzzle](https://packagist.org/packages/guzzlehttp/guzzle) хороший http клиент для POST GET запросов с параметрами. POST используется при авторизации
+    - [php-di/php-di](https://packagist.org/packages/php-di/php-di) Dependency Injection Container
+    - [predis/predis](https://packagist.org/packages/predis/predis) php redis
 
 3. Frontend:
-    - [UI Kit](https://getuikit.com/)
+    - [UI Kit](https://getuikit.com/) material UI
     - [Vue.js](https://vuejs.org/)
-    - [axios](https://github.com/axios/axios)
+    - [axios](https://github.com/axios/axios) js http client
     - [lodash](https://lodash.com/)
     - [jquery](https://jquery.com/)
 
