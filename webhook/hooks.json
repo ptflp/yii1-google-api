@@ -1,0 +1,17 @@
+[
+    {
+      "id": "redis-flush",
+      "execute-command": "/etc/webhook/flush.sh",
+      "response-message": "Flushing Redis cache"
+    },
+    {
+      "id": "redis-stop",
+      "execute-command": "/etc/webhook/stop.sh",
+      "response-message": "Stop Redis serving"
+    },
+    {
+      "id": "redis-start",
+      "execute-command": "/etc/webhook/start.sh",
+      "response-message": "Start Redis serving"
+    }
+]

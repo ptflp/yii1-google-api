@@ -3,6 +3,16 @@
 class SiteController extends Controller
 {
     /**
+     * @return array action filters
+     */
+    public function filters()
+    {
+        return array(
+            'postOnly + flush', // we only allow deletion via POST request
+        );
+    }
+
+    /**
      * This is the default 'index' action that is invoked
      * when an action is not explicitly requested by users.
      */
@@ -16,6 +26,40 @@ class SiteController extends Controller
             ];
         }
         $this->render('index', $params);
+    }
+
+    public function actionRedis()
+    {
+        $_POST = json_decode(file_get_contents('php://input'), true);
+
+        if (!Yii::app()->user->isGuest && isset($_POST['action'])) {
+            switch ($_POST['action']) {
+                case 'flushall':
+                    $url = 'http://webhook:9000/hooks/redis-flush';
+                    break;
+                case 'stop':
+                    $url = 'http://webhook:9000/hooks/redis-stop';
+                    break;
+                case 'start':
+                    $url = 'http://webhook:9000/hooks/redis-start';
+                    break;
+                default:
+                    $url = 'http://webhook:9000/hooks/';
+                    break;
+            }
+            try{
+                $client = $this->container
+                                ->get('Modules\GoogleApi\ClientAdaptor')
+                                ->setUrl($url)
+                                ->fetch();
+
+                $this->renderJSON(["success, Redis ".$_POST['action']]);
+            } catch (\Exception $e) {
+                $this->renderJSON(['error']);
+            }
+        } else {
+            $this->renderJSON($_POST);
+        }
     }
 
     /**
