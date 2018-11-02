@@ -38,16 +38,26 @@
                         <div class="uk-width-medium-3-4">
                             <input type="text" class="md-input" disabled="" v-model="queryUrl">
                         </div>
-                        <div class="uk-width-medium-1-6">
-                            <div class="md-input-wrapper">
-                                <input type="text" class="uk-form-width-medium k-input" id="addressesLimit" value="8" min="0" max="100">
-                                <span class="uk-form-help-block">Лимит выдачи адресов</span>
-                            </div>
-                        </div>
-                        <div class="uk-width-medium-1-6">
-                            <div class="md-input-wrapper">
-                                <input type="text" class="uk-form-width-medium k-input" id="placesLimit" value="13" min="0" max="100">
-                                <span class="uk-form-help-block">Лимит выдачи заведений</span>
+                        <div class="uk-width-medium-1-4">
+                            <div class="uk-grid" data-uk-grid-margin >
+                                <div class="uk-width-medium-1-3">
+                                    <div class="md-input-wrapper">
+                                        <input type="text" class="uk-form-width-medium k-input" id="addressesLimit" value="8" min="0" max="100">
+                                        <span class="uk-form-help-block">Лимит выдачи адресов</span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-3">
+                                    <div class="md-input-wrapper">
+                                        <input type="text" class="uk-form-width-medium k-input" id="placesLimit" value="13" min="0" max="100">
+                                        <span class="uk-form-help-block">Лимит выдачи заведений</span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-3">
+                                    <div class="md-input-wrapper">
+                                        <input type="text" class="uk-form-width-medium md-input" v-model="requestTime">
+                                        <span class="uk-form-help-block" >Время запроса</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="uk-width-medium-1-5">
