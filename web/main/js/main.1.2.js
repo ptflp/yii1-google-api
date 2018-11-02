@@ -59,7 +59,8 @@ if (checkApp !== null) {
             matchPercent: 61.8,
             queryUrl: 'GET ' + document.URL + 'googleapi/place/search',
             addressesLimit: 8,
-            placesLimit: 13
+            placesLimit: 13,
+            requestTime: '0 s'
         },
         created: function () {
             var f = document.getElementById('firstSelect') ;
@@ -90,6 +91,7 @@ if (checkApp !== null) {
                     app.cancel('Stop previous request');
                 }
                 var instance = axios.create();
+                var begin = new Date();
                 instance.get('/googleapi/place/search', {
                         cancelToken: new CancelToken(function executor(c) {
                             // An executor function receives a cancel function as a parameter
@@ -104,6 +106,10 @@ if (checkApp !== null) {
                         }
                     })
                     .then(function (response) {
+                        var end = new Date();
+                        var diff = end - begin;
+                        app.requestTime = diff/1000 + ' s';
+                        console.log(diff);
                         altair_helpers.content_preloader_hide();
                         editorJSON.set(response.data);
                         editorObj.set(response.data);
