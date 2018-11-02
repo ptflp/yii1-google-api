@@ -61,7 +61,7 @@ class SiteController extends Controller
                 $this->renderJSON(['error']);
             }
         } else {
-            $this->renderJSON($_POST);
+            $this->renderJSON(['error']);
         }
     }
 
